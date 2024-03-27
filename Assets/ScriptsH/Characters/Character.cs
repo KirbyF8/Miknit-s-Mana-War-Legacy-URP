@@ -6,7 +6,7 @@ public class Character : MonoBehaviour
 {
     private string Name = "Yuu";
 
-    int Lvl = 1;
+    public int Lvl = 1;
     public int exp;
     public int exp_max;
 
@@ -49,6 +49,7 @@ public class Character : MonoBehaviour
     void Start()
     {
         lvlUp = GetComponent<LvlUp>();
+        //lvlUp = FindAnyObjectByType<LvlUp>();
         ExpReset();
     }
 
@@ -60,7 +61,7 @@ public class Character : MonoBehaviour
             exp = exp - exp_max;
             exp_max += exp_max;
 
-            lvlUp.LevelUpStat();
+            lvlUp.LevelUpStat(HP, HP_max, HPScale, MP, MP_max, MPScale, Strenght, StrenghtScale, Magic,MagicScale,Defense,DefenseScale,Resistance,ResistanceScale,Speed,SpeedScale,Dexterity,DexterityScale,Luck,LuckScale,Movement);
             
         }
     }
