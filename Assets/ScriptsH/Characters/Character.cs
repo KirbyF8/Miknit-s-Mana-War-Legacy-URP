@@ -17,7 +17,7 @@ public class Character : MonoBehaviour
 
     [SerializeField] private int movement = 6;
 
-    // HP MP AD AP FR MR SP LK  
+    // HP Mana Strenght Dexterity Magic Defense Resistance Speed Luck  
 
     [SerializeField] private int[] stats;
 
