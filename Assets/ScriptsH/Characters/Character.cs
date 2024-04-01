@@ -6,43 +6,26 @@ public class Character : MonoBehaviour
 {
     private string Name = "Yuu";
 
-    public int Lvl = 1;
-    public int exp;
-    public int exp_max;
+    [SerializeField] private int lvl = 1;
+    [SerializeField] private int exp;
+    [SerializeField] private int exp_max;
 
 
+    [SerializeField] private int hp = 8;
 
-    public int HP = 8;
-    public int HP_max = 8;
-    public int HPScale = 50;
+    [SerializeField] private int mp = 12;
 
-    public int MP = 12;
-    public int MP_max = 12;
-    public int MPScale = 50;
+    [SerializeField] private int movement = 6;
 
-    public int Strenght = 12;
-    public int StrenghtScale = 50;
+    // HP MP AD AP FR MR SP LK  
 
-    public int Magic = 8;
-    public int MagicScale = 45;
-
-    public int Defense = 7;
-    public int DefenseScale = 20;
-
-    public int Resistance = 12;
-    public int ResistanceScale = 45;
-
-    public int Speed = 18;
-    public int SpeedScale = 95;
-
-    public int Dexterity = 18;
-    public int DexterityScale = 95;
-
-    public int Luck = 1;
-    public int LuckScale = 5;
+    [SerializeField] private int[] stats;
 
 
-    public int Movement = 6;
+    [SerializeField] private int[] scale;
+
+   
+
 
     private LvlUp lvlUp;
     
@@ -57,11 +40,11 @@ public class Character : MonoBehaviour
     {
         if (exp >= exp_max)
         {
-            Lvl++;
+            lvl++;
             exp = exp - exp_max;
             exp_max += exp_max;
 
-            lvlUp.LevelUpStat(HP, HP_max, HPScale, MP, MP_max, MPScale, Strenght, StrenghtScale, Magic,MagicScale,Defense,DefenseScale,Resistance,ResistanceScale,Speed,SpeedScale,Dexterity,DexterityScale,Luck,LuckScale,Movement);
+            lvlUp.LevelUpStat(ref stats, scale);
             
         }
     }
