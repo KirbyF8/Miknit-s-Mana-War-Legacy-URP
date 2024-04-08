@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class LvlUp : MonoBehaviour
 {
+    /*
     private Character characters;
     int randomNumber;
+
+    
 
     [SerializeField]private int[] statsToLevelUp;
 
@@ -47,5 +50,5 @@ public class LvlUp : MonoBehaviour
             Debug.Log(stats[i]);
         }
 
-    }
+    }*/
 }

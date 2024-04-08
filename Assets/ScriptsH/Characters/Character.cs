@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    /*
     private string Name = "Yuu";
 
     [SerializeField] private int lvl = 1;
@@ -24,8 +25,10 @@ public class Character : MonoBehaviour
 
     [SerializeField] private int[] scale;
 
-   
 
+    [SerializeField] private string arma;
+    
+    //? Hacha Lanza Espada Magia Arco
 
     private LvlUp lvlUp;
     
@@ -47,5 +50,5 @@ public class Character : MonoBehaviour
             lvlUp.LevelUpStat(ref stats, scale);
             
         }
-    }
+    }*/
 }
