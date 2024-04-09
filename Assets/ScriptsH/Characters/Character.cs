@@ -2,31 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Character : MonoBehaviour
 {
-    /*
+    
     private string Name = "Yuu";
 
-    [SerializeField] private int lvl = 1;
-    [SerializeField] private int exp;
-    [SerializeField] private int exp_max;
+    public int lvl = 1;
+    public int exp;
+    public int exp_max;
 
 
-    [SerializeField] private int hp = 8;
+    public int hp = 8;
 
-    [SerializeField] private int mp = 12;
+    public int mp = 12;
 
-    [SerializeField] private int movement = 6;
+    public int movement = 6;
 
     // HP Mana Strenght Dexterity Magic Defense Resistance Speed Luck  
 
-    [SerializeField] private int[] stats;
+    public int[] stats;
 
 
-    [SerializeField] private int[] scale;
+    public int[] scale;
 
 
-    [SerializeField] private string arma;
+    public string arma;
+
+    public bool dmgType;
     
     //? Hacha Lanza Espada Magia Arco
 
@@ -36,7 +39,7 @@ public class Character : MonoBehaviour
     {
         lvlUp = GetComponent<LvlUp>();
         //lvlUp = FindAnyObjectByType<LvlUp>();
-        ExpReset();
+        // ExpReset();
     }
 
     public void ExpReset()
@@ -50,5 +53,5 @@ public class Character : MonoBehaviour
             lvlUp.LevelUpStat(ref stats, scale);
             
         }
-    }*/
+    }
 }

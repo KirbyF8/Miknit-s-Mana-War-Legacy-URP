@@ -416,6 +416,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &244403623 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3047003408133654832, guid: d5e549c0d26211e48b399db2339f2381,
+    type: 3}
+  m_PrefabInstance: {fileID: 4152225250698275680}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &269242732
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +553,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl: 1
+  exp: 0
+  exp_max: 0
+  hp: 8
+  mp: 12
+  movement: 6
+  stats: 
+  scale: 
+  arma: 
+  dmgType: 0
 --- !u!1 &299538720
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +776,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314477889}
   m_CullTransparentMesh: 1
+--- !u!114 &409478958 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8799764703204172627, guid: 9b26997a9a0f7cc4ea564e62a4a6a37b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3741462566162581989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &488797226
 GameObject:
   m_ObjectHideFlags: 0
@@ -2084,6 +2118,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl: 1
+  exp: 0
+  exp_max: 0
+  hp: 8
+  mp: 12
+  movement: 6
+  stats: 
+  scale: 
+  arma: 
+  dmgType: 0
 --- !u!1 &1106743260
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,6 +2500,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl: 1
+  exp: 0
+  exp_max: 0
+  hp: 8
+  mp: 12
+  movement: 6
+  stats: 
+  scale: 
+  arma: 
+  dmgType: 0
 --- !u!1 &1214299712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2606,6 +2660,8 @@ GameObject:
   - component: {fileID: 1243695889}
   - component: {fileID: 1243695888}
   - component: {fileID: 1243695887}
+  - component: {fileID: 1243695892}
+  - component: {fileID: 1243695891}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -2700,6 +2756,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1243695891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243695886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc3ec44a0fcc5a1499b2dcf93c0bc05d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsToLevelUp: 
+--- !u!114 &1243695892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243695886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf38c860bc37a424d80c4e87d7f7c9db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacker: {fileID: 409478958}
+  defender: {fileID: 244403623}
 --- !u!1 &1252521122
 GameObject:
   m_ObjectHideFlags: 0
@@ -3086,6 +3169,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl: 1
+  exp: 0
+  exp_max: 0
+  hp: 8
+  mp: 12
+  movement: 6
+  stats: 
+  scale: 
+  arma: 
+  dmgType: 0
 --- !u!1 &1503856424
 GameObject:
   m_ObjectHideFlags: 0
@@ -3835,6 +3928,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvl: 1
+  exp: 0
+  exp_max: 0
+  hp: 8
+  mp: 12
+  movement: 6
+  stats: 
+  scale: 
+  arma: 
+  dmgType: 0
 --- !u!1 &1719795128
 GameObject:
   m_ObjectHideFlags: 0
@@ -5489,6 +5592,11 @@ PrefabInstance:
       propertyPath: arma
       value: Espada
       objectReference: {fileID: 0}
+    - target: {fileID: 8799764703204172627, guid: 9b26997a9a0f7cc4ea564e62a4a6a37b,
+        type: 3}
+      propertyPath: dmgType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5634,6 +5742,11 @@ PrefabInstance:
         type: 3}
       propertyPath: arma
       value: Magia
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047003408133654832, guid: d5e549c0d26211e48b399db2339f2381,
+        type: 3}
+      propertyPath: dmgType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

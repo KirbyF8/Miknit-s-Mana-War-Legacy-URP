@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LvlUp : MonoBehaviour
 {
-    /*
+    
     private Character characters;
     int randomNumber;
 
@@ -47,8 +47,8 @@ public class LvlUp : MonoBehaviour
                
             }
             
-            Debug.Log(stats[i]);
+            // Debug.Log(stats[i]);
         }
 
-    }*/
+    }
 }
