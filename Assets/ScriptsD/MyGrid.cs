@@ -94,7 +94,7 @@ public class MyGrid<T> : MonoBehaviour
 
     public T[] GetMovement(int x, int y, int move)
     {
-        return GetMovementRec(x, y, move);
+        return null; //GetMovementRec(x, y, move);
     }
 
     private List<T> GetMovementRec(int x, int y, int range) 
@@ -104,12 +104,13 @@ public class MyGrid<T> : MonoBehaviour
         if (range == 0)
         {
             end.Append(gridArray[x, y]);
-            return end;
+            return null /*end*/;
         }
 
         else
         {
-            end GetMovementRec(x + 1, y, range - 1);
+            // end GetMovementRec(x + 1, y, range - 1);
+            return null;
         }
 
     }
