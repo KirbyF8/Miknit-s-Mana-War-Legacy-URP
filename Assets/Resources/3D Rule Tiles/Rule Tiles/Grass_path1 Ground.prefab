@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ruleTile: {fileID: 11400000, guid: 25c8cf1f3eca29c42b1b9ee64c785593, type: 2}
   ruleTileController: {fileID: 0}
-  placeholder: {fileID: 7419114260175256988}
+  placeholder: {fileID: 0}
   neighborTilePositions: 0101010101010101
 --- !u!1 &7419114260175256988
 GameObject:

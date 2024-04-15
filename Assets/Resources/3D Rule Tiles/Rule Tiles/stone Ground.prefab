@@ -130,5 +130,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ruleTile: {fileID: 11400000, guid: 81949f9fac7adb64883a8e4a86100686, type: 2}
   ruleTileController: {fileID: 0}
-  placeholder: {fileID: 601143290239082909}
+  placeholder: {fileID: 0}
   neighborTilePositions: 0000000000000000
