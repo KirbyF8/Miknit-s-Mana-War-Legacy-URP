@@ -416,18 +416,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &244403623 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3047003408133654832, guid: d5e549c0d26211e48b399db2339f2381,
-    type: 3}
-  m_PrefabInstance: {fileID: 4152225250698275680}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &269242732
 GameObject:
   m_ObjectHideFlags: 0
@@ -2262,6 +2250,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106743260}
   m_CullTransparentMesh: 1
+--- !u!114 &1168842087 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 63416755896426872, guid: ad50f362418474b44b575ebb87ac9c06,
+    type: 3}
+  m_PrefabInstance: {fileID: 345197899250141628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1194717878
 GameObject:
   m_ObjectHideFlags: 0
@@ -2782,7 +2782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacker: {fileID: 409478958}
-  defender: {fileID: 244403623}
+  defender: {fileID: 1168842087}
 --- !u!1 &1252521122
 GameObject:
   m_ObjectHideFlags: 0
@@ -5596,6 +5596,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dmgType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8799764703204172627, guid: 9b26997a9a0f7cc4ea564e62a4a6a37b,
+        type: 3}
+      propertyPath: stats.Array.data[2]
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

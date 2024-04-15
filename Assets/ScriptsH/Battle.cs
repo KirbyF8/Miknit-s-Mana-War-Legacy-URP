@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86;
 
 public class Battle : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class Battle : MonoBehaviour
     int aCrit = 0;
     int dCrit = 0;
 
+    
     private void Start()
     {
         Combat();
@@ -35,11 +38,11 @@ public class Battle : MonoBehaviour
 
         Debug.Log(aDMG);
       
-        Debug.Log(aATKs);
+        //Debug.Log(aATKs);
        
-        Debug.Log(aHit);
+        //Debug.Log(aHit);
        
-        Debug.Log(aCrit);   
+        // Debug.Log(aCrit);   
 
     }
 
@@ -66,32 +69,69 @@ public class Battle : MonoBehaviour
             dATKs = 4;
         }
     }
-    
+
+    int dmgBeforeThings;
+    int weaponTriangle;
+    bool counterWeapon;
+
     private void DamaegeOfFisicAttack()
     {
+        float aux;
+      
+
         if (attacker.dmgType == false) 
         {
-            aDMG = 10*(attacker.stats[2] * (defender.stats[5] / (attacker.stats[2] + defender.stats[5])));
+
+           
+            if (counterWeapon == true)
+            {
+                dmgBeforeThings = attacker.stats[2];
+
+                if (weaponTriangle == 1)
+                {
+                    aDMG = dmgBeforeThings + attacker.stats[2] - (defender.stats[5]/2);
+                }
+                else if (weaponTriangle == 0)
+                {
+                    aDMG = dmgBeforeThings + attacker.stats[2] - defender.stats[5];
+                }
+                else
+                {
+                    aDMG = dmgBeforeThings + attacker.stats[2]/2 - defender.stats[5];
+                }
+            }
+
+
+            aDMG = attacker.stats[2] - defender.stats[5];
+
+           
+
         }
 
 
-        if (attacker.dmgType == false)
+        if (defender.dmgType == false)
         {
-            dDMG = defender.stats[2] * (attacker.stats[2] / (defender.stats[2] + attacker.stats[5]));
+            dDMG = 10 * (defender.stats[2] * (attacker.stats[2] / (defender.stats[2] + attacker.stats[5])));
         }
 
     }
 
     private void DamaegeOfMagicAttack()
     {
-        if (defender.dmgType == true)
+        float aux;
+        if (attacker.dmgType == true)
         {
-            aDMG = attacker.stats[4] * (defender.stats[6] / (attacker.stats[4] + defender.stats[6]));
+            aux = ((float)attacker.stats[4] * (defender.stats[6] / (attacker.stats[4] + defender.stats[6])));
+
+            aux = aux * 10;
+
+            aDMG = (int)aux;
+
         }
 
         if (defender.dmgType == true)
         {
-            dDMG = defender.stats[4] * (attacker.stats[6] / (defender.stats[4] + attacker.stats[6]));
+            dDMG = 10 * (defender.stats[4] * (attacker.stats[6] / (defender.stats[4] + attacker.stats[6])));
         }
 
     }
