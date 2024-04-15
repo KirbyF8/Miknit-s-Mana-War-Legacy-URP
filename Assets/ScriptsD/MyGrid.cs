@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MyGrid<T> : MonoBehaviour
+public class MyGrid : MonoBehaviour
 {
 
     [SerializeField] private int height;
     [SerializeField] private int width;
-    private T[,] gridArray;
+    private MyCell[,] gridArray;
 
-    public MyGrid(int height, int width, T defaultcell)
+    public MyGrid(int height, int width, MyCell defaultcell)
     {
         CreateGrid(height, width, defaultcell);
     }
@@ -27,25 +27,25 @@ public class MyGrid<T> : MonoBehaviour
         return width;
     }
 
-    public T GetCell(int x, int y)
+    public MyCell GetCell(int x, int y)
     {
         return gridArray[x, y];
     }
 
-    public void CreateGrid(int height, int width, T defaultcell)
+    public void CreateGrid(int height, int width, MyCell defaultcell)
     {
         this.height = height;
         this.width = width;
-        gridArray = new T[height, width];
+        gridArray = new MyCell[height, width];
 
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                gridArray[i, j] = defaultcell;
+                gridArray[i,j] = new MyCell();
+                gridArray[i, j].Copy(defaultcell);
             }
         }
-
     }
 
     public bool IsInBounds(int x, int y)
@@ -55,19 +55,19 @@ public class MyGrid<T> : MonoBehaviour
         return true;
     }
 
-    public void SetCell(T cell, int x, int y)
+    public void SetCell(MyCell cell, int x, int y)
     {
         gridArray[x, y] = cell;
     }
 
-    public T[] GetNeighbors(int x, int y, int range)
+    public MyCell[] GetNeighbors(int x, int y, int range)
     {
         return GetNeighbors(x, y, range, range);
     }
 
-    private T[] GetNeighbors(int xCordinate, int yCordinate, int xEndOffset = 1, int yEndOffset = 1)
+    private MyCell[] GetNeighbors(int xCordinate, int yCordinate, int xEndOffset = 1, int yEndOffset = 1)
     {
-        List<T> neighbourCells = new List<T>();
+        List<MyCell> neighbourCells = new List<MyCell>();
 
         int yEnd = (int)MathF.Min(height - 1, yCordinate + yEndOffset);
         int xEnd = (int)MathF.Min(width - 1, xCordinate + xEndOffset);
@@ -87,32 +87,36 @@ public class MyGrid<T> : MonoBehaviour
         }
 
 
-        T[] hola = neighbourCells.ToArray();
-        Debug.Log(hola.Length);
-        return hola;
+        MyCell[] tempArray = neighbourCells.ToArray();
+        return tempArray;
     }
 
-    public T[] GetMovement(int x, int y, int move)
+    public List<Vector2> GetMovement(int x, int y, int move)
     {
-        return null; //GetMovementRec(x, y, move);
+        List<Vector2> end = new List<Vector2>();
+        GetMovementRec(x, y, move, ref end);
+        return end;
     }
 
-    private List<T> GetMovementRec(int x, int y, int range) 
+    private void GetMovementRec(int x, int y, int range, ref List<Vector2> end) 
     {
-        T[] end = new T[0];
-
-        if (range == 0)
-        {
-            end.Append(gridArray[x, y]);
-            return null /*end*/;
+        if (x < 0 || y < 0 || x > width-1 || y > height-1) return;
+        bool thereIs = end.Contains(new Vector2(x, y));
+        int diff = gridArray[x,y].GetDifficulty();
+        if (!gridArray[x, y].GetWalkable()) return;
+        if (range <= 0)
+        { 
+            if(!thereIs) end.Add(new Vector2(x, y));
         }
-
         else
         {
-            // end GetMovementRec(x + 1, y, range - 1);
-            return null;
+            if (!thereIs) end.Add(new Vector2(x, y));
+            GetMovementRec(x + 1, y, range - diff, ref end);
+            GetMovementRec(x - 1, y, range - diff, ref end);
+            GetMovementRec(x, y + 1, range - diff, ref end);
+            GetMovementRec(x, y - 1, range - diff, ref end);
         }
-
+        return;
     }
-
+    
 }

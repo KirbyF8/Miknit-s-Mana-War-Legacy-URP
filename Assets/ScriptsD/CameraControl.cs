@@ -31,8 +31,18 @@ public class CameraControl : MonoBehaviour
 
     private void Start()
     {
-        Cell cell = new Cell();
-        MyGrid<Cell> grid = new MyGrid<Cell>(10,10,cell);
-        grid.GetNeighbors(0, 0, 2);
+        MyCell cell = new MyCell();
+        cell.SetWalkable(true);
+        MyGrid grid = new MyGrid(10,10,cell);
+        MyCell cell2 = grid.GetCell(6, 5);
+        cell2.SetWalkable(false);
+        List<Vector2> ey= grid.GetMovement(5, 5, 5);
+
+        for (int i = 0; i < ey.Count; i++)
+        {
+            Debug.Log(ey[i].x + ", " + ey[i].y);
+        }
+        Debug.Log(ey.Count);
+
     }
 }
