@@ -6,12 +6,12 @@ using System.IO;
 public class Declaraciones_Persistenciadedatos : MonoBehaviour
 {
 
-    private string path =  "/save.json";
+    private string path = Application.dataPath + "/../saves/"+"save.json";
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(Application.persistentDataPath);
+        Debug.Log(path);
         
     }
 
@@ -37,13 +37,18 @@ public class Declaraciones_Persistenciadedatos : MonoBehaviour
         {
             Id = 0,
             Name = "Jaime",
-            Description = "jaime"
+            Description = "jaime",
+            HP= 50,
+            Strengh= 10,
+            Defense= 100,
+            Magic= 5,
+            Speed= 10,
         };
 
 
         string jsonContent = JsonUtility.ToJson(save);
         Debug.Log(jsonContent);
-        File.WriteAllText(Application.persistentDataPath + path, jsonContent);
+        File.WriteAllText(path, jsonContent);
 
     }
 
