@@ -29,6 +29,7 @@ public class Battle : MonoBehaviour
 
     private void Combat()
     {
+        SetWeaponTriangle();
         NumberOfAttacks();
 
         DamaegeOfFisicAttack();
@@ -36,14 +37,16 @@ public class Battle : MonoBehaviour
         HitChance();
         CritChance();
 
-        Debug.Log(aDMG);
-      
-        //Debug.Log(aATKs);
-       
-        //Debug.Log(aHit);
-       
-        // Debug.Log(aCrit);   
+        Debug.Log("Tu daño = " + aDMG);      
+        Debug.Log("Tu Nº de ataques = " + aATKs);
+       Debug.Log("Tu % De golepar = " + aHit);
+       Debug.Log("Tu % De crítico = "+ aCrit);
 
+
+        Debug.Log("Su daño = " + dDMG);
+        Debug.Log("Su Nº de ataques = " + dATKs);
+        Debug.Log("Su % De golepar = " + dHit);
+        Debug.Log("Su % De crítico = " + dCrit);
     }
 
     private void NumberOfAttacks()
@@ -71,88 +74,155 @@ public class Battle : MonoBehaviour
     }
 
     int dmgBeforeThings;
+    int dmgBeforeThings2;
     int weaponTriangle;
     bool counterWeapon;
 
+    int accuracyTriangle = 20;
     private void DamaegeOfFisicAttack()
     {
-        float aux;
+        
       
 
         if (attacker.dmgType == false) 
         {
-
+            dmgBeforeThings = 0;
            
             if (counterWeapon == true)
             {
                 dmgBeforeThings = attacker.stats[2];
 
-                if (weaponTriangle == 1)
-                {
-                    aDMG = dmgBeforeThings + attacker.stats[2] - (defender.stats[5]/2);
-                }
-                else if (weaponTriangle == 0)
-                {
-                    aDMG = dmgBeforeThings + attacker.stats[2] - defender.stats[5];
-                }
-                else
-                {
-                    aDMG = dmgBeforeThings + attacker.stats[2]/2 - defender.stats[5];
-                }
+               
+            }
+
+            if (weaponTriangle == 1)
+            {
+                aDMG = dmgBeforeThings + attacker.stats[2] - (defender.stats[5] / 2);
+            }
+            else if (weaponTriangle == 2)
+            {
+                aDMG = dmgBeforeThings + attacker.stats[2] / 2 - defender.stats[5];
+            }
+            else
+            {
+                aDMG = dmgBeforeThings + attacker.stats[2] - defender.stats[5];
+
+            }
+
+            if (aDMG < 0)
+            {
+                aDMG = 0;
             }
 
 
-            aDMG = attacker.stats[2] - defender.stats[5];
 
-           
 
         }
 
 
         if (defender.dmgType == false)
         {
-            dDMG = 10 * (defender.stats[2] * (attacker.stats[2] / (defender.stats[2] + attacker.stats[5])));
+            dmgBeforeThings2 = 0;
+
+            if (counterWeapon == true)
+            {
+                dmgBeforeThings2 = defender.stats[2];
+
+                
+            }
+
+            if (weaponTriangle == 2)
+            {
+                dDMG = dmgBeforeThings2 + defender.stats[2] - (attacker.stats[5] / 2);
+            }
+            else if (weaponTriangle == 1)
+            {
+
+                dDMG = dmgBeforeThings2 + defender.stats[2] / 2 - attacker.stats[5];
+            }
+            else
+            {
+                dDMG = dmgBeforeThings2 + defender.stats[2] - attacker.stats[5];
+            }
+
+            if (dDMG < 0)
+            {
+                dDMG = 0;
+            }
+
         }
 
     }
 
     private void DamaegeOfMagicAttack()
     {
-        float aux;
+        
         if (attacker.dmgType == true)
         {
-            aux = ((float)attacker.stats[4] * (defender.stats[6] / (attacker.stats[4] + defender.stats[6])));
+            aDMG = attacker.stats[4] - defender.stats[6];
 
-            aux = aux * 10;
-
-            aDMG = (int)aux;
-
+            if (aDMG < 0)
+            {
+                aDMG = 0;
+            }
         }
 
         if (defender.dmgType == true)
         {
-            dDMG = 10 * (defender.stats[4] * (attacker.stats[6] / (defender.stats[4] + attacker.stats[6])));
+            dDMG = defender.stats[4] - attacker.stats[6];
+
+            if (dDMG < 0)
+            {
+                dDMG = 0;
+            }
         }
 
     }
 
+    private void SetWeaponTriangle()
+    {
+        
+        if (attacker.arma == "Espada" && defender.arma == "Hacha" || attacker.arma == "Hacha" && defender.arma == "Lanza" || attacker.arma == "Lanza" && defender.arma == "Espada")
+        {
+            weaponTriangle = 1;
+        }
+        else if (attacker.arma == "Espada" && defender.arma == "Lanza" || attacker.arma == "Hacha" && defender.arma == "Espada" || attacker.arma == "Lanza" && defender.arma == "Hacha")
+        {
+            weaponTriangle = 2;
+        }
+        else
+        {
+            weaponTriangle = 0;
+        }
+    }
+
     private void HitChance()
     {
+        if (weaponTriangle == 1) { aHit += accuracyTriangle; }else if (weaponTriangle == 2) { aHit -= accuracyTriangle; };
         aHit = 100 - (defender.stats[3] - attacker.stats[3]) - (defender.stats[7] - attacker.stats[7]);
         if (aHit >= 100)
         {
             aHit = 100;
         }
+        else if (aHit < 0)
+        {
+            aHit = 0;
+        }
+        if (weaponTriangle == 1) { dHit += accuracyTriangle; } else if (weaponTriangle == 2) { dHit -= accuracyTriangle; };
         dHit = 100 - (attacker.stats[3] - defender.stats[3]) - (attacker.stats[7] - defender.stats[7]);
         if (dHit >= 100)
         {
             dHit = 100;
         }
+        else if(dHit < 0)
+        {
+            dHit = 0;
+        }
     }
-
+    
     private void CritChance()
     {
-        aCrit = (attacker.stats[8] - defender.stats[8] + (attacker.stats[3] - defender.stats[3]));
+        aCrit = ((attacker.stats[8] * 2 ) - defender.stats[8] + (attacker.stats[3] - defender.stats[3]));
 
         if (aCrit >= 100)
         {
@@ -164,7 +234,7 @@ public class Battle : MonoBehaviour
         }
 
 
-        dCrit = (defender.stats[8] - attacker.stats[8] + (defender.stats[3] - attacker.stats[3]));
+        dCrit = ((defender.stats[8] * 2) - attacker.stats[8] + (defender.stats[3] - attacker.stats[3]));
 
         if (dCrit >= 100)
         {
