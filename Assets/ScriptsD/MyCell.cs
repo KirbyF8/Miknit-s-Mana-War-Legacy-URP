@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyCell : MonoBehaviour
+public class MyCell
 {
     private bool walkable = true;
     private int difficulty = 1;
-    private Character characterOnTop;
+    private CharacterD characterOnTop;
     private float evasionBuff;
     private float defenceBuff;
     private int positionx;
@@ -32,12 +32,12 @@ public class MyCell : MonoBehaviour
         difficulty = diff;
     }
 
-    public Character GetCharacter()
+    public CharacterD GetCharacter()
     {
         return characterOnTop;
     }
 
-    public void SetCharacter(Character someone)
+    public void SetCharacter(CharacterD someone)
     {
         characterOnTop = someone;
     }
@@ -62,11 +62,9 @@ public class MyCell : MonoBehaviour
         defenceBuff = x;
     }
 
-    public int[] GetPosition()
+    public Vector2 GetPosition()
     {
-        int[] position = new int[2];
-        position[0] = positionx;
-        position[1] = positiony;
+        Vector2 position = new Vector2 (positionx, positiony);
         return position;
     }
 

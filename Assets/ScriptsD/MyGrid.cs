@@ -10,12 +10,27 @@ public class MyGrid : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private int width;
     private MyCell[,] gridArray;
+    [SerializeField] private Vector2[] spawnPositions;
+
+    private void Start()
+    {
+
+    }
 
     public MyGrid(int height, int width, MyCell defaultcell)
     {
         CreateGrid(height, width, defaultcell);
     }
 
+    public void SetSpawn(Vector2[] spawns)
+    {
+        spawnPositions = spawns;
+    }
+
+    public Vector2[] GetSpawn()
+    {
+        return spawnPositions;
+    }
 
     public int Height()
     {
@@ -44,6 +59,7 @@ public class MyGrid : MonoBehaviour
             {
                 gridArray[i,j] = new MyCell();
                 gridArray[i, j].Copy(defaultcell);
+                gridArray[i, j].SetPosition(i, j);
             }
         }
     }
@@ -82,7 +98,6 @@ public class MyGrid : MonoBehaviour
                 }
                 if (MathF.Abs(x - xCordinate) + MathF.Abs(y - yCordinate) > xEndOffset) continue;
                 neighbourCells.Add(gridArray[x, y]);
-                Debug.Log(x + " , " + y);
             }
         }
 

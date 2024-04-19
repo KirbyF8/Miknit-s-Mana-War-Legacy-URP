@@ -30,7 +30,7 @@ public class CameraControl : MonoBehaviour
     }
 
     private void Start()
-    {
+    {/*
         MyCell cell = new MyCell();
         cell.SetWalkable(true);
         MyGrid grid = new MyGrid(10,10,cell);
@@ -42,7 +42,7 @@ public class CameraControl : MonoBehaviour
         {
             Debug.Log(ey[i].x + ", " + ey[i].y);
         }
-        Debug.Log(ey.Count);
+        Debug.Log(ey.Count);*/
 
     }
 }
