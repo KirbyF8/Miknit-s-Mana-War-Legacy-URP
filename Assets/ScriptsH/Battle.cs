@@ -9,6 +9,8 @@ public class Battle : MonoBehaviour
     [SerializeField] private Character attacker;
     [SerializeField] private Character defender;
 
+    private VisualBattle visualBattle;
+
     int aDMG = 0;
     int dDMG = 0;
 
@@ -24,6 +26,9 @@ public class Battle : MonoBehaviour
     
     private void Start()
     {
+        visualBattle = GetComponent<VisualBattle>();
+
+        visualBattle.SpawnCharacters(attacker, defender);
         Combat();
     }
 
@@ -192,6 +197,7 @@ public class Battle : MonoBehaviour
         }
         else
         {
+            
             weaponTriangle = 0;
         }
     }
