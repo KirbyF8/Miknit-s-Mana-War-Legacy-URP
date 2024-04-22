@@ -34,6 +34,8 @@ public class Character : MonoBehaviour
     //? Hacha Lanza Espada Magia Arco
 
     private LvlUp lvlUp;
+
+    public int side;
     
     void Start()
     {
