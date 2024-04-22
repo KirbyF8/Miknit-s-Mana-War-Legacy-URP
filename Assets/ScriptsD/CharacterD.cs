@@ -5,14 +5,34 @@ using UnityEngine;
 public class CharacterD : MonoBehaviour
 {
     private MyCell position;
+    [SerializeField] private int movement = 2;
+    [SerializeField] private int side = 0;
 
     [SerializeField] private MyGrid map;
 
-    private void Start()
+  /*  private void Start()
     {
        // map = FindObjectOfType<MyGrid>();
+    }*/
+
+    public int GetMovement()
+    {
+        return movement;
     }
 
+    public void SetMovement(int x)
+    {
+        movement = x;
+    }
+    public int GetSide()
+    {
+        return side;
+    }
+
+    public void SetSide(int x)
+    {
+        side = x;
+    }
     public Vector2 GetPosition()
     {
         return position.GetPosition();
@@ -21,7 +41,7 @@ public class CharacterD : MonoBehaviour
     public void SetPosition(int x, int y)
     {
         position = map.GetCell(x,y);
-        transform.position = new Vector3(x*2+1, 0, y*2-1);
+        transform.position = new Vector3(x*2+1, 0, -y*2-1);
     }
 
     public void SetPosition(MyCell cell)

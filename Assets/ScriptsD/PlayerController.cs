@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,23 +12,24 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 position;
 
-    private bool show = false;
-
-    private int x;
-    private int y;
 
     private Vector3 point;
+    private int scale = 2;
 
     private bool spawnPhase = true;
+    private bool movementPhase = false;
 
     private MyGrid map;
     private Vector2[] spawnPos;
     [SerializeField] private CharacterD[] characters;
-    private Collider mapCollider;
 
     private MyCell selected;
     private MyCell selectedAux;
     private CharacterD charSelected;
+    [SerializeField] private GameObject alliesTile;
+    [SerializeField] private GameObject enemiesTile;
+
+    private Vector2[] movementArray;
 
     private bool isASpawn = false;
 
@@ -34,39 +37,31 @@ public class PlayerController : MonoBehaviour
     {
         map = FindObjectOfType<MyGrid>();
         spawnPos = map.GetSpawn();
-        mapCollider = map.GetComponent<Collider>();
         MyCell cell = new MyCell();
         cell.SetWalkable(true);
         map.CreateGrid(20, 20, cell);
         for (int i = 0; i < characters.Length; i++)
         {
-            characters[i].SetPosition((int)spawnPos[i].x, (int)spawnPos[i].x);
-            map.GetCell((int)spawnPos[i].x, (int)spawnPos[i].x).SetCharacter(characters[i]);
+            characters[i].SetPosition((int)spawnPos[i].x, (int)spawnPos[i].y);
+            map.GetCell((int)spawnPos[i].x, (int)spawnPos[i].y).SetCharacter(characters[i]);
         }
-        
+
+        SpawnTiles(spawnPos);
+
     }
 
     void Update()
     {
-
         if (spawnPhase)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                position = Input.mousePosition;
-                position.z = Camera.main.nearClipPlane;
-                ray = Camera.main.ScreenPointToRay(position);
-                raycastHits = Physics.RaycastAll(ray);
+                ShootRay();
                 if (raycastHits.Length != 0)
                 {
                     GetPosition(raycastHits[0]);
-                    Vector2 aux = new Vector2(point.x, point.z);
-                    Debug.Log(isASpawn);
-                    for (int i = 0; i < spawnPos.Length && !isASpawn; i++)
-                    {
 
-                        if (aux == spawnPos[i]) isASpawn = true;
-                    }
+                    CheckSpawn(new Vector2(point.x, point.z));
 
                     if (selected == null && isASpawn)
                     {
@@ -88,6 +83,57 @@ public class PlayerController : MonoBehaviour
                     isASpawn = false;
                 }
             }
+        }
+        else if (movementPhase)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ShootRay();
+                if (raycastHits.Length != 0)
+                {
+                    if (selected != null) DeleteTiles();
+                    GetPosition(raycastHits[0]);
+                    selected = map.GetCell((int)point.x, (int)point.z);
+                    if(selected.GetCharacter() != null)
+                    {
+                        movementArray = map.GetMovement((int)point.x, (int)point.z, selected.GetCharacter().GetMovement()).ToArray();
+                        SpawnTiles(movementArray);
+                    }
+                    else
+                    {
+                        Debug.Log(selected.GetWalkable() + ", " + selected.GetDifficulty());
+                    }
+                }
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                ShootRay();
+                if (raycastHits.Length != 0)
+                {
+                    GetPosition(raycastHits[0]);
+                    selectedAux = map.GetCell((int)point.x, (int)point.z);
+                    if (selected != null && selected.GetCharacter() != null)
+                    {
+                        if(selectedAux.GetCharacter()!= null && selectedAux.GetCharacter().GetSide() !=0)
+                        {
+                            ExchangePos(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
+                            Debug.Log("attack");
+                            DeleteTiles();
+                        }
+                        else if (selectedAux.GetCharacter() == null && CheckMove())
+                        {
+                            ExchangePos(selected, selectedAux);
+                            selected = selectedAux = null;
+                            DeleteTiles();
+                        }
+                    }
+                }
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            EndSpawnPhase();
         }
 
         /*
@@ -114,6 +160,114 @@ public class PlayerController : MonoBehaviour
 
         if (show) Debug.DrawRay(transform.position, ray.direction * 100000, Color.red);*/
 
+    }
+
+    private bool CheckMove()
+    {
+        bool aux = false;
+        Vector2 secondpoint = new Vector2 (point.x, point.z);
+        for (int i = 0; i<movementArray.Length && !aux; i++)
+        {
+            if(secondpoint == movementArray[i]) { aux = true;}
+        }
+        return aux;
+    }
+
+    private bool CheckMove(Vector2 target)
+    {
+        bool aux = false;
+        for (int i = 0; i < movementArray.Length && !aux; i++)
+        {
+            if (target == movementArray[i]) { aux = true; }
+        }
+        return aux;
+    }
+
+    private Vector2 NearbyTile(Vector2 attackerPos, Vector2 defenderPos)
+    {
+        Vector2[] aux = new Vector2[4];
+        int x = 0;
+        int score = -1;
+        int scoreaux;
+        aux[0] = new Vector2(defenderPos.x + 1, defenderPos.y);
+        aux[1] = new Vector2(defenderPos.x - 1, defenderPos.y);
+        aux[2] = new Vector2(defenderPos.x, defenderPos.y + 1);
+        aux[3] = new Vector2(defenderPos.x, defenderPos.y - 1);
+        for (int i = 0; i < aux.Length; i++)
+        {
+            if (CheckMove(aux[i]))
+            {
+
+                scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
+
+                if (scoreaux < score || score == -1)
+                {
+                    score = scoreaux;
+                    x = i;
+                }
+            }
+        }
+
+
+        return aux[x];
+    }
+
+    private void SpawnTiles(Vector2[] pos)
+    {
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if(spawnPhase) Instantiate(alliesTile, new Vector3(pos[i].x * scale + 1, 0.1f, -pos[i].y * scale - 1), Quaternion.identity);
+            else
+            {
+                if (map.GetCell((int)pos[i].x, (int)pos[i].y).GetCharacter() == null)
+                {
+                    Instantiate(alliesTile, new Vector3(pos[i].x * scale + 1, 0.1f, -pos[i].y * scale - 1), Quaternion.identity);
+                }
+                else if (map.GetCell((int)pos[i].x, (int)pos[i].y).GetCharacter().GetSide() > 0)
+                {
+                    Instantiate(enemiesTile, new Vector3(pos[i].x * scale + 1, 0.1f, -pos[i].y * scale - 1), Quaternion.identity);
+                }
+            }
+            
+        }
+    }
+    
+    private void DeleteTiles()
+    {
+        GameObject[] destroying = GameObject.FindGameObjectsWithTag("Tile_mark");
+
+        Debug.Log(destroying.Length);
+
+        for (int i = 0; i < destroying.Length; i++)
+        {
+            Destroy(destroying[i]);
+        }
+    }
+
+    private void EndSpawnPhase()
+    {
+        spawnPhase = false;
+
+        DeleteTiles();
+
+        movementPhase = true;
+    }
+
+    private void ShootRay()
+    {
+        position = Input.mousePosition;
+        position.z = Camera.main.nearClipPlane;
+        ray = Camera.main.ScreenPointToRay(position);
+        raycastHits = Physics.RaycastAll(ray);
+    }
+
+    private void CheckSpawn( Vector2 aux)
+    {
+        for (int i = 0; i < spawnPos.Length && !isASpawn; i++)
+        {
+
+            if (aux == spawnPos[i]) isASpawn = true;
+        }
     }
 
     private void GetPosition(RaycastHit hit)

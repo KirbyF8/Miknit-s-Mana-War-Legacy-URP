@@ -46,6 +46,11 @@ public class MyGrid : MonoBehaviour
     {
         return gridArray[x, y];
     }
+    public MyCell GetCell(Vector2 x)
+    {
+        return gridArray[(int)x.x, (int)x.y];
+    }
+
 
     public void CreateGrid(int height, int width, MyCell defaultcell)
     {
@@ -119,6 +124,7 @@ public class MyGrid : MonoBehaviour
         bool thereIs = end.Contains(new Vector2(x, y));
         int diff = gridArray[x,y].GetDifficulty();
         if (!gridArray[x, y].GetWalkable()) return;
+        //if (gridArray[x, y].GetCharacter() != null && gridArray[x, y].GetCharacter().GetSide() > 0 || gridArray[x, y].GetCharacter().GetSide() < 0) return;
         if (range <= 0)
         { 
             if(!thereIs) end.Add(new Vector2(x, y));
