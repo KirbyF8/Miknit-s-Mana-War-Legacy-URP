@@ -50,6 +50,11 @@ public class CharacterD : MonoBehaviour
         transform.position = new Vector3(cell.GetPosition().x * 2 + 1, 0, cell.GetPosition().y * -2 - 1);
     }
 
+    public void SetPosition(Vector2 pos)
+    {
+        position = map.GetCell((int)pos.x, (int)pos.y);
+        transform.position = new Vector3(position.GetPosition().x * 2 + 1, 0, position.GetPosition().y * -2 - 1);
+    }
 
     public void SetMap(MyGrid map)
     {

@@ -33,13 +33,12 @@ public class PlayerController : MonoBehaviour
 
     private bool isASpawn = false;
 
+    private bool moving = false;
+
     void Start()
     {
         map = FindObjectOfType<MyGrid>();
         spawnPos = map.GetSpawn();
-        MyCell cell = new MyCell();
-        cell.SetWalkable(true);
-        map.CreateGrid(20, 20, cell);
         for (int i = 0; i < characters.Length; i++)
         {
             characters[i].SetPosition((int)spawnPos[i].x, (int)spawnPos[i].y);
@@ -86,7 +85,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (movementPhase)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !moving)
             {
                 ShootRay();
                 if (raycastHits.Length != 0)
@@ -102,10 +101,11 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         Debug.Log(selected.GetWalkable() + ", " + selected.GetDifficulty());
+                        //HAY QUE CAMBIAR ESTO POR UN PANEL QUE DE INFO DEL TERRENO 
                     }
                 }
             }
-            else if (Input.GetMouseButtonDown(1))
+            else if (Input.GetMouseButtonDown(1) && !moving)
             {
                 ShootRay();
                 if (raycastHits.Length != 0)
@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
                         }
                         else if (selectedAux.GetCharacter() == null && CheckMove())
                         {
-                            ExchangePos(selected, selectedAux);
+                            MoveChar(selected, selectedAux);
                             selected = selectedAux = null;
                             DeleteTiles();
                         }
@@ -236,7 +236,6 @@ public class PlayerController : MonoBehaviour
     {
         GameObject[] destroying = GameObject.FindGameObjectsWithTag("Tile_mark");
 
-        Debug.Log(destroying.Length);
 
         for (int i = 0; i < destroying.Length; i++)
         {
@@ -295,6 +294,29 @@ public class PlayerController : MonoBehaviour
             charSelected.SetPosition(cell2);
         }
         
+    }
+
+    private void MoveChar(MyCell cell1, MyCell cell2)
+    {
+        (int,int)[] aux = map.FindPath(cell1.GetPosition(), cell2.GetPosition());
+        StartCoroutine(MovingChar(aux));
+        return;
+
+    }
+
+
+    private IEnumerator MovingChar((int, int)[] path)
+    {
+        CharacterD selectedChar = map.GetCell(path[0].Item1, path[0].Item2).GetCharacter();
+        map.GetCell(path[0].Item1, path[0].Item2).SetCharacter(null);
+        moving = true;
+        for(int i = 1; i < path.Length; i++)
+        {
+            selectedChar.SetPosition(path[i].Item1, path[i].Item2);
+            yield return new WaitForSeconds(0.5f);
+        }
+        map.GetCell(path[path.Length-1].Item1, path[path.Length - 1].Item2).SetCharacter(selectedChar);
+        moving = false;
     }
 
 }
