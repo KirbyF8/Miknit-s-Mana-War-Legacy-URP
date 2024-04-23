@@ -8,8 +8,10 @@ public class Battle : MonoBehaviour
 {
     [SerializeField] private Character attacker;
     [SerializeField] private Character defender;
+    [SerializeField] private UIBattle uiBattle;
 
     private VisualBattle visualBattle;
+    
 
     int aDMG = 0;
     int dDMG = 0;
@@ -27,9 +29,12 @@ public class Battle : MonoBehaviour
     private void Start()
     {
         visualBattle = GetComponent<VisualBattle>();
+        
 
         visualBattle.SpawnCharacters(attacker, defender);
         Combat();
+
+        uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit );
     }
 
     private void Combat()
