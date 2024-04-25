@@ -34,7 +34,7 @@ public class Battle : MonoBehaviour
         visualBattle.SpawnCharacters(attacker, defender);
         Combat();
 
-        uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit );
+        uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
     }
 
     private void Combat()
