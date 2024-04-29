@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MyCell
 {
-    private bool walkable = true;
-    private int difficulty = 1;
+    [SerializeField] private bool walkable = true;
+    [SerializeField] private int difficulty = 1;
+    
+    [SerializeField] private float evasionBuff;
+    [SerializeField] private float defenceBuff;
     private CharacterD characterOnTop;
-    private float evasionBuff;
-    private float defenceBuff;
     private int positionx;
     private int positiony;
 

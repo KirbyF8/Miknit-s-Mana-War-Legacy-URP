@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterD : MonoBehaviour
 {
     private MyCell position;
+    private MyCell previousPos;
     [SerializeField] private int movement = 2;
     [SerializeField] private int side = 0;
 
@@ -42,6 +43,16 @@ public class CharacterD : MonoBehaviour
     {
         position = map.GetCell(x,y);
         transform.position = new Vector3(x*2+1, 0, -y*2-1);
+    }
+
+    public Vector2 GetPreviousPosition()
+    {
+        return previousPos.GetPosition();
+    }
+
+    public void SetPreviousPosition(int x, int y)
+    {
+        previousPos = map.GetCell(x, y);
     }
 
     public void SetPosition(MyCell cell)

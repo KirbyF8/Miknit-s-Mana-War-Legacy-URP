@@ -14,23 +14,35 @@ public class MyGrid : MonoBehaviour
     [SerializeField] private Vector2[] spawnPositions;
     [SerializeField] private CharacterD[] enemies;
     [SerializeField] private Vector2[] enemiesPositions;
-    private bool[,] walkablemap;
+    private bool[,] walkableMap;
+    [SerializeField] private CellCreatorSO[] cellsAux;
+    private MyCell[] cells;
+    [SerializeField] private Vector2[] cellsToChange;
+    [SerializeField] private int[] numberOfCell;
 
     private void Start()
     {
-        MyCell cell = new MyCell();
-        cell.SetWalkable(true);
-        CreateGrid(20, 20, cell);
+        cells = new MyCell[cellsAux.Length];
+        for (int i = 0; i < cellsAux.Length; i++)
+        {
+            cells[i] = new MyCell();
+            cells[i].SetWalkable(cellsAux[i].walkable);
+            cells[i].SetEvasion(cellsAux[i].evasionBuff);
+            cells[i].SetDefence(cellsAux[i].defenceBuff);
+            cells[i].SetDifficulty(cellsAux[i].difficulty);
+        }
+        CreateGrid(20, 20);
         for (int i = 0; i < enemies.Length; i++)
         {
             enemies[i].SetPosition(enemiesPositions[i]);
             gridArray[(int)enemiesPositions[i].x, (int)enemiesPositions[i].y].SetCharacter(enemies[i]);
         }
+        
     }
 
-    public MyGrid(int height, int width, MyCell defaultcell)
+    public MyGrid(int height, int width)
     {
-        CreateGrid(height, width, defaultcell);
+        CreateGrid(height, width);
     }
 
     public void SetSpawn(Vector2[] spawns)
@@ -63,22 +75,28 @@ public class MyGrid : MonoBehaviour
     }
 
 
-    public void CreateGrid(int height, int width, MyCell defaultcell)
+    public void CreateGrid(int height, int width)
     {
         this.height = height;
         this.width = width;
         gridArray = new MyCell[height, width];
-        walkablemap = new bool[height,width];
+        walkableMap = new bool[height,width];
 
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
                 gridArray[i,j] = new MyCell();
-                gridArray[i, j].Copy(defaultcell);
+                gridArray[i, j].Copy(cells[0]);
                 gridArray[i, j].SetPosition(i, j);
-                walkablemap[i,j] = defaultcell.GetWalkable();
+                walkableMap[i,j] = cells[0].GetWalkable();
             }
+        }
+        for (int i = 0;i<cellsToChange.Length; i++)
+        {
+            gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].Copy(cells[numberOfCell[i]]);
+            if (!gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].GetWalkable()) walkableMap[(int)cellsToChange[i].x, (int)cellsToChange[i].y] = false;
+
         }
     }
 
@@ -97,13 +115,13 @@ public class MyGrid : MonoBehaviour
     public void SetWalkable(Vector2 cell, bool walk)
     {
         gridArray[(int)cell.x, (int)cell.y].SetWalkable(walk);
-        walkablemap[(int)cell.x, (int)cell.y] = walk;
+        walkableMap[(int)cell.x, (int)cell.y] = walk;
     }
 
     public void SetWalkable(int x, int y, bool walk)
     {
         gridArray[x, y].SetWalkable(walk);
-        walkablemap[x, y] = walk;
+        walkableMap[x, y] = walk;
     }
 
     public MyCell[] GetNeighbors(int x, int y, int range)
@@ -171,17 +189,17 @@ public class MyGrid : MonoBehaviour
         {
             if (enemies[i] != null)
             {
-                walkablemap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = false;
+                walkableMap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = false;
             }
         }
-
-        (int, int)[] aux = AStarPathfinding.GeneratePathSync((int)start.x, (int) start.y, (int)goal.x, (int)goal.y, walkablemap, true,true);
+        Debug.Log(walkableMap[(int)enemies[0].GetPosition().x, (int)enemies[0].GetPosition().y]);
+        (int, int)[] aux = AStarPathfinding.GeneratePathSync((int)start.x, (int) start.y, (int)goal.x, (int)goal.y, walkableMap, false,false);
 
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
             {
-                walkablemap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = true;
+                walkableMap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = true;
             }
         }
 
