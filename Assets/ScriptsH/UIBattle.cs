@@ -264,4 +264,15 @@ public class UIBattle : MonoBehaviour
 
 
     }
+    
+   
+
+    public void HealthUpdate(Character atacker, Character defender)
+    {
+        if (atacker.hp < 0) { atacker.hp = 0; }
+        if (defender.hp < 0) { defender.hp = 0; }
+
+        attackerHealth.text = atacker.hp + "/" + atacker.stats[0];
+        defenderHealth.text = defender.hp + "/" + defender.stats[0];
+    }
 }
