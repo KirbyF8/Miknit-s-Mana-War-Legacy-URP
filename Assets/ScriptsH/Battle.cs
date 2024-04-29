@@ -35,6 +35,7 @@ public class Battle : MonoBehaviour
         Combat();
 
         uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
+        visualBattle.AnimationBattle(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
     }
 
     private void Combat()
@@ -47,6 +48,7 @@ public class Battle : MonoBehaviour
         HitChance();
         CritChance();
 
+        /*
         Debug.Log("Tu daño = " + aDMG);      
         Debug.Log("Tu Nº de ataques = " + aATKs);
        Debug.Log("Tu % De golepar = " + aHit);
@@ -57,8 +59,9 @@ public class Battle : MonoBehaviour
         Debug.Log("Su Nº de ataques = " + dATKs);
         Debug.Log("Su % De golepar = " + dHit);
         Debug.Log("Su % De crítico = " + dCrit);
-    }
-
+*/    
+        }
+        
     private void NumberOfAttacks()
     {
 
@@ -233,6 +236,7 @@ public class Battle : MonoBehaviour
     
     private void CritChance()
     {
+
         aCrit = ((attacker.stats[8] * 2 ) - defender.stats[8] + (attacker.stats[3] - defender.stats[3]));
 
         if (aCrit >= 100)
@@ -244,6 +248,9 @@ public class Battle : MonoBehaviour
             aCrit = 0;
         }
 
+        
+
+       
 
         dCrit = ((defender.stats[8] * 2) - attacker.stats[8] + (defender.stats[3] - attacker.stats[3]));
 
@@ -255,5 +262,9 @@ public class Battle : MonoBehaviour
         {
             dCrit = 0;
         }
+
+       
     }
+
+    
 }
