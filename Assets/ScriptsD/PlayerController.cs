@@ -85,6 +85,10 @@ public class PlayerController : MonoBehaviour
         }
         else if (movementPhase)
         {
+            if (Input.GetKeyDown(KeyCode.Z) && selected != null && selected.GetCharacter() != null)
+            {
+                ReturnPos();
+            }
             if (Input.GetMouseButtonDown(0) && !moving)
             {
                 ShootRay();
@@ -116,7 +120,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if(selectedAux.GetCharacter()!= null && selectedAux.GetCharacter().GetSide() !=0)
                         {
-                            ExchangePos(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
+                            MoveChar(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
                             Debug.Log("attack");
                             DeleteTiles();
                         }
@@ -160,6 +164,13 @@ public class PlayerController : MonoBehaviour
 
         if (show) Debug.DrawRay(transform.position, ray.direction * 100000, Color.red);*/
 
+    }
+
+    private void ReturnPos()
+    {
+        Debug.Log(selected.GetCharacter().GetPreviousPosition());
+        selected.GetCharacter().SetPosition(selected.GetCharacter().GetPreviousPosition());
+        DeleteTiles();
     }
 
     private bool CheckMove()
@@ -308,12 +319,13 @@ public class PlayerController : MonoBehaviour
     private IEnumerator MovingChar((int, int)[] path)
     {
         CharacterD selectedChar = map.GetCell(path[0].Item1, path[0].Item2).GetCharacter();
+        selectedChar.SetPreviousPosition(path[0].Item1, path[0].Item2);
         map.GetCell(path[0].Item1, path[0].Item2).SetCharacter(null);
         moving = true;
         for(int i = 1; i < path.Length; i++)
         {
             selectedChar.SetPosition(path[i].Item1, path[i].Item2);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
         map.GetCell(path[path.Length-1].Item1, path[path.Length - 1].Item2).SetCharacter(selectedChar);
         moving = false;
