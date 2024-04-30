@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class MyGrid : MonoBehaviour
 {
@@ -19,7 +20,6 @@ public class MyGrid : MonoBehaviour
     private MyCell[] cells;
     [SerializeField] private Vector2[] cellsToChange;
     [SerializeField] private int[] numberOfCell;
-
     private void Start()
     {
         cells = new MyCell[cellsAux.Length];
@@ -193,7 +193,8 @@ public class MyGrid : MonoBehaviour
             }
         }
         Debug.Log(walkableMap[(int)enemies[0].GetPosition().x, (int)enemies[0].GetPosition().y]);
-        (int, int)[] aux = AStarPathfinding.GeneratePathSync((int)start.x, (int) start.y, (int)goal.x, (int)goal.y, walkableMap, false,false);
+        //(int, int)[] aux = AStarPathfinding.GeneratePathSync((int)start.x, (int) start.y, (int)goal.x, (int)goal.y, walkableMap, false,false);
+        List<(int, int)> aux = PathFinding(start, goal, gridArray[(int)start.x, (int) start.y].GetCharacter().GetMovement());
 
         for (int i = 0; i < enemies.Length; i++)
         {
@@ -203,8 +204,179 @@ public class MyGrid : MonoBehaviour
             }
         }
 
-        return aux;
+        return aux.ToArray();
 
     }
-    
+
+    private List<(int, int)> PathFinding(Vector2 start, Vector2 goal, int range)
+    {
+        if (start == goal) return new List<(int, int)> { ((int)start.x, (int)start.y) };
+        else if ((int)start.x < 0 || (int)start.x > width || (int)start.y < 0 || (int)start.y > height) return null;
+        else if (!walkableMap[(int)start.x, (int)start.y]) return null;
+        else if (range == 0) return null;
+        else
+        {
+            if (start.y < goal.y)
+            {
+                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                if (possible != null)
+                {
+                    possible.Insert(0,((int)start.x, (int)start.y));
+                    return possible;
+                }
+                else
+                {
+                    if (start.x < goal.x)
+                    {
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                    }
+                    else
+                    {
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                }
+            }
+
+            else if(start.y > goal.y) 
+            {
+                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                if (possible != null)
+                {
+                    possible.Insert(0, ((int)start.x, (int)start.y));
+                    return possible;
+                }
+                else
+                {
+                    if (start.x < goal.x)
+                    {
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                    }
+                    else
+                    {
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        if (possible != null)
+                        {
+                            possible.Insert(0, ((int)start.x, (int)start.y));
+                            return possible;
+                        }
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                }
+            }
+
+            else
+            {
+                List<(int, int)> possible = null;
+                if (start.x < goal.x)
+                {
+                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                }
+                else
+                {
+                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                    if (possible != null)
+                    {
+                        possible.Insert(0, ((int)start.x, (int)start.y));
+                        return possible;
+                    }
+                }
+                
+            }
+
+            return null;
+        }
+        
+    }
+
 }
