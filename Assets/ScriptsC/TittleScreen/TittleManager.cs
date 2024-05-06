@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TittleManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class TittleManager : MonoBehaviour
     [SerializeField] private GameObject MainPanel;
     [SerializeField] private GameObject CreditsPanel;
     [SerializeField] private GameObject OptionsPanel;
+    [SerializeField] private Button mainButtonSelect;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +44,8 @@ public class TittleManager : MonoBehaviour
     public void HideCreditsPanel()
     {
         CreditsPanel.SetActive(false);
+        mainButtonSelect.Select();
+
     }
 
     public void ShowOptionsPanel()
@@ -51,6 +55,7 @@ public class TittleManager : MonoBehaviour
     public void HideOptionsPanel()
     {
         OptionsPanel.SetActive(false);
+        mainButtonSelect.Select();
     }
 
 
