@@ -10,14 +10,22 @@ public class CameraControl : MonoBehaviour
     private float horizontalInput;
     private Vector3 movementVector;
 
-    // Update is called once per frame
+
     void Update()
     {
+
+        //Leemos los inputs vertical y horizontal y creamos el vector de movimiento
+
         verticalInput = Input.GetAxis("Vertical");
         horizontalInput = Input.GetAxis("Horizontal");
         movementVector = verticalInput * Vector3.forward + horizontalInput * Vector3.right;
         movementVector.Normalize();
+
+        //Movemos la camara en la dirección del vector antes creado
+
         transform.Translate(movementVector * Time.deltaTime * moveSpeed);
+
+        //Leemos los inputs de la Q y la E y rotamos en una dirección u otra si pulsan alguno.
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -29,20 +37,4 @@ public class CameraControl : MonoBehaviour
         }
     }
 
-    private void Start()
-    {/*
-        MyCell cell = new MyCell();
-        cell.SetWalkable(true);
-        MyGrid grid = new MyGrid(10,10,cell);
-        MyCell cell2 = grid.GetCell(6, 5);
-        cell2.SetWalkable(false);
-        List<Vector2> ey= grid.GetMovement(5, 5, 5);
-
-        for (int i = 0; i < ey.Count; i++)
-        {
-            Debug.Log(ey[i].x + ", " + ey[i].y);
-        }
-        Debug.Log(ey.Count);*/
-
-    }
 }

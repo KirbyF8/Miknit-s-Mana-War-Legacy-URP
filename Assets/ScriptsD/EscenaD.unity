@@ -315,7 +315,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &154586086
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +401,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &189442287
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &391517990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,7 +1560,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &637213983
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,16 +3596,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b291997bd74a6bd4184e727a41f26552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  options: {fileID: 0}
-  goBack: {fileID: 0}
-  master: {fileID: 0}
-  sfx: {fileID: 0}
-  voices: {fileID: 0}
-  music: {fileID: 0}
-  autoEnd: {fileID: 0}
-  showGrid: {fileID: 0}
-  partyMode: {fileID: 0}
-  mirror: {fileID: 0}
+  options: {fileID: 1036809473}
+  goBack: {fileID: 1659387095}
+  master: {fileID: 1074991726}
+  sfx: {fileID: 333508090}
+  voices: {fileID: 809356459}
+  music: {fileID: 514096932}
+  autoEnd: {fileID: 382287905}
+  showGrid: {fileID: 130627246}
+  partyMode: {fileID: 154586088}
+  mirror: {fileID: 600407742}
 --- !u!1 &1297880624
 GameObject:
   m_ObjectHideFlags: 0
