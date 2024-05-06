@@ -13,6 +13,7 @@ public class VisualBattle : MonoBehaviour
 
     [SerializeField] private UIBattle uiBattle;
 
+    
 
     
     public void SpawnCharacters(Character attacker, Character defender)
@@ -22,8 +23,8 @@ public class VisualBattle : MonoBehaviour
         defender.hp = defender.stats[0];
         //? Quitar mas tarde
 
-        Instantiate(attacker, attackerPos, Quaternion.Euler(0,10,0));
-        Instantiate(defender, defenderPos, Quaternion.Euler(0, 170, 0));
+        Instantiate(attacker, attackerPos, Quaternion.Euler(0,0,0));
+        Instantiate(defender, defenderPos, Quaternion.Euler(0, 180, 0));
     }
 
     private void A_Atack(Character atacker, Character defender, int aCrit, int aDMG, int aHit)
@@ -31,6 +32,7 @@ public class VisualBattle : MonoBehaviour
         int aux = Random.Range(0, 101);
         if (atacker.hp <= 0 || defender.hp <= 0)
         {
+            //? Dejenlo ya esta muerto
             return;
         }
         else
@@ -40,6 +42,8 @@ public class VisualBattle : MonoBehaviour
                 if (aDMG <= 0)
                 {
                     //! No Damage
+                    Wait(atacker, defender, false, false, true, 0);
+                    
                     return;
                 }
                 else
@@ -49,14 +53,19 @@ public class VisualBattle : MonoBehaviour
                         aux = Random.Range(0, 101);
                         if (aux < aCrit)
                         {
-                            defender.hp -= aDMG * 3;
-
+                            Wait(atacker, defender, false, true, false, aDMG * 3);
+                           
+                            new WaitForSeconds(3f);
+                            
 
                         }
                         else
                         {
-                            defender.hp -= aDMG;
+                            Wait(atacker, defender, false, false, false, aDMG);
+                            
 
+                            new WaitForSeconds(3f);
+                            
                         }
                     }
                 }
@@ -64,7 +73,9 @@ public class VisualBattle : MonoBehaviour
             else
             {
                 //! miss
-                Debug.Log("miss");
+                Wait(atacker, defender, true, false, false, 0);
+                
+                new WaitForSeconds(3f);
                 return;
             }
         }
@@ -79,8 +90,7 @@ public class VisualBattle : MonoBehaviour
 
       
 
-        GameObject AtackerBody = GameObject.Find(atacker.name+"(Clone)");
-        GameObject DefenderBody = GameObject.Find(defender.name+"(Clone)");
+       
 
         int aux = Random.Range(0, 101);
         int auxDefenderHits = 0;
@@ -123,14 +133,44 @@ public class VisualBattle : MonoBehaviour
         }
        
           
-
-
+      
         
     }
 
+   
+
+    private void Wait(Character atacker, Character defender, bool missed, bool crit, bool noDMG, int aDMG)
+    {
+        GameObject AtackerBody = GameObject.Find(atacker.name + "(Clone)");
+        GameObject DefenderBody = GameObject.Find(defender.name + "(Clone)");
+
+        Animator atackerAnimator = AtackerBody.GetComponent<Animator>();
+        Animator defenderAnimator = DefenderBody.GetComponent<Animator>();
+
+
+        atackerAnimator.SetBool("AttackV2", true);
+
+        Invoke("Damage", 2f);
         
-        
-         
-        
-       
+    }
+
+    private void Damage()
+    {
+        Debug.Log("Hola");     
+        /*
+        Character defender; int aDMG;
+
+        GameObject DefenderBody = GameObject.Find(defender.name + "(Clone)");
+        defender = DefenderBody.GetComponent<Character>();
+
+        GameObject AtackerBody = GameObject.Find(atacker.name + "(Clone)");
+        Animator atackerAnimator = AtackerBody.GetComponent<Animator>();
+
+        defender.hp -= aDMG;
+
+        atackerAnimator.SetBool("AttackV2", false);
+    */
+        }
+
+
 }
