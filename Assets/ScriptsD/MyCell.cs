@@ -13,6 +13,9 @@ public class MyCell
     private int positionx;
     private int positiony;
 
+
+    //Funciones para leer y escribir las variables de la Cell
+    
     public bool GetWalkable()
     {
         return walkable;
@@ -75,10 +78,11 @@ public class MyCell
         positiony = y;
     }
 
+    //Función para copiar una Cell, se usa al crear el mapa porque usamos varios scriptable objects como casillas
+
     public void Copy(MyCell cell)
     {
-        positiony = cell.positiony;
-        positionx = cell.positionx;
+
         walkable = cell.walkable;
         difficulty = cell.difficulty;
         evasionBuff = cell.evasionBuff;

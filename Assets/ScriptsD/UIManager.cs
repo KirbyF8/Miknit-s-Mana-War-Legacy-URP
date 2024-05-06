@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
 
+        //Asignamos a todos los elementos de la UI su función de GameManager correspondiente
+
         goBack.onClick.AddListener(HideOptions);
         master.onValueChanged.AddListener(gameManager.ChangeMaster);
         sfx.onValueChanged.AddListener(gameManager.ChangeSFX);
@@ -37,12 +39,15 @@ public class UIManager : MonoBehaviour
         mirror.onValueChanged.AddListener(gameManager.MirrorStats);
     }
 
-    private void ShowOptions()
+
+    //Función para enseñar el panel de opciones
+    public void ShowOptions()
     {
         options.SetActive(true);
     }
 
-    private void HideOptions()
+    //Función para ocultar el panel de opciones
+    public void HideOptions()
     {
         options.SetActive(false);
     }

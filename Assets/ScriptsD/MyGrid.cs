@@ -9,19 +9,36 @@ using static UnityEditor.PlayerSettings;
 public class MyGrid : MonoBehaviour
 {
 
+    //altura y anchura del mapa
     [SerializeField] private int height;
     [SerializeField] private int width;
+
+    //Matriz de cells que es el mapa en si
     private MyCell[,] gridArray;
+
+    //posiciones en los que los aliados pueden posicionarse al principio de la batalla
     [SerializeField] private Vector2[] spawnPositions;
+
+    //los enemigos del mapa y sus correspondientes posiciones
     [SerializeField] private CharacterD[] enemies;
     [SerializeField] private Vector2[] enemiesPositions;
+
+    //matriz de booleanos para registrar por donde se puede caminar y por donde no
     private bool[,] walkableMap;
+
+    //array con los SO de las cells que va a haber en ese mapa y array que después llenaremos con las mismas cells pero pasadas de CellCreatorSO a MyCell
     [SerializeField] private CellCreatorSO[] cellsAux;
     private MyCell[] cells;
+
+    //arrays con el mismo tamaño, cellsToChange tiene las cells que tienen que ser diferentes a la cell por predeterminado (cellsAux[0])
+    //y numberOfCell tiene la casilla por la que hay que cambiar cada casilla de cellsToChange
     [SerializeField] private Vector2[] cellsToChange;
     [SerializeField] private int[] numberOfCell;
     private void Start()
     {
+
+        //Al crearse un mapa se pasan las cellsSO del array cellsAux a cells normales que guardamos en otro array del mismo tamaño.
+
         cells = new MyCell[cellsAux.Length];
         for (int i = 0; i < cellsAux.Length; i++)
         {
@@ -31,7 +48,13 @@ public class MyGrid : MonoBehaviour
             cells[i].SetDefence(cellsAux[i].defenceBuff);
             cells[i].SetDifficulty(cellsAux[i].difficulty);
         }
-        CreateGrid(20, 20);
+
+        //Se crea la grid con la height y width introducidas por inspector
+
+        CreateGrid(height, width);
+
+        //Se colocan todos los enemigos en la posición que les corresponde de enemiesPositions.
+
         for (int i = 0; i < enemies.Length; i++)
         {
             enemies[i].SetPosition(enemiesPositions[i]);
@@ -40,10 +63,15 @@ public class MyGrid : MonoBehaviour
         
     }
 
+    //Constructor de grid (ELIMINAR?)
+
     public MyGrid(int height, int width)
     {
         CreateGrid(height, width);
     }
+
+
+    //Funciones para leer y escribir las variables de la grid
 
     public void SetSpawn(Vector2[] spawns)
     {
@@ -73,40 +101,6 @@ public class MyGrid : MonoBehaviour
     {
         return gridArray[(int)x.x, (int)x.y];
     }
-
-
-    public void CreateGrid(int height, int width)
-    {
-        this.height = height;
-        this.width = width;
-        gridArray = new MyCell[height, width];
-        walkableMap = new bool[height,width];
-
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                gridArray[i,j] = new MyCell();
-                gridArray[i, j].Copy(cells[0]);
-                gridArray[i, j].SetPosition(i, j);
-                walkableMap[i,j] = cells[0].GetWalkable();
-            }
-        }
-        for (int i = 0;i<cellsToChange.Length; i++)
-        {
-            gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].Copy(cells[numberOfCell[i]]);
-            if (!gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].GetWalkable()) walkableMap[(int)cellsToChange[i].x, (int)cellsToChange[i].y] = false;
-
-        }
-    }
-
-    public bool IsInBounds(int x, int y)
-    {
-        if (x < 0 || y < 0) return false;
-        if (x > width || y > height) return false;
-        return true;
-    }
-
     public void SetCell(MyCell cell, int x, int y)
     {
         gridArray[x, y] = cell;
@@ -124,18 +118,71 @@ public class MyGrid : MonoBehaviour
         walkableMap[x, y] = walk;
     }
 
-    public MyCell[] GetNeighbors(int x, int y, int range)
+    //Función para crear la grid
+
+    public void CreateGrid(int height, int width)
     {
-        return GetNeighbors(x, y, range, range);
+
+        //primero se ponen la height y la width en las variables del objeto y se crea la matriz de cells y de bools con esas dos variables
+
+        this.height = height;
+        this.width = width;
+        gridArray = new MyCell[height, width];
+        walkableMap = new bool[height,width];
+
+        //Se crean todas las cells y se ponen como la cell predeterminada
+
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                gridArray[i,j] = new MyCell();
+                gridArray[i, j].Copy(cells[0]);
+                gridArray[i, j].SetPosition(i, j);
+                walkableMap[i,j] = cells[0].GetWalkable();
+            }
+        }
+
+        //Ahora se revisa todo el array de CellsToChange y se cambia cada cell por la cell que indica numberOfCell
+
+        for (int i = 0;i<cellsToChange.Length; i++)
+        {
+            gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].Copy(cells[numberOfCell[i]]);
+            if (!gridArray[(int)cellsToChange[i].x, (int)cellsToChange[i].y].GetWalkable()) walkableMap[(int)cellsToChange[i].x, (int)cellsToChange[i].y] = false;
+
+        }
     }
 
-    private MyCell[] GetNeighbors(int xCordinate, int yCordinate, int xEndOffset = 1, int yEndOffset = 1)
+    //Función para revisar si la posición indicada corresponde a una casilla del mapa
+    public bool IsInBounds(int x, int y)
     {
+        if (x < 0 || y < 0) return false;
+        if (x > width || y > height) return false;
+        return true;
+    }
+
+    
+    
+    
+    //Función que devuelve todas las casillas adyacentes a la casilla (x,y) hasta el rango indicado
+    public MyCell[] GetNeighbors(int x, int y, int range = 1, int range2 = 0)
+    {
+        if(range2 == 0) return GetNeighborsa(x, y, range, range);
+        else return GetNeighborsa(x, y, range, range2);
+    }
+
+
+    //no me gusta nada esta función peeero la pillé de un asset diferente y me ahorré el pensar cómo hacerla, tampoco creo que vayamos a usarla mucho
+    private MyCell[] GetNeighborsa(int xCordinate, int yCordinate, int xEndOffset, int yEndOffset)
+    {
+
         List<MyCell> neighbourCells = new List<MyCell>();
 
+        //yEnd y xEnd son el máximo de rango al que va a llegar la lista de su respectivo eje, sin pasarse de el límite del mapa.
         int yEnd = (int)MathF.Min(height - 1, yCordinate + yEndOffset);
         int xEnd = (int)MathF.Min(width - 1, xCordinate + xEndOffset);
 
+        //bucle que va a revisar toda la grid, y si la cell está en el rango que se busca la pone en la lista
         for (int y = 0; y <= yEnd; y++)
         {
             for (int x = 0; x <= xEnd; x++)
@@ -149,11 +196,12 @@ public class MyGrid : MonoBehaviour
             }
         }
 
-
+        //transforma la lista en array y la devuelve
         MyCell[] tempArray = neighbourCells.ToArray();
         return tempArray;
     }
 
+    //Función que devuelve una lista con todas las cells a las que se puede mover un personaje que está en (x,y) y tiene movimiento move
     public List<Vector2> GetMovement(int x, int y, int move)
     {
         List<Vector2> end = new List<Vector2>();
@@ -161,13 +209,20 @@ public class MyGrid : MonoBehaviour
         return end;
     }
 
+    //Función recursiva para hacer la anterior.
     private void GetMovementRec(int x, int y, int range, ref List<Vector2> end) 
     {
-        if (x < 0 || y < 0 || x > width-1 || y > height-1) return;
+        //Si no está dentro de la grid, si ya está dentro de la lista, o si no se puede caminar por la casilla seleccionada vuelve
+        if (!IsInBounds(x,y)) return;
         bool thereIs = end.Contains(new Vector2(x, y));
         int diff = gridArray[x,y].GetDifficulty();
         if (!gridArray[x, y].GetWalkable()) return;
-        if (gridArray[x, y].GetCharacter() != null && (gridArray[x, y].GetCharacter().GetSide() > 0 || gridArray[x, y].GetCharacter().GetSide() < 0)) range = 0; ;
+
+        //si hay un enemigo se añade al array pero se pone el rango a 0 para que no pueda atravesarlo, pero salga una casilla en rojo debajo del enemigo
+        if (gridArray[x, y].GetCharacter() != null && (gridArray[x, y].GetCharacter().GetSide() > 0 || gridArray[x, y].GetCharacter().GetSide() < 0)) range = 0; 
+
+        //si el rango es menor o igual a zero se añade la posición y ya,
+        //si es mayor a zero se añade y además vuelve a ejecutar la función con cada casilla adyacente y con rango menor dependiendo de la dificultad de movimiento
         if (range <= 0)
         { 
             if(!thereIs) end.Add(new Vector2(x, y));
@@ -183,8 +238,10 @@ public class MyGrid : MonoBehaviour
         return;
     }
 
+    //Función que devuelve el array con las posiciones por las que tiene que ir el personaje para llegar hasta el objetivo
     public (int, int)[] FindPath(Vector2 start, Vector2 goal)
     {
+        //se pone a false en el array de booleanos todas las posiciones donde haya enemigos
         for(int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
@@ -192,10 +249,10 @@ public class MyGrid : MonoBehaviour
                 walkableMap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = false;
             }
         }
-        Debug.Log(walkableMap[(int)enemies[0].GetPosition().x, (int)enemies[0].GetPosition().y]);
-        //(int, int)[] aux = AStarPathfinding.GeneratePathSync((int)start.x, (int) start.y, (int)goal.x, (int)goal.y, walkableMap, false,false);
-        List<(int, int)> aux = PathFinding(start, goal, gridArray[(int)start.x, (int) start.y].GetCharacter().GetMovement());
+        //pasa a la función que encuentra el camino
+        List <(int, int)> aux = PathFinding(start, goal, gridArray[(int)start.x, (int) start.y].GetCharacter().GetMovement());
 
+        //vuelve a poner las casillas con enemigos a true (para que el get movement no detecte los enemigos como paredes)
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
@@ -203,22 +260,40 @@ public class MyGrid : MonoBehaviour
                 walkableMap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = true;
             }
         }
-
+        
         return aux.ToArray();
 
     }
 
+    //función que devuelve el camino (TOCHO INCOMING)
     private List<(int, int)> PathFinding(Vector2 start, Vector2 goal, int range)
     {
+        // si start es goal devuelve una lista con la goal 
         if (start == goal) return new List<(int, int)> { ((int)start.x, (int)start.y) };
-        else if ((int)start.x < 0 || (int)start.x > width || (int)start.y < 0 || (int)start.y > height) return null;
+        
+        //si start no está en bounds o si es una pared devuelve nulo
+        else if (!IsInBounds((int)start.x, (int)start.y)) return null;
         else if (!walkableMap[(int)start.x, (int)start.y]) return null;
-        else if (range == 0) return null;
+
+        //si se agota el movimiento devuelve nulo
+        else if (range <= 0) return null;
+
+        
+
         else
         {
+            int diff = gridArray[(int)start.x, (int)start.y].GetDifficulty();
+            //comprueba si la meta está arriba, abajo, o en la misma linea que start.
+            //Si está más arriba se ejecutará la misma función pero con la casilla superior,
+            //si esa no devuelve una respuesta (nulo) comprobará si la meta está a la izquierda o a la derecha del start,
+            //hace la función primero hacia donde esté la meta, después hacia el otro lado,
+            //y finmalmente hacia abajo, si alguno devuelve una respuesta sale de la función con esa respuesta,
+            //si nadie tiene respuesta devuelve nulo
+            //Si está más arriba el orden es el contrario, primero revisa abajo, después los lados, y después arriba.
+            //Finalmente si está en la misma línea primero comprobará los lados, y si no hay respuesta válida comprobará arriba y abajo.
             if (start.y < goal.y)
             {
-                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - diff);
                 if (possible != null)
                 {
                     possible.Insert(0,((int)start.x, (int)start.y));
@@ -228,13 +303,13 @@ public class MyGrid : MonoBehaviour
                 {
                     if (start.x < goal.x)
                     {
-                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
-                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
@@ -243,20 +318,20 @@ public class MyGrid : MonoBehaviour
                     }
                     else
                     {
-                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
-                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
@@ -267,7 +342,7 @@ public class MyGrid : MonoBehaviour
 
             else if(start.y > goal.y) 
             {
-                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                List<(int, int)> possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - diff);
                 if (possible != null)
                 {
                     possible.Insert(0, ((int)start.x, (int)start.y));
@@ -277,13 +352,13 @@ public class MyGrid : MonoBehaviour
                 {
                     if (start.x < goal.x)
                     {
-                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
-                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
@@ -292,20 +367,20 @@ public class MyGrid : MonoBehaviour
                     }
                     else
                     {
-                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
-                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                        possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                         if (possible != null)
                         {
                             possible.Insert(0, ((int)start.x, (int)start.y));
                             return possible;
                         }
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
@@ -319,25 +394,25 @@ public class MyGrid : MonoBehaviour
                 List<(int, int)> possible = null;
                 if (start.x < goal.x)
                 {
-                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
@@ -346,25 +421,25 @@ public class MyGrid : MonoBehaviour
                 }
                 else
                 {
-                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x - 1, start.y), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y + 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x, start.y - 1), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));
                         return possible;
                     }
-                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - 1);
+                    possible = PathFinding(new Vector2(start.x + 1, start.y), goal, range - diff);
                     if (possible != null)
                     {
                         possible.Insert(0, ((int)start.x, (int)start.y));

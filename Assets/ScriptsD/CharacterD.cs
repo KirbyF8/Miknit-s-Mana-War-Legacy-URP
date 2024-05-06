@@ -11,10 +11,8 @@ public class CharacterD : MonoBehaviour
 
     [SerializeField] private MyGrid map;
 
-  /*  private void Start()
-    {
-       // map = FindObjectOfType<MyGrid>();
-    }*/
+
+    //Funciones para leer y escribir las variables del CharacterD 
 
     public int GetMovement()
     {
@@ -70,6 +68,11 @@ public class CharacterD : MonoBehaviour
     public void SetMap(MyGrid map)
     {
         this.map = map;
+    }
+
+    public MyGrid SetMap()
+    {
+        return this.map;
     }
 
 }
