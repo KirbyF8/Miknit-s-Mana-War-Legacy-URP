@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    private GameManager gameManager;
+    private GameManagerD gameManager;
 
     [SerializeField] private GameObject options;
 
@@ -21,10 +21,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Toggle partyMode;
     [SerializeField] private Toggle mirror;
 
+    [SerializeField] private Button endSpawnPhase;
+    [SerializeField] private Button endTurn;
 
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManagerD>();
 
         //Asignamos a todos los elementos de la UI su función de GameManager correspondiente
 
@@ -37,6 +39,9 @@ public class UIManager : MonoBehaviour
         showGrid.onValueChanged.AddListener(gameManager.ShowGrid);
         partyMode.onValueChanged.AddListener(gameManager.PartyMode);
         mirror.onValueChanged.AddListener(gameManager.MirrorStats);
+
+        endSpawnPhase.onClick.AddListener(gameManager.EndSpawn);
+        endTurn.onClick.AddListener(gameManager.EndTurn);
     }
 
 
@@ -52,4 +57,25 @@ public class UIManager : MonoBehaviour
         options.SetActive(false);
     }
 
+    //Función para desactivar el botón de terminar la fase de spawn
+    public void HideEndOfSpawn()
+    {
+        endSpawnPhase.gameObject.SetActive(false);
+    }
+
+    //Función para activar el botón de terminar la fase de spawn
+    public void ShowEndOfSpawn()
+    {
+        endSpawnPhase.gameObject.SetActive(true);
+    }
+
+    public void EndTurnOn()
+    {
+        endTurn.interactable = true;
+    }
+
+    public void EndTurnOff()
+    {
+        endTurn.interactable = false;
+    }
 }

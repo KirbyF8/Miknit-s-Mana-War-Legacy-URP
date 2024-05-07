@@ -8,7 +8,7 @@ public class CharacterD : MonoBehaviour
     private MyCell previousPos;
     [SerializeField] private int movement = 2;
     [SerializeField] private int side = 0;
-
+    private bool hasMovedThisTurn = false;
     [SerializeField] private MyGrid map;
 
 
@@ -70,9 +70,19 @@ public class CharacterD : MonoBehaviour
         this.map = map;
     }
 
-    public MyGrid SetMap()
+    public MyGrid GetMap()
     {
         return this.map;
+    }
+
+    public void SetHasMoved(bool x)
+    {
+        hasMovedThisTurn = x;
+    }
+
+    public bool GetHasMoved()
+    {
+        return hasMovedThisTurn;
     }
 
 }
