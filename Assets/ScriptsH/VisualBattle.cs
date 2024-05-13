@@ -1,23 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Unity.Burst.Intrinsics.X86;
 
 public class VisualBattle : MonoBehaviour
 {
-    private Vector3 attackerPos = new Vector3(600, 180, 40);
-    private Vector3 attackertargetPos = new Vector3(600, 180, 50);
+    private Vector3 attackerPos = new Vector3(600, 180, 42);
 
-    private Vector3 defenderPos = new Vector3(600, 180, 53);
-    private Vector3 defendertargetPos = new Vector3(600, 180, 42);
+    private Vector3 defenderPos = new Vector3(600, 180, 52);
 
     [SerializeField] private UIBattle uiBattle;
 
-    
+    private string defenderName;
+    private string attackerName;
 
-    
+    private int maxAttacks1;
+    private int attacks1;
+    private int maxAttacks2;
+    private int attacks2;
+
+    private string atackerNameConst;
+
+    private bool starded = false;
+
     public void SpawnCharacters(Character attacker, Character defender)
     {
+       atackerNameConst = attacker.name;
+
         //? Quitar mas tarde
         attacker.hp = attacker.stats[0];
         defender.hp = defender.stats[0];
@@ -29,7 +40,13 @@ public class VisualBattle : MonoBehaviour
 
     private void A_Atack(Character atacker, Character defender, int aCrit, int aDMG, int aHit)
     {
+        attackerName = atacker.name + "(Clone)";
+        defenderName = defender.name + "(Clone)";
+
         int aux = Random.Range(0, 101);
+
+       //if (!starded) { 
+
         if (atacker.hp <= 0 || defender.hp <= 0)
         {
             //? Dejenlo ya esta muerto
@@ -49,13 +66,13 @@ public class VisualBattle : MonoBehaviour
                 else
                 {
 
-                    {
+                    
                         aux = Random.Range(0, 101);
                         if (aux < aCrit)
                         {
                             Wait(atacker, defender, false, true, false, aDMG * 3);
                            
-                            new WaitForSeconds(3f);
+                           
                             
 
                         }
@@ -64,10 +81,10 @@ public class VisualBattle : MonoBehaviour
                             Wait(atacker, defender, false, false, false, aDMG);
                             
 
-                            new WaitForSeconds(3f);
+                          
                             
                         }
-                    }
+                    
                 }
             }
             else
@@ -75,36 +92,39 @@ public class VisualBattle : MonoBehaviour
                 //! miss
                 Wait(atacker, defender, true, false, false, 0);
                 
-                new WaitForSeconds(3f);
+                
                 return;
             }
         }
+        //}
     }
-        
 
-    
 
+
+    int auxDefenderHits = 0;
+    int auxAttackerHits = 0;
 
     public void AnimationBattle(Character atacker, Character defender, int aCrit, int dCrit, int aDMG, int dDMG, int aATKs, int dATKs, int aHit, int dHit)
     {
 
-      
+        maxAttacks1 = aATKs;
+        maxAttacks2 = dATKs;
 
        
 
         int aux = Random.Range(0, 101);
-        int auxDefenderHits = 0;
-        int auxAttackerHits = 0;
+        
 
          while (auxAttackerHits < aATKs || auxDefenderHits < dATKs)
         {
+             
             if ((aATKs-auxAttackerHits) >= 3 )
             {
                 A_Atack(atacker, defender, aCrit, aDMG,  aHit);
-                auxAttackerHits++;
+                //auxAttackerHits++;
                 uiBattle.HealthUpdate(atacker, defender);
                 A_Atack(atacker, defender, aCrit, aDMG, aHit);
-                auxAttackerHits++;
+                //auxAttackerHits++;
                 uiBattle.HealthUpdate(atacker, defender);
             }
             else
@@ -129,7 +149,7 @@ public class VisualBattle : MonoBehaviour
                 auxDefenderHits++;
                 uiBattle.HealthUpdate(atacker, defender);
             }
-
+            
         }
        
           
@@ -137,7 +157,6 @@ public class VisualBattle : MonoBehaviour
         
     }
 
-   
 
     private void Wait(Character atacker, Character defender, bool missed, bool crit, bool noDMG, int aDMG)
     {
@@ -147,30 +166,58 @@ public class VisualBattle : MonoBehaviour
         Animator atackerAnimator = AtackerBody.GetComponent<Animator>();
         Animator defenderAnimator = DefenderBody.GetComponent<Animator>();
 
-
-        atackerAnimator.SetBool("AttackV2", true);
-
-        Invoke("Damage", 2f);
+        
+            StartCoroutine("ADamage");
+            
+        
+      
+        
         
     }
 
-    private void Damage()
+    
+    private IEnumerator ADamage()
     {
-        Debug.Log("Hola");     
-        /*
-        Character defender; int aDMG;
 
-        GameObject DefenderBody = GameObject.Find(defender.name + "(Clone)");
+        starded = true;
+        Character defender; 
+        int aDMG = uiBattle.ReturnDamage();
+       
+        GameObject DefenderBody = GameObject.Find(defenderName);
+     
+
         defender = DefenderBody.GetComponent<Character>();
 
-        GameObject AtackerBody = GameObject.Find(atacker.name + "(Clone)");
+        Character atacker;
+        GameObject AtackerBody = GameObject.Find(attackerName);
+        atacker = AtackerBody.GetComponent<Character>();
         Animator atackerAnimator = AtackerBody.GetComponent<Animator>();
 
-        defender.hp -= aDMG;
-
+        atackerAnimator.SetBool("AttackV2", true);
+        Debug.Log(aDMG);
+        yield return new WaitForSeconds(1.2f);
         atackerAnimator.SetBool("AttackV2", false);
-    */
+
+        defender.hp -= aDMG;
+        
+        if (atacker.name == atackerNameConst)
+        {
+            uiBattle.HealthUpdate(atacker, defender);
         }
+        else 
+        {
+            uiBattle.HealthUpdate(defender, atacker);
+        }
+
+        
+
+       
+
+        starded = false;
+
+     
+
+    }
 
 
 }

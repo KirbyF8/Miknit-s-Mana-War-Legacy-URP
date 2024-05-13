@@ -51,6 +51,9 @@ public class UIBattle : MonoBehaviour
     [SerializeField] TextMeshProUGUI defenderCritC;
     [SerializeField] TextMeshProUGUI defenderCritCinfo;
 
+
+    private int aDMGToSend;
+
     private void Start()
     {
         // Debug.Log(attackerInfoTextsColorChange[0].name);
@@ -63,6 +66,8 @@ public class UIBattle : MonoBehaviour
 
     public void ValueChanges(Character atacker, Character defender, int aDMG, int aATKs, int aHit, int aCrit, int dDMG, int dATKs, int dHit, int dCrit, int weaponTriangle)
     {
+        aDMGToSend = aDMG;
+
 
         Vector3 atackerColor = new Vector3();
         Vector3 atackerColor2 = new Vector3();
@@ -274,5 +279,10 @@ public class UIBattle : MonoBehaviour
 
         attackerHealth.text = atacker.hp + "/" + atacker.stats[0];
         defenderHealth.text = defender.hp + "/" + defender.stats[0];
+    }
+
+    public int ReturnDamage()
+    {
+        return aDMGToSend;
     }
 }

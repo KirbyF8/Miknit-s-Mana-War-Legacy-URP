@@ -6411,6 +6411,7 @@ GameObject:
   - component: {fileID: 2084238653}
   - component: {fileID: 2084238654}
   - component: {fileID: 2084238655}
+  - component: {fileID: 2084238656}
   m_Layer: 0
   m_Name: Battle
   m_TagString: Untagged
@@ -6460,6 +6461,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a433f44c5493c5241b1cc43e6a6c1027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiBattle: {fileID: 1766563883}
+--- !u!114 &2084238656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084238652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633d0684c5caf6e40b367d66b1acf193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uiBattle: {fileID: 1766563883}

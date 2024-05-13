@@ -10,7 +10,7 @@ public class Battle : MonoBehaviour
     [SerializeField] private Character defender;
     [SerializeField] private UIBattle uiBattle;
 
-    private VisualBattle visualBattle;
+    private VisualBattleV2 visualBattle;
     
 
     int aDMG = 0;
@@ -28,14 +28,14 @@ public class Battle : MonoBehaviour
     
     private void Start()
     {
-        visualBattle = GetComponent<VisualBattle>();
+        visualBattle = GetComponent<VisualBattleV2>();
         
 
         visualBattle.SpawnCharacters(attacker, defender);
         Combat();
 
         uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
-        visualBattle.AnimationBattle(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
+        visualBattle.GetAllAttackCosas(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
     }
 
     private void Combat()

@@ -61,6 +61,18 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3b20c9f8061f25646892a7a25d68c50c, type: 2}
+    - target: {fileID: 9500000, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 13700008, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -95,7 +107,7 @@ MonoBehaviour:
   lvl: 1
   exp: 0
   exp_max: 1
-  hp: 48
+  hp: 80
   mp: 12
   movement: 6
   stats: 500000000c0000000c0000001200000008000000070000000c0000001200000001000000
