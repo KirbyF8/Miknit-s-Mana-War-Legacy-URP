@@ -12,6 +12,15 @@ public class CharacterD : MonoBehaviour
     [SerializeField] private MyGrid map;
 
 
+    //CAMBIAR POR ARMA
+    private int range = 1;
+    [SerializeField] private bool active = false;
+
+    private void Start()
+    {
+        map = FindObjectOfType<MyGrid>();
+    }
+
     //Funciones para leer y escribir las variables del CharacterD 
 
     public int GetMovement()
@@ -23,6 +32,7 @@ public class CharacterD : MonoBehaviour
     {
         movement = x;
     }
+
     public int GetSide()
     {
         return side;
@@ -83,6 +93,26 @@ public class CharacterD : MonoBehaviour
     public bool GetHasMoved()
     {
         return hasMovedThisTurn;
+    }
+
+    public int GetRange()
+    {
+        return range;
+    }
+
+    public void SetRange(int x)
+    {
+        range = x;
+    }
+
+    public bool GetActive()
+    {
+        return active;
+    }
+
+    public void SetActive(bool x)
+    {
+        active = x;
     }
 
 }

@@ -335,6 +335,7 @@ MonoBehaviour:
   movement: 4
   side: 0
   map: {fileID: 782534994}
+  active: 1
 --- !u!65 &126721236
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2443,7 +2444,7 @@ MonoBehaviour:
   - {x: 2, y: 2}
   - {x: 3, y: 3}
   enemies:
-  - {fileID: 1168143111}
+  - {fileID: 1168143115}
   enemiesPositions:
   - {x: 7, y: 9}
   cellsAux:
@@ -3408,7 +3409,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100106, guid: 24bdb7cc7a8d8a745a84df6c531bc19d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1168143111}
+      addedObject: {fileID: 1168143115}
   m_SourcePrefab: {fileID: 100100000, guid: 24bdb7cc7a8d8a745a84df6c531bc19d, type: 3}
 --- !u!1 &1168143110 stripped
 GameObject:
@@ -3416,21 +3417,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1168143109}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1168143111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1168143110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b123033be8241b459ae302d494b1e47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: 2
-  side: 1
-  map: {fileID: 782534994}
 --- !u!65 &1168143112
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3452,6 +3438,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.6016898, z: 1}
   m_Center: {x: 0, y: 1.2012873, z: 0}
+--- !u!114 &1168143115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168143110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b123033be8241b459ae302d494b1e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: 2
+  side: 1
+  map: {fileID: 0}
+  active: 1
 --- !u!1 &1190208512
 GameObject:
   m_ObjectHideFlags: 0
@@ -4072,6 +4074,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1321144429}
   - component: {fileID: 1321144430}
+  - component: {fileID: 1321144431}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4117,6 +4120,19 @@ MonoBehaviour:
     type: 3}
   normalMat: {fileID: 2100000, guid: a59dd7fca74ab3c49b4ca2a1ba3b6adf, type: 2}
   movedMat: {fileID: 2100000, guid: 29cfa363f8e37ed42971e91ab9f506c0, type: 2}
+  numberOfSides: 2
+--- !u!114 &1321144431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321144428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a2c65469865d64b9b3ce36899796bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1426408584
 GameObject:
   m_ObjectHideFlags: 0

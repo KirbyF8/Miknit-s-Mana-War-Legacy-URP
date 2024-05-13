@@ -65,6 +65,8 @@ public class GameManagerD : MonoBehaviour
 
     private int turn = 0;
 
+    [SerializeField] private int numberOfSides = 2;
+    private EnemyAI enemyBrain;
 
     void Start()
     {
@@ -72,6 +74,7 @@ public class GameManagerD : MonoBehaviour
         //encuentra el mapa y recoje las posiciones de spawn
         map = FindObjectOfType<MyGrid>();
         uiManager = FindObjectOfType<UIManager>();
+        enemyBrain = gameObject.GetComponent<EnemyAI>();
         spawnPos = map.GetSpawn();
         uiManager.EndTurnOff();
         //posiciona los personajes en posiciones de spawn
@@ -160,7 +163,7 @@ public class GameManagerD : MonoBehaviour
                         //se selecciona la cell correspondiente
                         selected = map.GetCell((int)point.x, (int)point.z);
 
-                        //si hay un pj en la casilla seleccionada se spawnean las casillas de movimiento 
+                        //si hay un pj en la casilla seleccionada y no se ha movido en ese turno se spawnean las casillas de movimiento 
                         if (selected.GetCharacter() != null)
                         {
                             if (!selected.GetCharacter().GetHasMoved())
@@ -175,7 +178,7 @@ public class GameManagerD : MonoBehaviour
                         else
                         {
                             Debug.Log(selected.GetWalkable() + ", " + selected.GetDifficulty());
-                            //HAY QUE CAMBIAR ESTO POR UN PANEL QUE DE INFO DEL TERRENO 
+                            //TO DO: HAY QUE CAMBIAR ESTO POR UN PANEL QUE DE INFO DEL TERRENO 
                         }
                     }
                 }
@@ -196,7 +199,7 @@ public class GameManagerD : MonoBehaviour
                         if (selected != null && selected.GetCharacter() != null)
                         {
                             //si en la nueva casilla seleccionada hay un enemigo se mueve cerca suyo y ataca
-                            if (selectedAux.GetCharacter() != null && selectedAux.GetCharacter().GetSide() != 0)
+                            if (selectedAux.GetCharacter() != null && selectedAux.GetCharacter().GetSide() > 0)
                             {
                                 MoveChar(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
                                 Debug.Log("attack");
@@ -217,8 +220,9 @@ public class GameManagerD : MonoBehaviour
             }
         }
         
-        else if(turn == 1)
+        else if(turn != 0)
         {
+            enemyBrain.EnemyTurn();
             //TURNO ENEMIGO 1, REPETIR POR BANNDOS POSIBLES
             EndEnemyTurn();
         }
@@ -405,6 +409,11 @@ public class GameManagerD : MonoBehaviour
 
     }
 
+    public void MoveCharacter(MyCell cell1, MyCell cell2)
+    {
+        MoveChar(cell1, cell2);
+    }
+
     //Corutina para mover el personaje casilla por casilla
     private IEnumerator MovingChar((int, int)[] path)
     {
@@ -421,20 +430,24 @@ public class GameManagerD : MonoBehaviour
         moving = false;
         selectedChar.SetHasMoved(true);
         //CAMBIAR DE COLOR EL PJ PARA DENOTAR QUE SE HA MOVIDO
-        selectedChar.GameObject().GetComponentsInChildren<Renderer>()[0].material = movedMat;
+        if(selectedChar.GetSide() == 0) selectedChar.GameObject().GetComponentsInChildren<Renderer>()[0].material = movedMat;
     }
 
     //Función para terminar el turno aliado
     private void EndAllyTurn()
     {
-        turn++;
-        DeleteTiles();
+        if (!moving)
+        {
+            turn++;
+            DeleteTiles();
+        }
+        
     }
 
     private void EndEnemyTurn()
     {
         turn++;
-        if (turn >= 2)
+        if (turn >= numberOfSides)
         {
             turn = 0;
             for (int i = 0; i < characters.Length; i++)
@@ -504,6 +517,20 @@ public class GameManagerD : MonoBehaviour
     {
         EndAllyTurn();
         uiManager.EndTurnOff();
+    }
+
+    public int GetNumb(CharacterD person) 
+    { 
+        for(int i = 0; i<characters.Length; i++)
+        {
+            if (characters[i] == person) return i;
+        }
+        return -1;
+    }
+
+    public CharacterD[] GetCharacters()
+    {
+        return characters;
     }
 
 }

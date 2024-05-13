@@ -118,6 +118,16 @@ public class MyGrid : MonoBehaviour
         walkableMap[x, y] = walk;
     }
 
+    public CharacterD[] GetEnemies()
+    {
+        return enemies;
+    }
+
+    public void SetEnemies(CharacterD[] x)
+    {
+        enemies = x;
+    }
+
     //Función para crear la grid
 
     public void CreateGrid(int height, int width)
