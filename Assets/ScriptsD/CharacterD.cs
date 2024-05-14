@@ -71,7 +71,7 @@ public class CharacterD : MonoBehaviour
 
     public void SetPosition(Vector2 pos)
     {
-        position = map.GetCell((int)pos.x, (int)pos.y);
+        position = map.GetCell(pos);
         transform.position = new Vector3(position.GetPosition().x * 2 + 1, 0, position.GetPosition().y * -2 - 1);
     }
 

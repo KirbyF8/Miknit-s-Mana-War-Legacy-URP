@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 using Random = UnityEngine.Random;
@@ -14,10 +15,13 @@ public class EnemyAI : MonoBehaviour
     private Vector2Int actionToPerform;
     private Vector2Int movement;
     private List<CharacterD> alliesToAttack;
+    private List<(int, int)> moveList;
     private int score;
     private CharacterD[] Allies;
     private Vector2Int targetPos;
     private bool posFound = false;
+    private bool moving = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,23 +50,31 @@ public class EnemyAI : MonoBehaviour
     {
         if (actionToPerform.x == 1)
         {
+            moving = true;
             movement = new Vector2Int(-1000,-1000);
             //Debug.Log(actionToPerform.y);
             CharacterD aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
-
-            List<Vector2Int> alreadyChecked = new List<Vector2Int>();
-            FindPositionToGoTo((int)person.GetPosition().x, (int)person.GetPosition().y, person.GetRange(), ref alreadyChecked);
-            gameManager.MoveCharacter(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(movement.x, movement.y));
+            gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos)));
             posFound = false;
+
+            /*while (moving)
+            {
+                await Task.Delay(25);
+            } */
+            Debug.Log("ENEMY ATTACK");
+            //Lógica de ataque
         }
         else if (actionToPerform.x == 2)
         {
+            moving = true;
             score = 10000;
             targetPos = new Vector2Int(0,0);
             List<Vector2Int> alreadyChecked = new List<Vector2Int>();
             FindClosestPos((int)person.GetPosition().x, (int)person.GetPosition().y, person.GetMovement(), ref alreadyChecked);
-            gameManager.MoveCharacter(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(targetPos.x, targetPos.y));
+            gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(targetPos.x, targetPos.y));
+
+           
         }
         else return;
     }
@@ -81,8 +93,10 @@ public class EnemyAI : MonoBehaviour
             foreach(CharacterD target in alliesToAttack)
             {
                 score = Calculate(person, target);
-                if(score > max)
+                //Debug.Log(person.GetPosition());
+                if(score > max && CanGetToEnemy(target))
                 {
+                    
                     max = score;
                     Selected = target;
                 }
@@ -98,6 +112,39 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private bool CanGetToEnemy( CharacterD target)
+    {
+        (int,int) aux = ((int)target.GetPosition().x,(int)target.GetPosition().y);
+        //Debug.Log(aux);
+        /*for(int i=0; i < moveList.Count; i++)
+        {
+            Debug.Log(moveList[i]);
+        }*/
+        aux.Item1++;
+        if(moveList.Contains(aux)){
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+        }
+
+        aux.Item1 -= 2;
+        if (aux.Item1 >=0 && moveList.Contains(aux))
+        {
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+        }
+
+        aux.Item1++;
+        aux.Item2++;
+        if (moveList.Contains(aux))
+        {
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+        }
+
+        aux.Item2 -= 2;
+        if (aux.Item2 >= 0 && moveList.Contains(aux))
+        {
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+        }
+        return false;
+    }
 
     private void closestEnemy(CharacterD person)
     {
@@ -131,6 +178,7 @@ public class EnemyAI : MonoBehaviour
 
     private bool AlliesInRange(CharacterD person)
     {
+        moveList = new List<(int, int)> ();
         alliesToAttack.Clear();
         Vector2 pos = person.GetPosition();
         List<Vector2Int> alreadyChecked = new List<Vector2Int>();
@@ -157,58 +205,33 @@ public class EnemyAI : MonoBehaviour
         //si es mayor a zero se añade y además vuelve a ejecutar la función con cada casilla adyacente y con rango menor dependiendo de la dificultad de movimiento
         if (range <= 0)
         {
-            if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
+            if (!thereIs)
+            {
+                alreadyChecked.Add(new Vector2Int(x, y));
+                moveList.Add((x, y));
+
+            }
         }
         else
         {
             if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
-            GetEnemiesRange(x + 1, y, range - diff, ref alreadyChecked);
-            GetEnemiesRange(x - 1, y, range - diff, ref alreadyChecked);
-            GetEnemiesRange(x, y + 1, range - diff, ref alreadyChecked);
-            GetEnemiesRange(x, y - 1, range - diff, ref alreadyChecked);
-        }
-        return;
-    }
+            moveList.Add((x, y));
+            int ran = Random.Range(1, 3);
+            if (ran == 1)
+            {
+                GetEnemiesRange(x + 1, y, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x - 1, y, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x, y + 1, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x, y - 1, range - diff, ref alreadyChecked);
+            }
+            else
+            {
 
-    private void FindPositionToGoTo(int x, int y, int range, ref List<Vector2Int> alreadyChecked)
-    {
-        //Si no está dentro de la grid, o si no se puede caminar por la casilla seleccionada vuelve
-        if (!IsInBounds(x, y)) return;
-        bool thereIs = alreadyChecked.Contains(new Vector2Int(x, y));
-        int diff = map.GetCell(x, y).GetDifficulty();
-        if (!map.GetCell(x, y).GetWalkable()) return;
-
-        int aux = Mathf.Abs(x-targetPos.x) + Mathf.Abs(y-targetPos.y);
-        if (aux == range)
-        {
-            movement = new Vector2Int(x, y);
-            posFound = true;
-            return;
-            
-        }
-        
-            
-        //si hay un enemigo se añade al array pero se pone el rango a 0 para que no pueda atravesarlo, pero salga una casilla en rojo debajo del enemigo
-        if (map.GetCell(x, y).GetCharacter() != null && map.GetCell(x, y).GetCharacter().GetSide() == 0)
-        {
-            range = 0;
-        }
-        //si el rango es menor o igual a zero se añade la posición y ya,
-        //si es mayor a zero se añade y además vuelve a ejecutar la función con cada casilla adyacente y con rango menor dependiendo de la dificultad de movimiento
-        if (range <= 0)
-        {
-            if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
-        }
-        else
-        {
-            if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
-            FindPositionToGoTo(x + 1, y, range - diff, ref alreadyChecked);
-            if (posFound) return;
-            FindPositionToGoTo(x - 1, y, range - diff, ref alreadyChecked);
-            if (posFound) return;
-            FindPositionToGoTo(x, y + 1, range - diff, ref alreadyChecked);
-            if (posFound) return;
-            FindPositionToGoTo(x, y - 1, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x, y + 1, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x, y - 1, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x + 1, y, range - diff, ref alreadyChecked);
+                GetEnemiesRange(x - 1, y, range - diff, ref alreadyChecked);
+            }
         }
         return;
     }
@@ -240,10 +263,23 @@ public class EnemyAI : MonoBehaviour
         {
 
             if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
-            FindClosestPos(x + 1, y, range - diff, ref alreadyChecked);
-            FindClosestPos(x - 1, y, range - diff, ref alreadyChecked);
-            FindClosestPos(x, y + 1, range - diff, ref alreadyChecked);
-            FindClosestPos(x, y - 1, range - diff, ref alreadyChecked);
+            int ran = Random.Range(1, 3);
+            if(ran == 1)
+            {
+                FindClosestPos(x + 1, y, range - diff, ref alreadyChecked);
+                FindClosestPos(x - 1, y, range - diff, ref alreadyChecked);
+                FindClosestPos(x, y + 1, range - diff, ref alreadyChecked);
+                FindClosestPos(x, y - 1, range - diff, ref alreadyChecked);
+            }
+            else
+            {
+
+                FindClosestPos(x, y + 1, range - diff, ref alreadyChecked);
+                FindClosestPos(x, y - 1, range - diff, ref alreadyChecked);
+                FindClosestPos(x + 1, y, range - diff, ref alreadyChecked);
+                FindClosestPos(x - 1, y, range - diff, ref alreadyChecked);
+            }
+            
         }
         return;
     }
@@ -253,6 +289,11 @@ public class EnemyAI : MonoBehaviour
         if (x < 0 || y < 0) return false;
         if (x > map.Width() || y > map.Height()) return false;
         return true;
+    }
+
+    public void DoneMoving()
+    {
+        moving = false;
     }
 
 }

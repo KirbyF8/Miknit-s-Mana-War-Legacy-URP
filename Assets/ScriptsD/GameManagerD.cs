@@ -261,7 +261,7 @@ public class GameManagerD : MonoBehaviour
     }
 
     //Función para ver si el target seleccionado está en el array de movimiento
-    private bool CheckMove(Vector2 target)
+    private bool CheckMove(Vector2 target, bool enemy = false)
     {
         bool aux = false;
         for (int i = 0; i < movementArray.Length && !aux; i++)
@@ -289,7 +289,7 @@ public class GameManagerD : MonoBehaviour
         //revisa que cells de las que se puede mover le queda más cerca al atacante 
         for (int i = 0; i < aux.Length; i++)
         {
-            if (CheckMove(aux[i]))
+            if (turn != 0 || CheckMove(aux[i]))
             {
 
                 scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
@@ -306,6 +306,10 @@ public class GameManagerD : MonoBehaviour
         return aux[x];
     }
 
+    public Vector2 AttackTile(Vector2 attackerPos, Vector2 defenderPos)
+    {
+        return NearbyTile(attackerPos, defenderPos);
+    }
 
     //función para enseñar las casillas de movimiento o de spawn, dependiendo de la fase en la que estés
     private void SpawnTiles(Vector2[] pos)
@@ -401,17 +405,25 @@ public class GameManagerD : MonoBehaviour
 
 
     //Función para mover el personaje 
-    private void MoveChar(MyCell cell1, MyCell cell2)
+    private void MoveChar(MyCell cell1, MyCell cell2, bool side = true)
     {
-        (int, int)[] aux = map.FindPath(cell1.GetPosition(), cell2.GetPosition());
-        StartCoroutine(MovingChar(aux));
+        (int, int)[] aux;
+        if (side)
+        {
+            aux = map.FindPath(cell1.GetPosition(), cell2.GetPosition());
+        }
+        else
+        {
+            aux = map.FindPathEnemy(cell1.GetPosition(), cell2.GetPosition());
+        }
+            StartCoroutine(MovingChar(aux));
         return;
 
     }
 
-    public void MoveCharacter(MyCell cell1, MyCell cell2)
+    public void MoveEnemy(MyCell cell1, MyCell cell2)
     {
-        MoveChar(cell1, cell2);
+        MoveChar(cell1, cell2, false);
     }
 
     //Corutina para mover el personaje casilla por casilla
@@ -431,6 +443,10 @@ public class GameManagerD : MonoBehaviour
         selectedChar.SetHasMoved(true);
         //CAMBIAR DE COLOR EL PJ PARA DENOTAR QUE SE HA MOVIDO
         if(selectedChar.GetSide() == 0) selectedChar.GameObject().GetComponentsInChildren<Renderer>()[0].material = movedMat;
+        if(turn != 0)
+        {
+            enemyBrain.DoneMoving();
+        }
     }
 
     //Función para terminar el turno aliado
@@ -440,6 +456,7 @@ public class GameManagerD : MonoBehaviour
         {
             turn++;
             DeleteTiles();
+            uiManager.EndTurnOff();
         }
         
     }
@@ -516,7 +533,7 @@ public class GameManagerD : MonoBehaviour
     public void EndTurn()
     {
         EndAllyTurn();
-        uiManager.EndTurnOff();
+        
     }
 
     public int GetNumb(CharacterD person) 

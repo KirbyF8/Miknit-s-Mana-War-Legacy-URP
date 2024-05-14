@@ -34,9 +34,12 @@ public class MyGrid : MonoBehaviour
     //y numberOfCell tiene la casilla por la que hay que cambiar cada casilla de cellsToChange
     [SerializeField] private Vector2[] cellsToChange;
     [SerializeField] private int[] numberOfCell;
+
+    private GameManagerD gamemanager;
+
     private void Start()
     {
-
+        gamemanager = FindObjectOfType<GameManagerD>();
         //Al crearse un mapa se pasan las cellsSO del array cellsAux a cells normales que guardamos en otro array del mismo tamaño.
 
         cells = new MyCell[cellsAux.Length];
@@ -270,7 +273,35 @@ public class MyGrid : MonoBehaviour
                 walkableMap[(int)enemies[i].GetPosition().x, (int)enemies[i].GetPosition().y] = true;
             }
         }
-        
+
+        return aux.ToArray();
+
+    }
+
+    public (int, int)[] FindPathEnemy(Vector2 start, Vector2 goal)
+    {
+        CharacterD[] alliesArray = gamemanager.GetCharacters();
+
+        //se pone a false en el array de booleanos todas las posiciones donde haya enemigos
+        for (int i = 0; i < alliesArray.Length; i++)
+        {
+            if (alliesArray[i] != null)
+            {
+                walkableMap[(int)alliesArray[i].GetPosition().x, (int)alliesArray[i].GetPosition().y] = false;
+            }
+        }
+        //pasa a la función que encuentra el camino
+        List<(int, int)> aux = PathFinding(start, goal, gridArray[(int)start.x, (int)start.y].GetCharacter().GetMovement());
+
+        //vuelve a poner las casillas con enemigos a true (para que el get movement no detecte los enemigos como paredes)
+        for (int i = 0; i < alliesArray.Length; i++)
+        {
+            if (alliesArray[i] != null)
+            {
+                walkableMap[(int)alliesArray[i].GetPosition().x, (int)alliesArray[i].GetPosition().y] = true;
+            }
+        }
+
         return aux.ToArray();
 
     }
