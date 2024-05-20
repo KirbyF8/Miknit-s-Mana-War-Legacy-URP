@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
 
         //Asignamos a todos los elementos de la UI su función de GameManager correspondiente
 
-        goBack.onClick.AddListener(HideOptions);
+        goBack.onClick.AddListener(gameManager.Hideoptions);
         master.onValueChanged.AddListener(gameManager.ChangeMaster);
         sfx.onValueChanged.AddListener(gameManager.ChangeSFX);
         voices.onValueChanged.AddListener(gameManager.ChangeVoices);
@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour
     public void HideOptions()
     {
         options.SetActive(false);
+        
     }
 
     //Función para desactivar el botón de terminar la fase de spawn

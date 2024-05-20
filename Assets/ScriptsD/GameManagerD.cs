@@ -59,14 +59,20 @@ public class GameManagerD : MonoBehaviour
     //booleano para indicar si el personaje se está moviendo.
     private bool moving = false;
 
-
+    //materiales que ponerle a los personajes antes y después de moverse
     [SerializeField] private Material normalMat;
     [SerializeField] private Material movedMat;
 
+    //variable para determinar si es el turno del enemigo o aliado (int porque puede haber más de un bando enemigo)
     private int turn = 0;
 
+    //variable que guarda el script de la ia del enemigo y el numero de bandos 
     [SerializeField] private int numberOfSides = 2;
     private EnemyAI enemyBrain;
+
+    //booleanos para saber si ya ha activado el turno enemigo y si el juego está pausado o no.
+    private bool enemyTurnStarted = false;
+    private bool paused = false;
 
     void Start()
     {
@@ -92,10 +98,26 @@ public class GameManagerD : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!paused)
+            {
+                uiManager.ShowOptions();
+                paused = true;
+                Time.timeScale = 0;
+            }
+            else
+            {
+                uiManager.HideOptions();
+                paused = false;
+                Time.timeScale = 1.0f;
+            }
+
+        }
         if(turn == 0)
         {
             //FASE DE SPAWN
-            if (spawnPhase)
+            if (spawnPhase && !paused)
             {
                 //si hace click izquierdo
                 if (Input.GetMouseButtonUp(0))
@@ -140,7 +162,7 @@ public class GameManagerD : MonoBehaviour
             }
 
             //FASE DE MOVIMIENTO
-            else if (movementPhase)
+            else if (movementPhase && !paused)
             {
                 if (Input.GetKeyDown(KeyCode.Z) && selected != null && selected.GetCharacter() != null)
                 {
@@ -222,9 +244,16 @@ public class GameManagerD : MonoBehaviour
         
         else if(turn != 0)
         {
-            enemyBrain.EnemyTurn();
-            //TURNO ENEMIGO 1, REPETIR POR BANNDOS POSIBLES
-            EndEnemyTurn();
+            if (!enemyTurnStarted)
+            {
+                enemyBrain.EnemyTurn();
+                enemyTurnStarted = true;
+            }
+            else if (!enemyBrain.IsEnemyTurn())
+            {
+                EndEnemyTurn();
+            }
+            
         }
 
 
@@ -285,7 +314,6 @@ public class GameManagerD : MonoBehaviour
         aux[1] = new Vector2(defenderPos.x - 1, defenderPos.y);
         aux[2] = new Vector2(defenderPos.x, defenderPos.y + 1);
         aux[3] = new Vector2(defenderPos.x, defenderPos.y - 1);
-
         //revisa que cells de las que se puede mover le queda más cerca al atacante 
         for (int i = 0; i < aux.Length; i++)
         {
@@ -293,7 +321,39 @@ public class GameManagerD : MonoBehaviour
             {
 
                 scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
+                if (map.GetCell(aux[i]).GetCharacter() != null) scoreaux -= 100000; 
+                if (scoreaux < score || score == -1)
+                {
+                    score = scoreaux;
+                    x = i;
+                }
+            }
+        }
 
+
+        return aux[x];
+    }
+
+    private Vector2 NearbyTileEnemy(Vector2 attackerPos, Vector2 defenderPos)
+    {
+
+        //se hace un array con las cuatro posiciones adyacentes al que recibe el ataque
+        Vector2[] aux = new Vector2[4];
+        int x = 0;
+        int score = -1;
+        int scoreaux;
+        aux[0] = new Vector2(defenderPos.x + 1, defenderPos.y);
+        aux[1] = new Vector2(defenderPos.x - 1, defenderPos.y);
+        aux[2] = new Vector2(defenderPos.x, defenderPos.y + 1);
+        aux[3] = new Vector2(defenderPos.x, defenderPos.y - 1);
+        //revisa que cells de las que se puede mover le queda más cerca al atacante 
+        for (int i = 0; i < aux.Length; i++)
+        {
+            if (map.CheckBounds(aux[i]))
+            {
+
+                scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
+                if (map.GetCell(aux[i]).GetCharacter() != null) scoreaux += 100000;
                 if (scoreaux < score || score == -1)
                 {
                     score = scoreaux;
@@ -308,7 +368,7 @@ public class GameManagerD : MonoBehaviour
 
     public Vector2 AttackTile(Vector2 attackerPos, Vector2 defenderPos)
     {
-        return NearbyTile(attackerPos, defenderPos);
+        return NearbyTileEnemy(attackerPos, defenderPos);
     }
 
     //función para enseñar las casillas de movimiento o de spawn, dependiendo de la fase en la que estés
@@ -439,14 +499,17 @@ public class GameManagerD : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
         map.GetCell(path[path.Length - 1].Item1, path[path.Length - 1].Item2).SetCharacter(selectedChar);
-        moving = false;
-        selectedChar.SetHasMoved(true);
+
+        yield return new WaitForSeconds(0.2f);
+        
         //CAMBIAR DE COLOR EL PJ PARA DENOTAR QUE SE HA MOVIDO
-        if(selectedChar.GetSide() == 0) selectedChar.GameObject().GetComponentsInChildren<Renderer>()[0].material = movedMat;
+        if (selectedChar.GetSide() == 0) selectedChar.GameObject().GetComponentsInChildren<Renderer>()[0].material = movedMat;
         if(turn != 0)
         {
             enemyBrain.DoneMoving();
         }
+        moving = false;
+        selectedChar.SetHasMoved(true);
     }
 
     //Función para terminar el turno aliado
@@ -461,6 +524,8 @@ public class GameManagerD : MonoBehaviour
         
     }
 
+
+    //Función para terminar el turno enemigo, es igual que el aliado pero activa el botón de terminar turno y pone el enemyturnstarted a false, también si el proximo turno es el del jugador reinicia el movimiento de los personajes
     private void EndEnemyTurn()
     {
         turn++;
@@ -474,8 +539,10 @@ public class GameManagerD : MonoBehaviour
             }
             uiManager.EndTurnOn();
         }
+        enemyTurnStarted = false;
     }
 
+    //Funciones para cambiar el valor de un audiosource con cada uno de los sliders de las opciones
     public void ChangeMaster(float x)
     {
         masterVolume = x;
@@ -503,6 +570,7 @@ public class GameManagerD : MonoBehaviour
         voices.volume = (voicesValue + masterVolume) / 2;
     }
 
+    //funciones para activar varias opciones
     public void ShowGrid(bool x)
     {
         gridShow = x;
@@ -523,6 +591,7 @@ public class GameManagerD : MonoBehaviour
         autoend = x;
     }
 
+    //funciones para terminar la fase de spawn y el turno aliado respectivamente
     public void EndSpawn()
     {
         EndSpawnPhase();
@@ -536,6 +605,8 @@ public class GameManagerD : MonoBehaviour
         
     }
 
+
+    //función que devuelve que número ocupa el personaje seleccionado en el array de aliados
     public int GetNumb(CharacterD person) 
     { 
         for(int i = 0; i<characters.Length; i++)
@@ -545,9 +616,18 @@ public class GameManagerD : MonoBehaviour
         return -1;
     }
 
+    //Funcion que devuelve todos los personajes aliados
     public CharacterD[] GetCharacters()
     {
         return characters;
+    }
+
+    //Funcion que oculta el panel de opciones y quita la pausa.
+    public void Hideoptions()
+    {
+        uiManager.HideOptions();
+        paused = false;
+        Time.timeScale = 1.0f;
     }
 
 }

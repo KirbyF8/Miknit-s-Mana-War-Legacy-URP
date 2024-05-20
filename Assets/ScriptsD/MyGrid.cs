@@ -495,4 +495,9 @@ public class MyGrid : MonoBehaviour
         
     }
 
+    public bool CheckBounds(Vector2 pos)
+    {
+        return IsInBounds((int) pos.x, (int) pos.y);
+    }
+
 }

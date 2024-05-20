@@ -8,66 +8,109 @@ using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
 {
+    //variable para seleccionar el enemigo que va a actuar.
+    private int numberOfEnemy;
 
+    //cariables para saber si es el turno del enemigo y si el enemigo anterior ya ha terminado el movimiento.
+    private bool enemyTurn = false;
+    private bool canDoTurn = true;
+
+    //variables para los scripts de MyGrid y Gamemanager
     private MyGrid map;
     private GameManagerD gameManager;
+
+    //array con todos los enemigos (en el momento de iniciar el turno)
     private CharacterD[] enemies;
+
+    //variable para saber que acción va a hacer el enemigo (la acción se decide en think), y variable auxiliar para guardar una posición a las que moverse.
     private Vector2Int actionToPerform;
     private Vector2Int movement;
+
+    //listas de los enemigos a los que atacar y de la lista a la que se puede mover un personaje 
     private List<CharacterD> alliesToAttack;
     private List<(int, int)> moveList;
+
+    //variable para guardar puntuaciones de las acciones
     private int score;
+
+    //variable para guardar a todos los aliados
     private CharacterD[] Allies;
+
+    //variable para guardar la posición del aliado que va a atacar
     private Vector2Int targetPos;
-    private bool posFound = false;
-    private bool moving = false;
+
+    //variable para saber si ya se ha actualizado la lista de enemigos.
+    private bool updated = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Declaración de algunas variables
         map = FindObjectOfType<MyGrid>();
         alliesToAttack = new List<CharacterD>();
         gameManager = FindObjectOfType<GameManagerD>();
         Allies = gameManager.GetCharacters();
+        numberOfEnemy = -1;
+    }
+
+    private void Update()
+    {
+        if(enemyTurn)
+        {
+            if (!updated)
+            {
+                enemies = map.GetEnemies();
+                updated = true;
+            }
+            if (canDoTurn)
+            {
+                canDoTurn = false;
+                numberOfEnemy++;
+                if (numberOfEnemy < enemies.Length)
+                {
+                    TrueEnemyTurn();
+                }
+                else
+                {
+                    enemyTurn = false;
+                    updated = false;
+                    canDoTurn=true;
+                    numberOfEnemy = -1;
+                }
+
+                
+            }
+            
+        }
     }
 
     public void EnemyTurn()
     {
-        TrueEnemyTurn();
+        enemyTurn = true;
     }
 
     private void TrueEnemyTurn()
     {
-        enemies = map.GetEnemies();
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            Think(enemies[i]);
-            Act(enemies[i]);
-        }
+
+        Think(enemies[numberOfEnemy]);
+        Act(enemies[numberOfEnemy]);
+
     }
 
     private void Act(CharacterD person)
     {
         if (actionToPerform.x == 1)
         {
-            moving = true;
             movement = new Vector2Int(-1000,-1000);
-            //Debug.Log(actionToPerform.y);
+            Debug.Log(actionToPerform.y);
             CharacterD aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
             gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos)));
-            posFound = false;
-
-            /*while (moving)
-            {
-                await Task.Delay(25);
-            } */
             Debug.Log("ENEMY ATTACK");
             //Lógica de ataque
         }
         else if (actionToPerform.x == 2)
         {
-            moving = true;
             score = 10000;
             targetPos = new Vector2Int(0,0);
             List<Vector2Int> alreadyChecked = new List<Vector2Int>();
@@ -88,6 +131,7 @@ public class EnemyAI : MonoBehaviour
         }
         else if (AlliesInRange(person))
         {
+            moveList = new List<(int, int)>();
             int max = -1000;
             CharacterD Selected = null;
             foreach(CharacterD target in alliesToAttack)
@@ -96,14 +140,23 @@ public class EnemyAI : MonoBehaviour
                 //Debug.Log(person.GetPosition());
                 if(score > max && CanGetToEnemy(target))
                 {
-                    
+                    Debug.Log(CanGetToEnemy(target));
                     max = score;
                     Selected = target;
                 }
             }
-            actionToPerform.x = 1;
-            actionToPerform.y=gameManager.GetNumb(Selected);
-            return;
+            if (Selected == null)
+            {
+                closestEnemy(person);
+                actionToPerform.x = 2;
+            }
+            else
+            {
+                actionToPerform.x = 1;
+                actionToPerform.y = gameManager.GetNumb(Selected);
+                return;
+            }
+            
         }
         else
         {
@@ -115,33 +168,36 @@ public class EnemyAI : MonoBehaviour
     private bool CanGetToEnemy( CharacterD target)
     {
         (int,int) aux = ((int)target.GetPosition().x,(int)target.GetPosition().y);
+
         //Debug.Log(aux);
         /*for(int i=0; i < moveList.Count; i++)
         {
             Debug.Log(moveList[i]);
         }*/
+        
         aux.Item1++;
-        if(moveList.Contains(aux)){
-            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
-        }
+        if(aux.Item1 < map.Width() && moveList.Contains(aux)){
 
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null || map.GetCell(aux.Item1, aux.Item2).GetCharacter() == enemies[numberOfEnemy]) return true;
+        }
+        
         aux.Item1 -= 2;
         if (aux.Item1 >=0 && moveList.Contains(aux))
         {
-            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null || map.GetCell(aux.Item1, aux.Item2).GetCharacter() == enemies[numberOfEnemy]) return true;
         }
 
         aux.Item1++;
         aux.Item2++;
-        if (moveList.Contains(aux))
+        if (aux.Item2 < map.Height() && moveList.Contains(aux))
         {
-            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null || map.GetCell(aux.Item1, aux.Item2).GetCharacter() == enemies[numberOfEnemy]) return true;
         }
 
         aux.Item2 -= 2;
         if (aux.Item2 >= 0 && moveList.Contains(aux))
         {
-            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null) return true;
+            if (map.GetCell(aux.Item1, aux.Item2).GetCharacter() == null || map.GetCell(aux.Item1, aux.Item2).GetCharacter() == enemies[numberOfEnemy]) return true;
         }
         return false;
     }
@@ -245,6 +301,7 @@ public class EnemyAI : MonoBehaviour
         if (!map.GetCell(x, y).GetWalkable()) return;
 
         int aux = Mathf.Abs(movement.x - x) + Mathf.Abs(movement.y-y);
+        if (map.GetCell(x, y).GetCharacter() != null) aux += 10000;
         if (aux < score)
         {
             score = aux;
@@ -293,7 +350,12 @@ public class EnemyAI : MonoBehaviour
 
     public void DoneMoving()
     {
-        moving = false;
+        canDoTurn = true;
+    }
+
+    public bool IsEnemyTurn()
+    {
+        return enemyTurn;
     }
 
 }
