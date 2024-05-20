@@ -29,7 +29,7 @@ public class UIBattle : MonoBehaviour
     [SerializeField] TextMeshProUGUI attackerHitCinfo;
     [SerializeField] TextMeshProUGUI attackerCritC;
     [SerializeField] TextMeshProUGUI attackerCritCinfo;
-
+  
 
     
     [SerializeField] Image defenderBackGrounds1ColorChange;
@@ -50,7 +50,7 @@ public class UIBattle : MonoBehaviour
     [SerializeField] TextMeshProUGUI defenderHitCinfo;
     [SerializeField] TextMeshProUGUI defenderCritC;
     [SerializeField] TextMeshProUGUI defenderCritCinfo;
-
+    
 
     private int aDMGToSend;
 
@@ -279,6 +279,9 @@ public class UIBattle : MonoBehaviour
 
         attackerHealth.text = atacker.hp + "/" + atacker.stats[0];
         defenderHealth.text = defender.hp + "/" + defender.stats[0];
+
+        defenderHealthBar.value = defender.hp;
+        attackerHealthBar.value = atacker.hp;
     }
 
     public int ReturnDamage()
