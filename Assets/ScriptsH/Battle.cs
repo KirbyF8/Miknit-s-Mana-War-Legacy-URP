@@ -7,7 +7,9 @@ using static Unity.Burst.Intrinsics.X86;
 public class Battle : MonoBehaviour
 {
     [SerializeField] private Character attacker;
+   
     [SerializeField] private Character defender;
+   
     [SerializeField] private UIBattle uiBattle;
 
     private VisualBattleV2 visualBattle;
@@ -25,7 +27,7 @@ public class Battle : MonoBehaviour
     int aCrit = 0;
     int dCrit = 0;
 
-    
+
     private void Start()
     {
         visualBattle = GetComponent<VisualBattleV2>();
@@ -35,9 +37,14 @@ public class Battle : MonoBehaviour
         Combat();
 
         uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
-        visualBattle.GetAllAttackCosas(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
+        GetAllAttack();
+        
     }
 
+    public void GetAllAttack()
+    {
+        visualBattle.GetAllAttackCosas(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
+    }
     private void Combat()
     {
         SetWeaponTriangle();
