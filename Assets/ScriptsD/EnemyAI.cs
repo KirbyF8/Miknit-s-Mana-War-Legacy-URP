@@ -20,21 +20,21 @@ public class EnemyAI : MonoBehaviour
     private GameManagerD gameManager;
 
     //array con todos los enemigos (en el momento de iniciar el turno)
-    private CharacterD[] enemies;
+    private Character[] enemies;
 
     //variable para saber que acción va a hacer el enemigo (la acción se decide en think), y variable auxiliar para guardar una posición a las que moverse.
     private Vector2Int actionToPerform;
     private Vector2Int movement;
 
     //listas de los enemigos a los que atacar y de la lista a la que se puede mover un personaje 
-    private List<CharacterD> alliesToAttack;
+    private List<Character> alliesToAttack;
     private List<(int, int)> moveList;
 
     //variable para guardar puntuaciones de las acciones
     private int score;
 
     //variable para guardar a todos los aliados
-    private CharacterD[] Allies;
+    private Character[] Allies;
 
     //variable para guardar la posición del aliado que va a atacar
     private Vector2Int targetPos;
@@ -42,15 +42,18 @@ public class EnemyAI : MonoBehaviour
     //variable para saber si ya se ha actualizado la lista de enemigos.
     private bool updated = false;
 
+    private Battle battle;
+
     // Start is called before the first frame update
     void Start()
     {
         //Declaración de algunas variables
         map = FindObjectOfType<MyGrid>();
-        alliesToAttack = new List<CharacterD>();
+        alliesToAttack = new List<Character>();
         gameManager = FindObjectOfType<GameManagerD>();
         Allies = gameManager.GetCharacters();
         numberOfEnemy = -1;
+        battle = FindObjectOfType<Battle>();
     }
 
     private void Update()
@@ -64,6 +67,7 @@ public class EnemyAI : MonoBehaviour
             }
             if (canDoTurn)
             {
+                // Debug.Log("Halo");
                 canDoTurn = false;
                 numberOfEnemy++;
                 if (numberOfEnemy < enemies.Length)
@@ -97,13 +101,13 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    private void Act(CharacterD person)
+    private void Act(Character person)
     {
         if (actionToPerform.x == 1)
         {
             movement = new Vector2Int(-1000,-1000);
-            Debug.Log(actionToPerform.y);
-            CharacterD aux = Allies[actionToPerform.y];
+            // Debug.Log(actionToPerform.y);
+            Character aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
             gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos)));
             Debug.Log("ENEMY ATTACK");
@@ -122,8 +126,9 @@ public class EnemyAI : MonoBehaviour
         else return;
     }
 
-    private void Think(CharacterD person)
+    private void Think(Character person)
     {
+        moveList = new List<(int, int)>();
         actionToPerform = new Vector2Int(0, 0);
         if (!person.GetActive())
         {
@@ -131,16 +136,17 @@ public class EnemyAI : MonoBehaviour
         }
         else if (AlliesInRange(person))
         {
-            moveList = new List<(int, int)>();
+            
             int max = -1000;
-            CharacterD Selected = null;
-            foreach(CharacterD target in alliesToAttack)
+            Character Selected = null;
+            foreach(Character target in alliesToAttack)
             {
                 score = Calculate(person, target);
                 //Debug.Log(person.GetPosition());
-                if(score > max && CanGetToEnemy(target))
+                // Debug.Log(CanGetToEnemy(target));
+                if (score > max && CanGetToEnemy(target))
                 {
-                    Debug.Log(CanGetToEnemy(target));
+                    // Debug.Log(CanGetToEnemy(target));
                     max = score;
                     Selected = target;
                 }
@@ -165,12 +171,13 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private bool CanGetToEnemy( CharacterD target)
+    private bool CanGetToEnemy( Character target)
     {
         (int,int) aux = ((int)target.GetPosition().x,(int)target.GetPosition().y);
+        /*
+         Debug.Log(moveList.Count);
 
-        //Debug.Log(aux);
-        /*for(int i=0; i < moveList.Count; i++)
+        for(int i=0; i < moveList.Count; i++)
         {
             Debug.Log(moveList[i]);
         }*/
@@ -202,14 +209,14 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    private void closestEnemy(CharacterD person)
+    private void closestEnemy(Character person)
     {
         float posx = person.GetPosition().x;
         float posy = person.GetPosition().y;
         
         int min = 1000;
         Vector2 dir = new Vector2 (0,0);
-        foreach(CharacterD target in Allies)
+        foreach(Character target in Allies)
         {
             score =(int) MathF.Abs(posx - target.GetPosition().x) + (int) MathF.Abs(posy-person.GetPosition().y);
             if (score < min)
@@ -222,17 +229,23 @@ public class EnemyAI : MonoBehaviour
         return;
     }
 
-    private int Calculate(CharacterD person, CharacterD target)
+    private int Calculate(Character person, Character target)
     {
         //AQUI HAY QUE PONER EL CALCULO DE DAÑO QUE HACE Y RECIBE
         //BÁSICAMENTE EN LA VARIABLE AUXILIAR SUMAR 100 SI LO MATA, SI NO LO MATA EL PORCENTAJE DE VIDA QUE LE QUITARÍA, DIVIDIR ENTRE DOS Y RESTAR LA PROB. DE ESQUIVAR (SI ES UN 100% SE PUEDE HACER ALGO)
         //RESTAR LA MITAD DEL DAÑO QUE RECIBIRÍA EL PERSONAJE Y FINALMENTE UN RANDOM DEL 1 AL 20
+
+        
         int aux = 0;
+
+        aux = battle.CalculateDMG(person, target);
+
         aux += Random.Range(1, 21);
+
         return aux;
     }
 
-    private bool AlliesInRange(CharacterD person)
+    private bool AlliesInRange(Character person)
     {
         moveList = new List<(int, int)> ();
         alliesToAttack.Clear();
@@ -255,7 +268,7 @@ public class EnemyAI : MonoBehaviour
         if (map.GetCell(x, y).GetCharacter() != null && map.GetCell(x, y).GetCharacter().GetSide() == 0)
         {
             range = 0;
-            alliesToAttack.Add(map.GetCell(x,y).GetCharacter());
+            if (!alliesToAttack.Contains(map.GetCell(x,y).GetCharacter())) alliesToAttack.Add(map.GetCell(x,y).GetCharacter());
         }
         //si el rango es menor o igual a zero se añade la posición y ya,
         //si es mayor a zero se añade y además vuelve a ejecutar la función con cada casilla adyacente y con rango menor dependiendo de la dificultad de movimiento

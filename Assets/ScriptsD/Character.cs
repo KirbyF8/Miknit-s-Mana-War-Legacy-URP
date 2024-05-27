@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterD : MonoBehaviour
-{
+{/*
     private MyCell position;
     private MyCell previousPos;
     [SerializeField] private int movement = 2;
@@ -114,5 +114,5 @@ public class CharacterD : MonoBehaviour
     {
         active = x;
     }
-
+    */
 }

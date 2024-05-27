@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -40,13 +41,13 @@ public class GameManagerD : MonoBehaviour
     //el mapa, las posiciones de spawn que tiene el mapa y personajes que usará el player.
     private MyGrid map;
     private Vector2[] spawnPos;
-    [SerializeField] private CharacterD[] characters;
+    private Character[] characters;
 
 
     //variables para seleccionar una casilla o personaje, y variables con el objeto de las casillas
     private MyCell selected;
     private MyCell selectedAux;
-    private CharacterD charSelected;
+    private Character charSelected;
     [SerializeField] private GameObject alliesTile;
     [SerializeField] private GameObject enemiesTile;
 
@@ -74,18 +75,49 @@ public class GameManagerD : MonoBehaviour
     private bool enemyTurnStarted = false;
     private bool paused = false;
 
+    private UIBattle uiBattle;
+    private Battle battle;
+    private VisualBattleV2 visualBattle;
+
+    [SerializeField] GameObject[] AlliesPrefabs;
+
+    [SerializeField] private Camera cameraGrid;
+    [SerializeField] private Camera cameraBattle;
+
+    [SerializeField] private GameObject battleCanvas;
+    [SerializeField] private GameObject gridCanvas;
+
     void Start()
     {
-
+        cameraBattle.enabled = false;
+        battleCanvas.SetActive(false);
         //encuentra el mapa y recoje las posiciones de spawn
         map = FindObjectOfType<MyGrid>();
         uiManager = FindObjectOfType<UIManager>();
         enemyBrain = gameObject.GetComponent<EnemyAI>();
         spawnPos = map.GetSpawn();
         uiManager.EndTurnOff();
+        uiBattle = FindObjectOfType<UIBattle>();
+        battle = FindObjectOfType<Battle>();
+        characters = new Character[AlliesPrefabs.Length];
+        visualBattle = FindObjectOfType<VisualBattleV2>();
         //posiciona los personajes en posiciones de spawn
-        for (int i = 0; i < characters.Length; i++)
+        
+        for (int i = 0; i < AlliesPrefabs.Length; i++)
         {
+            GameObject aux;
+            String auxName;
+
+            Instantiate(AlliesPrefabs[i]);
+
+            auxName = AlliesPrefabs[i].name + "(Clone)";
+           
+            aux = GameObject.Find(auxName);
+            Debug.Log(aux.name);
+            characters[i] = aux.GetComponent<Character>();
+
+            characters[i].SetMap(map);
+
             characters[i].SetPosition((int)spawnPos[i].x, (int)spawnPos[i].y);
             map.GetCell((int)spawnPos[i].x, (int)spawnPos[i].y).SetCharacter(characters[i]);
         }
@@ -223,9 +255,13 @@ public class GameManagerD : MonoBehaviour
                             //si en la nueva casilla seleccionada hay un enemigo se mueve cerca suyo y ataca
                             if (selectedAux.GetCharacter() != null && selectedAux.GetCharacter().GetSide() > 0)
                             {
+                                Character auxCharA = selected.GetCharacter();
+                                
                                 MoveChar(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
                                 Debug.Log("attack");
                                 //AQUI VA LA LÓGICA DEL ATAQUE
+                                Fight(auxCharA, selectedAux.GetCharacter());
+                                
                                 DeleteTiles();
                             }
 
@@ -259,12 +295,49 @@ public class GameManagerD : MonoBehaviour
 
     }
 
+    public void Fight(Character battler1, Character battler2)
+    {
+        if (battler1 == null || battler2 == null)
+        {
+            if (battler1 == null && battler2 != null)
+            {
+                Debug.LogError("Atacker");
+                return;
+            }
+            else if (battler2 == null && battler1 != null)
+            {
+                Debug.LogError("Defender");
+                return;
+            }
+            else
+            {
+                Debug.LogError("Both");
+                return;
+            }
+   
+        }
+        
 
+        Debug.Log(battler1.name + battler2.name);
+        battle.updateUIBattle(battler1, battler2);
+        
+        //! EFECTO DROGA
+        
+        gridCanvas.SetActive(false);
+        cameraBattle.enabled = true;
+        cameraGrid.enabled = false;
+        battleCanvas.SetActive(true);
+
+        visualBattle.SpawnCharacters(battler1, battler2);
+        
+
+
+    }
     //función de volver a la posición anterior ALFA BETA GAMMA 
     private void ReturnPos()
     {
         MyCell aux = map.GetCell(selected.GetCharacter().GetPosition());
-        CharacterD auxChar = selected.GetCharacter();
+        Character auxChar = selected.GetCharacter();
         if (map.GetCell(auxChar.GetPreviousPosition()).GetCharacter() == null)
         {
             auxChar.SetPosition(auxChar.GetPreviousPosition());
@@ -451,7 +524,7 @@ public class GameManagerD : MonoBehaviour
     private void ExchangePos(MyCell cell1, MyCell cell2)
     {
         charSelected = cell1.GetCharacter();
-        CharacterD charSelectedAux = cell2.GetCharacter();
+        Character charSelectedAux = cell2.GetCharacter();
         cell2.SetCharacter(charSelected);
         cell1.SetCharacter(charSelectedAux);
 
@@ -489,7 +562,7 @@ public class GameManagerD : MonoBehaviour
     //Corutina para mover el personaje casilla por casilla
     private IEnumerator MovingChar((int, int)[] path)
     {
-        CharacterD selectedChar = map.GetCell(path[0].Item1, path[0].Item2).GetCharacter();
+        Character selectedChar = map.GetCell(path[0].Item1, path[0].Item2).GetCharacter();
         selectedChar.SetPreviousPosition(path[0].Item1, path[0].Item2);
         map.GetCell(path[0].Item1, path[0].Item2).SetCharacter(null);
         moving = true;
@@ -607,7 +680,7 @@ public class GameManagerD : MonoBehaviour
 
 
     //función que devuelve que número ocupa el personaje seleccionado en el array de aliados
-    public int GetNumb(CharacterD person) 
+    public int GetNumb(Character person) 
     { 
         for(int i = 0; i<characters.Length; i++)
         {
@@ -617,7 +690,7 @@ public class GameManagerD : MonoBehaviour
     }
 
     //Funcion que devuelve todos los personajes aliados
-    public CharacterD[] GetCharacters()
+    public Character[] GetCharacters()
     {
         return characters;
     }

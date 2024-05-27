@@ -8,15 +8,18 @@ using static Unity.Burst.Intrinsics.X86;
 
 public class VisualBattleV2 : MonoBehaviour
 {
-    private Vector3 attackerPos = new Vector3(600, 180, 42);
+    private Vector3 attackerPos = new Vector3(-5, 0.2f, 304.5f);
 
-    private Vector3 defenderPos = new Vector3(600, 180, 52);
+    private Vector3 defenderPos = new Vector3(5, 0.2f, 304.5f);
 
     [SerializeField] private UIBattle uiBattle;
     private Battle battle;
 
     private string defenderName;
     private string attackerName;
+
+    private string defenderBodyName;
+    private string attackerBodyName;
 
     private int maxAttacksA;
     private int attacksA;
@@ -39,6 +42,8 @@ public class VisualBattleV2 : MonoBehaviour
 
     private ParticleSystem atackerParticles;
     private ParticleSystem defenderParticles;
+
+   
  
     private void Start()
     {
@@ -46,8 +51,10 @@ public class VisualBattleV2 : MonoBehaviour
     }
     public void SpawnCharacters(Character attacker, Character defender)
     {
-        atackerNameConst = attacker.name + "(Clone)";
-        defenderNameConst = defender.name + "(Clone)";
+        atackerNameConst = attacker.name;
+        attackerBodyName = attacker.name + "(Clone)";
+        defenderNameConst = defender.name;
+        defenderBodyName = defender.name + "(Clone)";
 
 
         //? Quitar mas tarde
@@ -56,17 +63,20 @@ public class VisualBattleV2 : MonoBehaviour
         //? Quitar mas tarde
 
 
-        Instantiate(attacker, attackerPos, Quaternion.Euler(0, 0, 0));
 
-        GameObject a = GameObject.Find($"{atackerNameConst}"); 
+        Instantiate(attacker.gameObject, attackerPos, Quaternion.Euler(0, 75, 0));
+
+        GameObject a = GameObject.Find($"{attackerBodyName}"); 
         atackerParticles = a.GetComponent<ParticleSystem>();
        
        
 
-        Instantiate(defender, defenderPos, Quaternion.Euler(0, 180, 0));
-        GameObject d = GameObject.Find($"{defenderNameConst}");
+        Instantiate(defender.gameObject, defenderPos, Quaternion.Euler(0, -75, 0));
+        GameObject d = GameObject.Find($"{defenderBodyName}");
         defenderParticles = d.GetComponent<ParticleSystem>();
 
+        battle.GetAllAttack();
+       //callAttack(attacker, defender, aCrit, aDMG, aHit, aATKs);
     }
 
     public void callAttack(Character atacker, Character defender, int aCrit, int aDMG, int aHit, int aATKs )
@@ -75,9 +85,6 @@ public class VisualBattleV2 : MonoBehaviour
 
         coroutine = Attack(atacker,defender, aCrit, aDMG,aHit,aATKs);
 
-
-        
-        
             StartCoroutine(coroutine);
         
        
@@ -86,12 +93,12 @@ public class VisualBattleV2 : MonoBehaviour
 
     private IEnumerator Attack(Character atacker, Character defender, int aCrit, int aDMG, int aHit, int aATKs)
     {
-        attackerName = atacker.name + "(Clone)";
-        defenderName = defender.name + "(Clone)";
+        
+       
 
         int aux = Random.Range(0, 101);
 
-        coroutine = ADamage(aDMG, aATKs);
+        coroutine = ADamage(atacker, defender, aDMG, aATKs);
 
         if (atacker.hp <= 0 || defender.hp <= 0)
         {
@@ -133,23 +140,15 @@ public class VisualBattleV2 : MonoBehaviour
     }
 
 
-    private IEnumerator ADamage(int aDMG, int aATKs)
+    private IEnumerator ADamage(Character atacker,Character defender,int aCrit, int aDMG, int aHit, int aATKs)
     {
         
         //Debug.Log(defenderParticles.name);
         starded = true;
-        Character defender;
+        
         //int aDMG = uiBattle.ReturnDamage();
-
-        GameObject DefenderBody = GameObject.Find(defenderName);
-
-
-        defender = DefenderBody.GetComponent<Character>();
-
-        Character atacker;
-        GameObject AtackerBody = GameObject.Find(attackerName);
-        atacker = AtackerBody.GetComponent<Character>();
-        Animator atackerAnimator = AtackerBody.GetComponent<Animator>();
+      
+        Animator atackerAnimator = atacker.gameObject.GetComponent<Animator>();
 
         atackerAnimator.SetBool("AttackV2", true);
         Debug.Log(aDMG);
@@ -168,10 +167,10 @@ public class VisualBattleV2 : MonoBehaviour
       
 
         yield return new WaitForSeconds(0.5f);
-        
 
 
 
+        /*
         if (atacker.name == atackerNameConst)
         {
             uiBattle.HealthUpdate(atacker, defender);
@@ -192,11 +191,12 @@ public class VisualBattleV2 : MonoBehaviour
                 auxTres++;
             }
             attacksA++;
-                coroutine = ADamage(aDMG, aATKs);
+                coroutine = ADamage(atacker, defender, aDMG, aATKs);
             StartCoroutine(coroutine);
         }
         else if (!defenderTurn && attacksD < maxAttacksD)
         {
+            
             auxDos = 1;
             auxTres = 1;
             defenderTurn = true;
@@ -210,14 +210,23 @@ public class VisualBattleV2 : MonoBehaviour
             auxTres = 1;
             defenderTurn = false;
             battle.GetAllAttack();
+        }*/
+
+    
+        if (aATKs > 2 && attacksA < aATKs)
+        {
+            coroutine = Attack(atacker, defender, aCrit, aDMG, aHit, aATKs);
         }
-        
+
     }
     public void GetAllAttackCosas(Character attacker,Character defender,int aCrit,int dCrit,int aDMG,int dDMG,int aATKs,int dATKs,int aHit,int dHit)
     {
         maxAttacksA = aATKs;
         maxAttacksD = dATKs;
 
+        Debug.Log(defenderTurn);
+       
+       
         if (!defenderTurn)
         {
 

@@ -33,12 +33,23 @@ public class Battle : MonoBehaviour
         visualBattle = GetComponent<VisualBattleV2>();
         
 
-        visualBattle.SpawnCharacters(attacker, defender);
-        Combat();
+        // visualBattle.SpawnCharacters(attacker, defender);
+        // Combat();
 
-        uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
-        GetAllAttack();
+        // uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
+        // GetAllAttack();
         
+    }
+
+
+    public void updateUIBattle(Character battler1, Character battler2)
+    {
+       
+        attacker = battler1;
+        defender = battler2;
+        Combat();
+        //GetAllAttack();
+        uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);
     }
 
     public void GetAllAttack()
@@ -69,6 +80,37 @@ public class Battle : MonoBehaviour
 */    
         }
         
+    public int CalculateDMG(Character enemy, Character ally)
+    {
+        
+        attacker = enemy;
+        defender = ally;
+
+        
+        int aux = 0;
+
+        NumberOfAttacks();
+
+        if (attacker.dmgType) DamaegeOfMagicAttack();
+        else DamaegeOfFisicAttack();
+
+        aux += aDMG * aATKs;
+
+        
+        aux = (aux * 100) / defender.hp;
+        /*
+        if (aHit < 25)
+        {
+            aux -= 75;
+        }
+        else
+        {
+            aux += aHit / 2;
+        }*/
+        // Debug.Log(aux + defender.name);
+        return aux;
+    }
+
     private void NumberOfAttacks()
     {
 

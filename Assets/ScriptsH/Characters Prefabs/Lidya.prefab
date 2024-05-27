@@ -190,6 +190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 0}
+  active: 0
   lvl: 1
   exp: 0
   exp_max: 1
@@ -198,7 +200,7 @@ MonoBehaviour:
   movement: 5
   stats: 0e000000000000000c00000008000000000000000800000014000000060000000c000000
   scale: 4b00000000000000460000004600000000000000320000006e0000002800000032000000
-  arma: 
+  arma: Lanza
   dmgType: 0
   side: 0
 --- !u!198 &3697332793290630720

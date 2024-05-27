@@ -20,7 +20,7 @@ public class MyGrid : MonoBehaviour
     [SerializeField] private Vector2[] spawnPositions;
 
     //los enemigos del mapa y sus correspondientes posiciones
-    [SerializeField] private CharacterD[] enemies;
+    private Character[] enemies;
     [SerializeField] private Vector2[] enemiesPositions;
 
     //matriz de booleanos para registrar por donde se puede caminar y por donde no
@@ -36,6 +36,8 @@ public class MyGrid : MonoBehaviour
     [SerializeField] private int[] numberOfCell;
 
     private GameManagerD gamemanager;
+
+    [SerializeField] private GameObject[] enemiesPrefabs;
 
     private void Start()
     {
@@ -58,8 +60,24 @@ public class MyGrid : MonoBehaviour
 
         //Se colocan todos los enemigos en la posición que les corresponde de enemiesPositions.
 
-        for (int i = 0; i < enemies.Length; i++)
+        enemies = new Character[enemiesPrefabs.Length];
+
+        for (int i = 0; i < enemiesPrefabs.Length; i++)
         {
+
+            GameObject aux;
+            String auxName;
+
+           Instantiate(enemiesPrefabs[i]);
+
+            auxName = enemiesPrefabs[i].name + "(Clone)";
+            Debug.Log(auxName);
+            aux = GameObject.Find(auxName);
+
+            enemies[i] = aux.GetComponent<Character>();
+
+            enemies[i].SetMap(this);
+
             enemies[i].SetPosition(enemiesPositions[i]);
             gridArray[(int)enemiesPositions[i].x, (int)enemiesPositions[i].y].SetCharacter(enemies[i]);
         }
@@ -121,12 +139,12 @@ public class MyGrid : MonoBehaviour
         walkableMap[x, y] = walk;
     }
 
-    public CharacterD[] GetEnemies()
+    public Character[] GetEnemies()
     {
         return enemies;
     }
 
-    public void SetEnemies(CharacterD[] x)
+    public void SetEnemies(Character[] x)
     {
         enemies = x;
     }
@@ -280,7 +298,7 @@ public class MyGrid : MonoBehaviour
 
     public (int, int)[] FindPathEnemy(Vector2 start, Vector2 goal)
     {
-        CharacterD[] alliesArray = gamemanager.GetCharacters();
+        Character[] alliesArray = gamemanager.GetCharacters();
 
         //se pone a false en el array de booleanos todas las posiciones donde haya enemigos
         for (int i = 0; i < alliesArray.Length; i++)

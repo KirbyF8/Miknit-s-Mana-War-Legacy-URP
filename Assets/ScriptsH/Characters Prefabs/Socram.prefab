@@ -106,6 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 0}
+  active: 1
   lvl: 1
   exp: 0
   exp_max: 1

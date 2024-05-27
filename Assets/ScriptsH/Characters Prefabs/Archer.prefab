@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9b30ac6c68e46439e8f1ab8adcc294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: {fileID: 0}
+  active: 0
   lvl: 1
   exp: 0
   exp_max: 1
@@ -204,7 +206,7 @@ MonoBehaviour:
   movement: 6
   stats: 090000000c0000000c0000000f0000000900000006000000080000000e0000000c000000
   scale: 190000001400000028000000730000001900000028000000320000005500000032000000
-  arma: 
+  arma: Arco
   dmgType: 0
   side: 1
 --- !u!198 &6214176172269808789

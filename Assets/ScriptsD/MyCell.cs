@@ -9,7 +9,7 @@ public class MyCell
     
     [SerializeField] private float evasionBuff;
     [SerializeField] private float defenceBuff;
-    private CharacterD characterOnTop;
+    private Character characterOnTop;
     private int positionx;
     private int positiony;
 
@@ -36,12 +36,12 @@ public class MyCell
         difficulty = diff;
     }
 
-    public CharacterD GetCharacter()
+    public Character GetCharacter()
     {
         return characterOnTop;
     }
 
-    public void SetCharacter(CharacterD someone)
+    public void SetCharacter(Character someone)
     {
         characterOnTop = someone;
     }

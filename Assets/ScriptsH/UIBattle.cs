@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class UIBattle : MonoBehaviour
 {
+    
+
     [SerializeField] Sprite[] weaponTriangleSprites;
     [SerializeField] Sprite[] weaponSprites;
 
@@ -54,12 +57,7 @@ public class UIBattle : MonoBehaviour
 
     private int aDMGToSend;
 
-    private void Start()
-    {
-        // Debug.Log(attackerInfoTextsColorChange[0].name);
-        // ColorChange();
-    }
-
+   
    
 
 
@@ -112,7 +110,8 @@ public class UIBattle : MonoBehaviour
             attackerBackGrounds3ColorChange[i].color = colorAtacker3;
         }
         attackerName.color = colorAtacker;
-        attackerName.text = atacker.name;
+        
+        attackerName.text = atacker.name.Replace("(Clone)", "");
 
         attackerHealthBar.maxValue = atacker.stats[0];
         attackerHealthBar.value = atacker.hp;
@@ -203,7 +202,7 @@ public class UIBattle : MonoBehaviour
             defenderBackGrounds3ColorChange[i].color = colorDefender3;
         }
 
-        defenderName.text = defender.name;
+        defenderName.text = defender.name.Replace("(Clone)", ""); 
         defenderName.color = colorDefender;
 
         defenderHealthBar.maxValue = defender.stats[0];
