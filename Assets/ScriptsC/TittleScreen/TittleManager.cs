@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TittleManager : MonoBehaviour
@@ -56,6 +57,17 @@ public class TittleManager : MonoBehaviour
     {
         OptionsPanel.SetActive(false);
         mainButtonSelect.Select();
+    }
+
+    public void GoToTutoriralCoroutine()
+    {
+        StartCoroutine(GoToTutorial());
+
+    }
+    public IEnumerator GoToTutorial()
+    {
+        yield return new WaitForSeconds(0.50f);
+        SceneManager.LoadScene(2);
     }
 
 
