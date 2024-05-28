@@ -63,6 +63,7 @@ public class EnemyAI : MonoBehaviour
             if (!updated)
             {
                 enemies = map.GetEnemies();
+                Allies = gameManager.GetCharacters();
                 updated = true;
             }
             if (canDoTurn)
@@ -72,7 +73,12 @@ public class EnemyAI : MonoBehaviour
                 numberOfEnemy++;
                 if (numberOfEnemy < enemies.Length)
                 {
-                    TrueEnemyTurn();
+                    if (enemies[numberOfEnemy] != null)
+                    {
+                        TrueEnemyTurn();
+                    }
+                    else canDoTurn = true;
+                    
                 }
                 else
                 {
@@ -112,6 +118,7 @@ public class EnemyAI : MonoBehaviour
             gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos)));
             Debug.Log("ENEMY ATTACK");
             //Lógica de ataque
+            gameManager.WaitingForAFight(person, aux);
         }
         else if (actionToPerform.x == 2)
         {
@@ -362,6 +369,15 @@ public class EnemyAI : MonoBehaviour
     }
 
     public void DoneMoving()
+    {
+        if (actionToPerform.x == 2) canDoTurn = true;
+        else if(actionToPerform.x == 1)
+        {
+            gameManager.IsGoingToFight();
+        }
+    }
+
+    public void DoneFighting()
     {
         canDoTurn = true;
     }

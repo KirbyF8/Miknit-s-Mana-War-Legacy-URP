@@ -87,6 +87,9 @@ public class GameManagerD : MonoBehaviour
     [SerializeField] private GameObject battleCanvas;
     [SerializeField] private GameObject gridCanvas;
 
+    private bool fightHasEnded = true;
+    private bool ReadyToFight = false;
+
     void Start()
     {
         cameraBattle.enabled = false;
@@ -137,12 +140,18 @@ public class GameManagerD : MonoBehaviour
                 uiManager.ShowOptions();
                 paused = true;
                 Time.timeScale = 0;
+                uiManager.HideTurn();
+                uiManager.HideEndOfSpawn();
+                battleCanvas.SetActive(false);
             }
             else
             {
                 uiManager.HideOptions();
                 paused = false;
                 Time.timeScale = 1.0f;
+                uiManager.ShowTurn();
+                if (spawnPhase) uiManager.ShowEndOfSpawn();
+                if(!fightHasEnded) battleCanvas.SetActive(true);
             }
 
         }
@@ -261,6 +270,7 @@ public class GameManagerD : MonoBehaviour
                                 Debug.Log("attack");
                                 //AQUI VA LA LÓGICA DEL ATAQUE
                                 Fight(auxCharA, selectedAux.GetCharacter());
+                                fightHasEnded = false;
                                 
                                 DeleteTiles();
                             }
@@ -585,6 +595,33 @@ public class GameManagerD : MonoBehaviour
         selectedChar.SetHasMoved(true);
     }
 
+    private IEnumerator WaitToFight(Character attacker, Character defender)
+    {
+        while (!ReadyToFight)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+        ReadyToFight=false;
+        Fight(attacker, defender);
+
+        while (!fightHasEnded)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        enemyBrain.DoneFighting();
+        fightHasEnded = false;
+    }
+
+    public void WaitingForAFight(Character att, Character def)
+    {
+        StartCoroutine(WaitToFight(att, def));
+    }
+
+    public void IsGoingToFight()
+    {
+        ReadyToFight = true;
+    }
+
     //Función para terminar el turno aliado
     private void EndAllyTurn()
     {
@@ -702,5 +739,39 @@ public class GameManagerD : MonoBehaviour
         paused = false;
         Time.timeScale = 1.0f;
     }
+
+    public void FightHasEnded(Character dead)
+    {
+        cameraGrid.enabled = true;
+        cameraBattle.enabled = false;
+        fightHasEnded = true;
+        battleCanvas.SetActive(false);
+        gridCanvas.SetActive(true);
+
+        if (dead != null)
+        {
+            MyCell aux = map.GetCell(dead.GetPosition());
+            aux.SetCharacter(null);
+            if (dead.side == 0)
+            {
+                for (int i = 0; i < characters.Length; i++)
+                {
+                    if (characters[i] == dead)
+                    {
+                        Destroy(characters[i].GameObject());
+                        characters[i] = null;
+                    }
+                }
+            }
+            else
+            {
+
+                map.DeleteCharacter(dead);
+            }
+        }
+        
+    }
+
+    
 
 }

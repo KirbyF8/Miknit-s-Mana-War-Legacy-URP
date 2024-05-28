@@ -57,14 +57,21 @@ public class Character : MonoBehaviour
 
     public void ExpReset()
     {
-        if (exp >= exp_max)
-        {
+
             lvl++;
             exp = exp - exp_max;
             exp_max += exp_max;
 
             lvlUp.LevelUpStat(ref stats, scale);
-            
+
+    }
+
+    public void GiveExp(int x)
+    {
+        exp += x;
+        if(exp>= exp_max)
+        {
+            ExpReset();
         }
     }
 

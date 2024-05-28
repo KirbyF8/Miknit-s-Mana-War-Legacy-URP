@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Button endSpawnPhase;
     [SerializeField] private Button endTurn;
+    [SerializeField] private Button mainMenu;
 
     void Start()
     {
@@ -78,5 +79,15 @@ public class UIManager : MonoBehaviour
     public void EndTurnOff()
     {
         endTurn.interactable = false;
+    }
+
+    public void HideTurn()
+    {
+        endTurn.gameObject.SetActive(false);
+    }
+
+    public void ShowTurn()
+    {
+        endTurn.gameObject.SetActive(true);
     }
 }

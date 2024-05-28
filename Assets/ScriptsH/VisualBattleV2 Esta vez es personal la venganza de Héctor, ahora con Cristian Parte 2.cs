@@ -55,11 +55,13 @@ public class VisualBattleV2 : MonoBehaviour
     private int dCRITLocal;
     private int aATKsLocal;
     private int dATKsLocal;
-   
+
+    private GameManagerD gameManagerD;
  
     private void Start()
     {
         battle = GetComponent<Battle>();
+        gameManagerD = FindObjectOfType<GameManagerD>();
     }
     public void SpawnCharacters(Character attacker, Character defender)
     {
@@ -69,10 +71,6 @@ public class VisualBattleV2 : MonoBehaviour
         defenderBodyName = defender.name + "(Clone)";
 
 
-        //? Quitar mas tarde
-        attacker.hp = attacker.stats[0];
-        defender.hp = defender.stats[0];
-        //? Quitar mas tarde
 
 
 
@@ -115,7 +113,9 @@ public class VisualBattleV2 : MonoBehaviour
         {
             if (atacker.hp <= 0 || defender.hp <= 0)
             {
-                //? Dejenlo ya esta muerto
+                yield return new WaitForSeconds(1f);
+                if (atacker.hp <= 0) GoBackToGrid(atacker, defender);
+                else GoBackToGrid(defender, atacker);
                 yield return null;
             }
             else
@@ -124,7 +124,7 @@ public class VisualBattleV2 : MonoBehaviour
                 {
                     if (aDMGlocal <= 0)
                     {
-                        //! No Damage
+                        
                         yield return null;
                     }
                     else
@@ -158,7 +158,9 @@ public class VisualBattleV2 : MonoBehaviour
         {
             if (atacker.hp <= 0 || defender.hp <= 0)
             {
-                //? Dejenlo ya esta muerto
+                yield return new WaitForSeconds(1f);
+                if (atacker.hp <= 0) GoBackToGrid(atacker, defender);
+                else GoBackToGrid(defender, atacker);
                 yield return null;
             }
             else
@@ -205,10 +207,18 @@ public class VisualBattleV2 : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         //Debug.Log(defenderParticles.name);
 
+        GameObject a;
         started = true;
-       
-      
-        Animator atackerAnimator = atacker.gameObject.GetComponent<Animator>();
+
+        if (!defenderTurn)
+        {
+            a = GameObject.Find(attackerBodyName);
+        }
+        else
+        {
+            a = GameObject.Find(defenderBodyName);
+        }
+        Animator atackerAnimator = a.gameObject.GetComponent<Animator>();
 
         atackerAnimator.SetBool("AttackV2", true);
         // Debug.Log(aDMG);
@@ -268,6 +278,8 @@ public class VisualBattleV2 : MonoBehaviour
                 }
                 else if ( attacksD >= maxAttacksD && attacksA >= aATKsLocal)
                 {
+                    yield return new WaitForSeconds(1f);
+                    GoBackToGrid(atacker,defender);
                     yield return null;
                 }
                 else 
@@ -306,6 +318,8 @@ public class VisualBattleV2 : MonoBehaviour
                 }
                 else if (attacksD >= maxAttacksD && attacksA >= aATKsLocal)
                 {
+                    yield return new WaitForSeconds(1f);
+                    GoBackToGrid(atacker, defender);
                     yield return null;
                 }
                 else 
@@ -362,6 +376,9 @@ public class VisualBattleV2 : MonoBehaviour
     {
         maxAttacksA = aATKs;
         maxAttacksD = dATKs;
+        attacksA = 0;
+        attacksD = 0;
+        defenderTurn = false;
 
         SaveBattle(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
         Debug.Log(defenderTurn);
@@ -466,6 +483,34 @@ public class VisualBattleV2 : MonoBehaviour
             }
         }
        
+    }
+
+    private void GoBackToGrid(Character dead = null, Character alive = null)
+    {
+        GameObject a = GameObject.Find(attackerBodyName);
+        GameObject d = GameObject.Find(defenderBodyName);
+        Destroy(a);
+        Destroy(d);
+        if (dead.hp == 0)
+        {
+            if (alive.GetSide() == 0)
+            {
+                alive.GiveExp(25);
+            }
+            
+        }
+        else
+        {
+            if(alive.GetSide() == 0)
+            {
+                alive.GiveExp(5);
+            }
+            else
+            {
+                dead.GiveExp(5);
+            }
+        }
+        gameManagerD.FightHasEnded(dead);
     }
 
 }

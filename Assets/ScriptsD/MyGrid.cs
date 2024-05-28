@@ -518,4 +518,16 @@ public class MyGrid : MonoBehaviour
         return IsInBounds((int) pos.x, (int) pos.y);
     }
 
+    public void DeleteCharacter(Character character)
+    {
+        for(int i = 0; i<= enemies.Length; i++)
+        {
+            if(enemies[i] == character)
+            {
+                Destroy(enemies[i].gameObject);
+                enemies[i]= null; 
+            }
+        }
+    }
+
 }
