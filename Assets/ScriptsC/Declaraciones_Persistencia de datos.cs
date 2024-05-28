@@ -2,11 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
-public class Declaraciones_Persistenciadedatos : MonoBehaviour
+public class PersistenciaDeDatos : MonoBehaviour
 {
 
     private string path = Application.dataPath + "/../saves/"+"save.json";
+
+
+
+
+    private int id;
+    private string name;
+    private string description;
+    private bool tutorialDone;
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +62,36 @@ public class Declaraciones_Persistenciadedatos : MonoBehaviour
         File.WriteAllText(path, jsonContent);
 
     }
+    public void LoadData()
+    {
+        if (File.Exists(path))
+        {
+            string jsonContent = File.ReadAllText(path);
 
+            Save save = JsonUtility.FromJson<Save>(jsonContent);
+
+            //if(!inTitleScreen){}
+
+            id = save.Id;
+            name = save.Name;
+            description = save.Description;
+            tutorialDone = save.tutorialDone;
+            //GameManager.Instance.Load(save.name, save.mapPosition, save.points, save.color, save.level, save.exp, save.initialPower, save.levelsCompleted, save.timePlayed);
+            //PlayerControlMap.Instance.SetPlayerPos(save.mapPosition);
+        }
+        else
+        {
+            Debug.LogError("¡¡¡ EL ARCHIVO DE GUARDADO NO EXISTE !!!");
+        }
+    }
+
+
+
+    public bool GetTutorialDone()
+    {
+
+        return tutorialDone;
+    }
 
 
 

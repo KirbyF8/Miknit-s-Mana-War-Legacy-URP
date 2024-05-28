@@ -13,12 +13,16 @@ public class TittleManager : MonoBehaviour
     [SerializeField] private GameObject OptionsPanel;
     [SerializeField] private Button mainButtonSelect;
 
+    private PersistenciaDeDatos persistenciaDeDatos;
+
+
     // Start is called before the first frame update
     void Start()
     {
         MainPanel.SetActive(true);
         CreditsPanel.SetActive(false);
         OptionsPanel.SetActive(false);
+        persistenciaDeDatos = GetComponent<PersistenciaDeDatos>();
     }
 
     // Update is called once per frame
@@ -67,7 +71,18 @@ public class TittleManager : MonoBehaviour
     public IEnumerator GoToTutorial()
     {
         yield return new WaitForSeconds(0.50f);
-        SceneManager.LoadScene(2);
+
+        if (!persistenciaDeDatos.GetTutorialDone())
+        {
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            SceneManager.LoadScene(3);
+        }
+        
+        
+        
     }
 
 
