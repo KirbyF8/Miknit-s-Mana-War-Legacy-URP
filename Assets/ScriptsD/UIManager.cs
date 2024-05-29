@@ -17,7 +17,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider music;
 
     [SerializeField] private Toggle autoEnd;
-    [SerializeField] private Toggle showGrid;
     [SerializeField] private Toggle partyMode;
     [SerializeField] private Toggle mirror;
 
@@ -37,7 +36,6 @@ public class UIManager : MonoBehaviour
         voices.onValueChanged.AddListener(gameManager.ChangeVoices);
         music.onValueChanged.AddListener(gameManager.ChangeMusic);
         autoEnd.onValueChanged.AddListener(gameManager.AutoEndOnOff);
-        showGrid.onValueChanged.AddListener(gameManager.ShowGrid);
         partyMode.onValueChanged.AddListener(gameManager.PartyMode);
         mirror.onValueChanged.AddListener(gameManager.MirrorStats);
 
@@ -89,5 +87,24 @@ public class UIManager : MonoBehaviour
     public void ShowTurn()
     {
         endTurn.gameObject.SetActive(true);
+    }
+
+    public float MusicVolume()
+    {
+        return music.value;
+    }
+
+    public float SfxVolume()
+    {
+        return sfx.value;
+    }
+
+    public float VoicesVolume()
+    {
+        return voices.value;
+    }
+    public float MasterVolume()
+    {
+        return master.value;
     }
 }

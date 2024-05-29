@@ -497,7 +497,8 @@ public class VisualBattleV2 : MonoBehaviour
             {
                 alive.GiveExp(25);
             }
-            
+            gameManagerD.FightHasEnded(dead);
+
         }
         else
         {
@@ -509,8 +510,9 @@ public class VisualBattleV2 : MonoBehaviour
             {
                 dead.GiveExp(5);
             }
+            gameManagerD.FightHasEnded(null);
         }
-        gameManagerD.FightHasEnded(dead);
+        
     }
 
 }

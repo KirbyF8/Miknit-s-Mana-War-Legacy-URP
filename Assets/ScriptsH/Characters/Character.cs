@@ -62,7 +62,7 @@ public class Character : MonoBehaviour
             exp = exp - exp_max;
             exp_max += exp_max;
 
-            lvlUp.LevelUpStat(ref stats, scale);
+            //lvlUp.LevelUpStat(ref stats, scale);
 
     }
 

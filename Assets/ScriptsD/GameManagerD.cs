@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
+using Random = UnityEngine.Random;
 
 public class GameManagerD : MonoBehaviour
 {
-    private UIManager uiManager;
+    [SerializeField] private UIManager uiManager;
 
     private float masterVolume;
     private float sfxValue;
@@ -90,20 +93,27 @@ public class GameManagerD : MonoBehaviour
     private bool fightHasEnded = true;
     private bool ReadyToFight = false;
 
+    [SerializeField] private Volume volume;
+    [SerializeField] private Vignette vignette;
     void Start()
     {
         cameraBattle.enabled = false;
         battleCanvas.SetActive(false);
         //encuentra el mapa y recoje las posiciones de spawn
         map = FindObjectOfType<MyGrid>();
-        uiManager = FindObjectOfType<UIManager>();
         enemyBrain = gameObject.GetComponent<EnemyAI>();
         spawnPos = map.GetSpawn();
         uiManager.EndTurnOff();
+        uiManager.HideOptions();
         uiBattle = FindObjectOfType<UIBattle>();
         battle = FindObjectOfType<Battle>();
         characters = new Character[AlliesPrefabs.Length];
         visualBattle = FindObjectOfType<VisualBattleV2>();
+        ChangeMusic(uiManager.MusicVolume());
+        //ChangeSFX(uiManager.SfxVolume());
+        //ChangeVoices(uiManager.VoicesVolume());
+        ChangeMaster(uiManager.MasterVolume());
+        volume.weight = 0;
         //posiciona los personajes en posiciones de spawn
         
         for (int i = 0; i < AlliesPrefabs.Length; i++)
@@ -133,6 +143,22 @@ public class GameManagerD : MonoBehaviour
 
     void Update()
     {
+        if (YouLost())
+        {
+            Debug.Log("you lose!");
+        }
+        else if (YouWin())
+        {
+            Debug.Log("you win!");
+        }
+
+        else if (autoend)
+        {
+            if (AllAlliesHaveActed())
+            {
+                EndAllyTurn();
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!paused)
@@ -656,28 +682,28 @@ public class GameManagerD : MonoBehaviour
     public void ChangeMaster(float x)
     {
         masterVolume = x;
-
-        ChangeSFX(sfxValue);
+        Debug.Log(musicValue + ", " + masterVolume);
+        //ChangeSFX(sfxValue);
         ChangeMusic(musicValue);
-        ChangeVoices(voicesValue);
+        //ChangeVoices(voicesValue);
     }
 
     public void ChangeSFX(float x)
     {
         sfxValue = x;
-        sfx.volume = (sfxValue + masterVolume) / 2;
+        sfx.volume = (sfxValue * masterVolume);
     }
 
     public void ChangeMusic(float x)
     {
         musicValue = x;
-        music.volume = (musicValue+masterVolume)/2;
+        music.volume = (musicValue*masterVolume);
     }
 
     public void ChangeVoices(float x)
     {
         voicesValue = x;
-        voices.volume = (voicesValue + masterVolume) / 2;
+        voices.volume = (voicesValue * masterVolume);
     }
 
     //funciones para activar varias opciones
@@ -689,6 +715,7 @@ public class GameManagerD : MonoBehaviour
     public void PartyMode(bool x)
     {
         party = x;
+        if (x) volume.weight = 1; else volume.weight = 0;
     }
 
     public void MirrorStats(bool x)
@@ -738,6 +765,9 @@ public class GameManagerD : MonoBehaviour
         uiManager.HideOptions();
         paused = false;
         Time.timeScale = 1.0f;
+        uiManager.ShowTurn();
+        if (spawnPhase) uiManager.ShowEndOfSpawn();
+        if (!fightHasEnded) battleCanvas.SetActive(true);
     }
 
     public void FightHasEnded(Character dead)
@@ -773,5 +803,34 @@ public class GameManagerD : MonoBehaviour
     }
 
     
+    private bool AllAlliesHaveActed()
+    {
+        for(int i=0; i<characters.Length; i++)
+        {
+            if (characters[i] != null && !characters[i].GetHasMoved())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool YouLost()
+    {
+        for (int i= 0; i<characters.Length; i++)
+        {
+            if (characters[i] != null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool YouWin()
+    {
+        return map.YouWin();
+    }
+
 
 }

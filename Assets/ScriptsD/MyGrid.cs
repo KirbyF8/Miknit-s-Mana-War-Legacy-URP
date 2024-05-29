@@ -530,4 +530,16 @@ public class MyGrid : MonoBehaviour
         }
     }
 
+    public bool YouWin()
+    {
+        for(int i = 0; i<= enemies.Length;i++) 
+        { 
+            if (enemies[i] != null) 
+            { 
+                return false;
+            } 
+        }
+        return true;
+    }
+
 }
