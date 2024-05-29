@@ -22,7 +22,7 @@ public class PersistenciaDeDatos : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(path);
+        //Debug.Log(path);
         
     }
 
@@ -49,6 +49,7 @@ public class PersistenciaDeDatos : MonoBehaviour
             Id = 0,
             Name = "Jaime",
             Description = "jaime",
+            tutorialDone = false,
             HP= 50,
             Strengh= 10,
             Defense= 100,
@@ -89,7 +90,8 @@ public class PersistenciaDeDatos : MonoBehaviour
 
     public bool GetTutorialDone()
     {
-
+        
+        
         return tutorialDone;
     }
 

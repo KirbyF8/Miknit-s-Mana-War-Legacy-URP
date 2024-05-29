@@ -19,10 +19,12 @@ public class TittleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
+        persistenciaDeDatos.LoadData();
         MainPanel.SetActive(true);
         CreditsPanel.SetActive(false);
         OptionsPanel.SetActive(false);
-        persistenciaDeDatos = GetComponent<PersistenciaDeDatos>();
+        
     }
 
     // Update is called once per frame
@@ -65,11 +67,13 @@ public class TittleManager : MonoBehaviour
 
     public void GoToTutoriralCoroutine()
     {
+        
         StartCoroutine(GoToTutorial());
 
     }
     public IEnumerator GoToTutorial()
     {
+        
         yield return new WaitForSeconds(0.50f);
 
         if (!persistenciaDeDatos.GetTutorialDone())
