@@ -1090,7 +1090,7 @@ MonoBehaviour:
   scale: 500000000f0000005a0000001e0000000f0000005a00000050000000280000000a000000
   arma: Espada
   dmgType: 0
-  side: 2
+  side: 1
 --- !u!198 &1565015243864844579
 ParticleSystem:
   m_ObjectHideFlags: 0
