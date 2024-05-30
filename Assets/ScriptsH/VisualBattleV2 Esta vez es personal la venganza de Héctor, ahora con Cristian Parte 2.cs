@@ -226,6 +226,7 @@ public class VisualBattleV2 : MonoBehaviour
 
         atackerAnimator.SetBool("AttackV2", true);
         // Debug.Log(aDMG);
+        DamageSound(atacker);
         yield return new WaitForSeconds(0.7f);
         atackerAnimator.SetBool("AttackV2", false);
 
@@ -245,8 +246,11 @@ public class VisualBattleV2 : MonoBehaviour
         actualAttacks++;
 
         ParticleManager();
+        
+          
        
-      
+
+
 
         yield return new WaitForSeconds(0.5f);
 
@@ -337,43 +341,6 @@ public class VisualBattleV2 : MonoBehaviour
             }
         }
         
-        /*
-         if (auxDos <= aATKs - 1 && auxTres < 2 && attacksA < maxAttacksA)
-         {
-
-             auxDos++;
-             if (atacker.name == atackerNameConst)
-             {
-                 auxTres++;
-             }
-             attacksA++;
-                 coroutine = ADamage(atacker, defender, aCrit, aDMG, aHit, aATKs);
-             StartCoroutine(coroutine);
-         }
-         else if (!defenderTurn && attacksD < maxAttacksD)
-         {
-
-             auxDos = 1;
-             auxTres = 1;
-             defenderTurn = true;
-             battle.GetAllAttack();
-         }
-         if(defenderTurn && auxDos <= aATKs - 1 && attacksD < maxAttacksD)
-         {
-             yield return new WaitForSeconds(1.4f);
-             attacksD++;
-             auxDos = 1;
-             auxTres = 1;
-             defenderTurn = false;
-             battle.GetAllAttack();
-         }
-
-
-         if (aATKs > 2 && attacksA < aATKs)
-         {
-             coroutine = Attack(atacker, defender, aCrit, aDMG, aHit, aATKs);
-         }
-        */
 
     }
     public void GetAllAttackCosas(Character attacker,Character defender,int aCrit,int dCrit,int aDMG,int dDMG,int aATKs,int dATKs,int aHit,int dHit)
@@ -485,6 +452,20 @@ public class VisualBattleV2 : MonoBehaviour
             {
                 defender.hp -= dDMGlocal;
             }
+        }
+       
+    }
+
+    private void DamageSound(Character atacker)
+    {
+        Debug.Log(atacker.arma);
+        if (atacker.arma == "Baston")
+        {
+            gameManagerD.playSFX(bonk);
+        }
+        else
+        {
+            gameManagerD.playSFX(slash);
         }
        
     }

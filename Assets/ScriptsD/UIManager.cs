@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button endTurn;
     [SerializeField] private Button mainMenu;
 
+    [SerializeField] private TextMeshProUGUI tileDifficulty;
     void Start()
     {
         gameManager = FindObjectOfType<GameManagerD>();
@@ -106,5 +108,18 @@ public class UIManager : MonoBehaviour
     public float MasterVolume()
     {
         return master.value;
+    }
+
+    public void ChangeTileInfo(int difficulty)
+    {
+        if (difficulty == 69) 
+        {
+            tileDifficulty.text = "Wall";
+        }
+        else
+        {
+            tileDifficulty.text = difficulty.ToString();
+        }
+        
     }
 }

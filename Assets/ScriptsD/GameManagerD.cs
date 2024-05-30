@@ -67,6 +67,7 @@ public class GameManagerD : MonoBehaviour
     [SerializeField] private Material normalMat;
     [SerializeField] private Material movedMat;
 
+
     //variable para determinar si es el turno del enemigo o aliado (int porque puede haber más de un bando enemigo)
     private int turn = 0;
 
@@ -261,6 +262,15 @@ public class GameManagerD : MonoBehaviour
 
                         //se selecciona la cell correspondiente
                         selected = map.GetCell((int)point.x, (int)point.z);
+                        if (!selected.GetWalkable())
+                        {
+                            uiManager.ChangeTileInfo(69);
+                        }
+                        else
+                        {
+                            uiManager.ChangeTileInfo(selected.GetDifficulty());
+                        }
+                        
 
                         //si hay un pj en la casilla seleccionada y no se ha movido en ese turno se spawnean las casillas de movimiento 
                         if (selected.GetCharacter() != null)
@@ -693,9 +703,9 @@ public class GameManagerD : MonoBehaviour
     {
         masterVolume = x;
         Debug.Log(musicValue + ", " + masterVolume);
-        //ChangeSFX(sfxValue);
+        ChangeSFX(sfxValue);
         ChangeMusic(musicValue);
-        //ChangeVoices(voicesValue);
+        ChangeVoices(voicesValue);
     }
 
     public void ChangeSFX(float x)
@@ -842,5 +852,13 @@ public class GameManagerD : MonoBehaviour
         return map.YouWin();
     }
 
+    public void playSFX(AudioClip soundEffect)
+    {
+        
+        sfx.clip = soundEffect;
+        sfx.Play();
+        
+        
+    }
 
 }
