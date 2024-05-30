@@ -534,7 +534,7 @@ public class MyGrid : MonoBehaviour
 
     public bool YouWin()
     {
-        for(int i = 0; i<= enemies.Length;i++) 
+        for(int i = 0; i< enemies.Length;i++) 
         { 
             if (enemies[i] != null) 
             { 
