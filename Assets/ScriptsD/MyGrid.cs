@@ -301,7 +301,7 @@ public class MyGrid : MonoBehaviour
     public (int, int)[] FindPathEnemy(Vector2 start, Vector2 goal)
     {
         Character[] alliesArray = gamemanager.GetCharacters();
-
+        
         //se pone a false en el array de booleanos todas las posiciones donde haya enemigos
         for (int i = 0; i < alliesArray.Length; i++)
         {
@@ -311,6 +311,7 @@ public class MyGrid : MonoBehaviour
             }
         }
         //pasa a la función que encuentra el camino
+       
         List<(int, int)> aux = PathFinding(start, goal, gridArray[(int)start.x, (int)start.y].GetCharacter().GetMovement());
 
         //vuelve a poner las casillas con enemigos a true (para que el get movement no detecte los enemigos como paredes)
@@ -329,6 +330,7 @@ public class MyGrid : MonoBehaviour
     //función que devuelve el camino (TOCHO INCOMING)
     private List<(int, int)> PathFinding(Vector2 start, Vector2 goal, int range)
     {
+        Debug.Log(start + ", " + goal);
         // si start es goal devuelve una lista con la goal 
         if (start == goal) return new List<(int, int)> { ((int)start.x, (int)start.y) };
         
