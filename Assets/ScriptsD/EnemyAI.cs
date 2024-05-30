@@ -101,21 +101,27 @@ public class EnemyAI : MonoBehaviour
 
     private void TrueEnemyTurn()
     {
-
+        if (!enemies[numberOfEnemy].GetActive() && AlliesInRange(enemies[numberOfEnemy]))
+        {
+            enemies[numberOfEnemy].SetActive(true);
+        }
         Think(enemies[numberOfEnemy]);
         Act(enemies[numberOfEnemy]);
+        if (!enemies[numberOfEnemy].GetActive()) canDoTurn = true;
 
     }
 
     private void Act(Character person)
     {
+        if (!person.GetActive()) return;
         if (actionToPerform.x == 1)
         {
             movement = new Vector2Int(-1000,-1000);
             // Debug.Log(actionToPerform.y);
             Character aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
-            gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos)));
+            Debug.Log(moveList.Contains((5,0)));
+            gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos, ref moveList)));
             Debug.Log("ENEMY ATTACK");
             //Lógica de ataque
             gameManager.WaitingForAFight(person, aux);
@@ -284,14 +290,14 @@ public class EnemyAI : MonoBehaviour
             if (!thereIs)
             {
                 alreadyChecked.Add(new Vector2Int(x, y));
-                moveList.Add((x, y));
+                if(range != 0) moveList.Add((x, y));
 
             }
         }
         else
         {
             if (!thereIs) alreadyChecked.Add(new Vector2Int(x, y));
-            moveList.Add((x, y));
+            if(range!=0) moveList.Add((x, y));
             int ran = Random.Range(1, 3);
             if (ran == 1)
             {

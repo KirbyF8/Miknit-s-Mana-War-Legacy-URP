@@ -95,7 +95,6 @@ public class GameManagerD : MonoBehaviour
     private bool ReadyToFight = false;
 
     [SerializeField] private Volume volume;
-    [SerializeField] private Vignette vignette;
 
     private AudioClip mapMusic;
     void Start()
@@ -450,7 +449,7 @@ public class GameManagerD : MonoBehaviour
             {
 
                 scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
-                if (map.GetCell(aux[i]).GetCharacter() != null) scoreaux -= 100000; 
+                if (map.GetCell(aux[i]).GetCharacter() != null) scoreaux += 100000;
                 if (scoreaux < score || score == -1)
                 {
                     score = scoreaux;
@@ -463,7 +462,7 @@ public class GameManagerD : MonoBehaviour
         return aux[x];
     }
 
-    private Vector2 NearbyTileEnemy(Vector2 attackerPos, Vector2 defenderPos)
+    private Vector2 NearbyTileEnemy(Vector2 attackerPos, Vector2 defenderPos, ref List<(int, int)> moveList)
     {
 
         //se hace un array con las cuatro posiciones adyacentes al que recibe el ataque
@@ -483,6 +482,7 @@ public class GameManagerD : MonoBehaviour
 
                 scoreaux = ((Mathf.Abs((int)attackerPos.x - (int)aux[i].x)) + (Mathf.Abs((int)attackerPos.y - (int)aux[i].y)));
                 if (map.GetCell(aux[i]).GetCharacter() != null) scoreaux += 100000;
+                if (!moveList.Contains(((int)aux[i].x, (int)aux[i].y))) scoreaux += 100000;
                 if (scoreaux < score || score == -1)
                 {
                     score = scoreaux;
@@ -495,9 +495,9 @@ public class GameManagerD : MonoBehaviour
         return aux[x];
     }
 
-    public Vector2 AttackTile(Vector2 attackerPos, Vector2 defenderPos)
+    public Vector2 AttackTile(Vector2 attackerPos, Vector2 defenderPos, ref List<(int, int)>  moveList)
     {
-        return NearbyTileEnemy(attackerPos, defenderPos);
+        return NearbyTileEnemy(attackerPos, defenderPos, ref moveList);
     }
 
     //función para enseñar las casillas de movimiento o de spawn, dependiendo de la fase en la que estés

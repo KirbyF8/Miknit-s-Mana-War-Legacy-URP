@@ -79,7 +79,6 @@ public class MyGrid : MonoBehaviour
             enemies[i] = aux.GetComponent<Character>();
 
             enemies[i].SetMap(this);
-
             enemies[i].SetPosition(enemiesPositions[i]);
             gridArray[(int)enemiesPositions[i].x, (int)enemiesPositions[i].y].SetCharacter(enemies[i]);
         }
@@ -330,7 +329,6 @@ public class MyGrid : MonoBehaviour
     //función que devuelve el camino (TOCHO INCOMING)
     private List<(int, int)> PathFinding(Vector2 start, Vector2 goal, int range)
     {
-        Debug.Log(start + ", " + goal);
         // si start es goal devuelve una lista con la goal 
         if (start == goal) return new List<(int, int)> { ((int)start.x, (int)start.y) };
         
