@@ -39,6 +39,8 @@ public class MyGrid : MonoBehaviour
 
     [SerializeField] private GameObject[] enemiesPrefabs;
 
+    [SerializeField] private AudioClip music;
+
     private void Start()
     {
         gamemanager = FindObjectOfType<GameManagerD>();
@@ -542,4 +544,9 @@ public class MyGrid : MonoBehaviour
         return true;
     }
 
+
+    public AudioClip GetMusic()
+    {
+        return music;
+    }
 }

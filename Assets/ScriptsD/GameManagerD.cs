@@ -95,6 +95,8 @@ public class GameManagerD : MonoBehaviour
 
     [SerializeField] private Volume volume;
     [SerializeField] private Vignette vignette;
+
+    private AudioClip mapMusic;
     void Start()
     {
         cameraBattle.enabled = false;
@@ -109,10 +111,7 @@ public class GameManagerD : MonoBehaviour
         battle = FindObjectOfType<Battle>();
         characters = new Character[AlliesPrefabs.Length];
         visualBattle = FindObjectOfType<VisualBattleV2>();
-        ChangeMusic(uiManager.MusicVolume());
-        //ChangeSFX(uiManager.SfxVolume());
-        //ChangeVoices(uiManager.VoicesVolume());
-        ChangeMaster(uiManager.MasterVolume());
+        
         volume.weight = 0;
         //posiciona los personajes en posiciones de spawn
         
@@ -135,9 +134,20 @@ public class GameManagerD : MonoBehaviour
             map.GetCell((int)spawnPos[i].x, (int)spawnPos[i].y).SetCharacter(characters[i]);
         }
 
-        //spawnea las casillas azules para indicar donde pueden spawnear los personajes
+        
+        // Pone la musica
+        ChangeMusic(uiManager.MusicVolume());
+        ChangeSFX(uiManager.SfxVolume());
+        ChangeVoices(uiManager.VoicesVolume());
+        ChangeMaster(uiManager.MasterVolume());
+        mapMusic = map.GetMusic();
+        music.clip = mapMusic;
+        music.Play();
 
+        //spawnea las casillas azules para indicar donde pueden spawnear los personajes
         SpawnTiles(spawnPos);
+
+
 
     }
 
