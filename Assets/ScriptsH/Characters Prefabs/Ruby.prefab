@@ -1079,7 +1079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  active: 0
+  active: 1
   lvl: 1
   exp: 0
   exp_max: 1
