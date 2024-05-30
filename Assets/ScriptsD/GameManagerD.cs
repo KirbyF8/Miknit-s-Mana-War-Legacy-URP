@@ -645,17 +645,24 @@ public class GameManagerD : MonoBehaviour
     {
         while (!ReadyToFight)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
         }
         ReadyToFight=false;
         Fight(attacker, defender);
-
+        fightHasEnded = false;
         while (!fightHasEnded)
         {
+            
             yield return new WaitForSeconds(1f);
         }
+        Debug.Log("---------------------------------------------------");
+        Debug.Log("---------------------------------------------------");
+        Debug.Log("---------------------------------------------------");
+        Debug.Log("---------------------------------------------------");
+        Debug.Log("---------------------------------------------------");
+        Debug.Log("---------------------------------------------------");
         enemyBrain.DoneFighting();
-        fightHasEnded = false;
+        fightHasEnded = true;
     }
 
     public void WaitingForAFight(Character att, Character def)

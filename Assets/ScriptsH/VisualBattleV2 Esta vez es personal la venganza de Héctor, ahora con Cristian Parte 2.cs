@@ -56,6 +56,8 @@ public class VisualBattleV2 : MonoBehaviour
     private int aATKsLocal;
     private int dATKsLocal;
 
+    private bool missed;
+
     private GameManagerD gameManagerD;
 
     [SerializeField] AudioClip slash;
@@ -128,8 +130,9 @@ public class VisualBattleV2 : MonoBehaviour
                 {
                     if (aDMGlocal <= 0)
                     {
-                        
-                        yield return null;
+
+                        //! No Damage
+                        StartCoroutine(coroutine);
                     }
                     else
                     {
@@ -151,8 +154,9 @@ public class VisualBattleV2 : MonoBehaviour
                 else
                 {
                     //! miss
+                    missed = true;
                     StartCoroutine(coroutine);
-                    yield return null;
+                    
                 }
             }
 
@@ -174,7 +178,7 @@ public class VisualBattleV2 : MonoBehaviour
                     if (dDMGlocal <= 0)
                     {
                         //! No Damage
-                        yield return null;
+                        StartCoroutine(coroutine);
                     }
                     else
                     {
@@ -196,8 +200,9 @@ public class VisualBattleV2 : MonoBehaviour
                 else
                 {
                     //! miss
+                    missed = true;
                     StartCoroutine(coroutine);
-                    yield return null;
+                    
                 }
             }
 
@@ -385,7 +390,7 @@ public class VisualBattleV2 : MonoBehaviour
 
     private void ParticleManager()
     {
-
+        if (missed) { 
     if (Crited)
         {
 
@@ -411,7 +416,7 @@ public class VisualBattleV2 : MonoBehaviour
                 defenderParticles.Play();
             }
         }
-        
+        }
     }
 
     private void SaveBattle(Character attacker, Character defender, int aCrit, int dCrit, int aDMG, int dDMG, int aATKs, int dATKs, int aHit, int dHit)
@@ -432,7 +437,9 @@ public class VisualBattleV2 : MonoBehaviour
     private void DealDamage(Character atacker, Character defender)
     {
     if (!defenderTurn)
+            
         {
+            if (!missed) {
             if (Crited)
             {
                 defender.hp -= aDMGlocal * 2;
@@ -440,20 +447,24 @@ public class VisualBattleV2 : MonoBehaviour
             else
             {
                 defender.hp -= aDMGlocal;
+                }
             }
         }
         else
         {
-            if (Crited)
+            if (!missed)
             {
-                defender.hp -= dDMGlocal * 2;
-            }
-            else
-            {
-                defender.hp -= dDMGlocal;
+                if (Crited)
+                {
+                    defender.hp -= dDMGlocal * 2;
+                }
+                else
+                {
+                    defender.hp -= dDMGlocal;
+                }
             }
         }
-       
+       missed = false;
     }
 
     private void DamageSound(Character atacker)

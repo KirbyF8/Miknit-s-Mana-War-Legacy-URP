@@ -96,8 +96,11 @@ public class Battle : MonoBehaviour
 
         aux += aDMG * aATKs;
 
+        if (defender.hp == 0)
+        {
+            aux = (aux * 100) / defender.hp;
+        }
         
-        aux = (aux * 100) / defender.hp;
         /*
         if (aHit < 25)
         {

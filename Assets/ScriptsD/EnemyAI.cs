@@ -231,12 +231,16 @@ public class EnemyAI : MonoBehaviour
         Vector2 dir = new Vector2 (0,0);
         foreach(Character target in Allies)
         {
-            score =(int) MathF.Abs(posx - target.GetPosition().x) + (int) MathF.Abs(posy-person.GetPosition().y);
-            if (score < min)
+            if(target != null)
             {
-                min = score;
-                dir = target.GetPosition();
+                score = (int)MathF.Abs(posx - target.GetPosition().x) + (int)MathF.Abs(posy - person.GetPosition().y);
+                if (score < min)
+                {
+                    min = score;
+                    dir = target.GetPosition();
+                }
             }
+            
         }
         movement = new Vector2Int((int)dir.x, (int)dir.y);
         return;
@@ -370,7 +374,7 @@ public class EnemyAI : MonoBehaviour
     private bool IsInBounds(int x, int y)
     {
         if (x < 0 || y < 0) return false;
-        if (x > map.Width() || y > map.Height()) return false;
+        if (x >= map.Width() || y >= map.Height()) return false;
         return true;
     }
 

@@ -38,7 +38,7 @@ public class LvlUp : MonoBehaviour
                
             }
             
-            Debug.Log(stats[i]);
+           
         }
 
     }

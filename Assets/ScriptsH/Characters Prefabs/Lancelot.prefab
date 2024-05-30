@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  active: 0
+  active: 1
   lvl: 10
   exp: 0
   exp_max: 100
@@ -4827,7 +4827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ec44a0fcc5a1499b2dcf93c0bc05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsToLevelUp: 
 --- !u!4 &5593124702905963511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400102, guid: ec9ce9573683d684aa75013daec3884d,

@@ -99,7 +99,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1c737b7de78c7184da51147fbad95fde, type: 2}
     - target: {fileID: 100102, guid: ec9ce9573683d684aa75013daec3884d, type: 3}
       propertyPath: m_Name
-      value: Irogue
+      value: Spearman
       objectReference: {fileID: 0}
     - target: {fileID: 400102, guid: ec9ce9573683d684aa75013daec3884d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  active: 0
+  active: 1
   lvl: 2
   exp: 0
   exp_max: 1
