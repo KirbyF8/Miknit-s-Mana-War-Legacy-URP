@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button mainMenu;
 
     [SerializeField] private TextMeshProUGUI tileDifficulty;
+
+    [SerializeField] private TextMeshProUGUI[] stats;
     void Start()
     {
         gameManager = FindObjectOfType<GameManagerD>();
