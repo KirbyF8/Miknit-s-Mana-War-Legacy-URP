@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     private bool hasMovedThisTurn = false;
     [SerializeField] private MyGrid map;
 
+    private PersistenciaDeDatos persistenciaDeDatos;
     //CAMBIAR POR ARMA
     private int range = 1;
     [SerializeField] private bool active = false;
@@ -52,6 +53,22 @@ public class Character : MonoBehaviour
         map = FindObjectOfType<MyGrid>();
         lvlUp = GetComponent<LvlUp>();
         //lvlUp = FindAnyObjectByType<LvlUp>();
+
+        persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
+
+        persistenciaDeDatos.LoadStats(gameObject.name);
+        //GetStats();
+        for (int i = 0; i < stats.Length; i++)
+        {
+            stats[i] = persistenciaDeDatos.SendStats(i);
+        }
+
+        lvl = persistenciaDeDatos.SendLevel();
+        exp = persistenciaDeDatos.SendExp();
+
+
+        ExpReset();
+
         
         
     }
@@ -65,6 +82,12 @@ public class Character : MonoBehaviour
 
             lvlUp.LevelUpStat(ref stats, scale);
 
+        persistenciaDeDatos.SetLevel(lvl);
+
+        persistenciaDeDatos.SetStats(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8]);
+        persistenciaDeDatos.SaveStats(gameObject.name);
+            
+
     }
 
     public void GiveExp(int x)
@@ -73,7 +96,11 @@ public class Character : MonoBehaviour
         if(exp>= exp_max)
         {
             ExpReset();
+            persistenciaDeDatos.SetExp(x);
         }
+        persistenciaDeDatos.SetExp(x);
+
+
     }
 
 
@@ -172,6 +199,21 @@ public class Character : MonoBehaviour
         active = x;
     }
 
+    /*
 
+    public void GetStats(int maxHP,int maxMana, int strengh, int dexterity, int magic, int defense, int resistance, int speed, int luck)
+    {
+        stats[0] = maxHP; 
+        stats[1] = maxMana; 
+        stats[2] = strengh; 
+        stats[3] = dexterity;
+        stats[4] = magic; 
+        stats[5] = defense;
+        stats[6] = resistance;
+        stats[7] = speed;
+        stats[8] = luck;
+    }
+
+    */
 
 }

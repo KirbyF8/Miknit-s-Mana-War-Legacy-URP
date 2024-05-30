@@ -8,6 +8,7 @@ public class PersistenciaDeDatos : MonoBehaviour
 {
 
     private string path = Application.dataPath + "/../saves/"+"save.json";
+    private string statsPath = Application.dataPath + "/../stats saves/";
 
 
 
@@ -16,7 +17,25 @@ public class PersistenciaDeDatos : MonoBehaviour
     private string name;
     private string description;
     private bool tutorialDone;
-    
+
+
+    private int level;
+    private int exp;
+
+    private int maxHp;
+    private int maxMana;
+    private int strengh;
+    private int dexterity;
+    private int magic;
+    private int defense;
+    private int resistance;
+    private int speed;
+    private int luck;
+
+
+    private int[] stats = new int[9];
+
+    private int aux;
 
 
     // Start is called before the first frame update
@@ -63,6 +82,100 @@ public class PersistenciaDeDatos : MonoBehaviour
         File.WriteAllText(path, jsonContent);
 
     }
+
+    public void SaveStats(string fileName)
+    {
+
+
+
+        Stats save = new Stats
+        {
+            level = level,
+            exp = exp,
+
+            maxHp = maxHp,
+            maxMana = maxMana,
+            strengh = strengh,
+            dexterity = dexterity,
+            magic = magic,
+            defense = defense,
+            resistance = resistance,
+            speed = speed,
+            luck = luck,
+
+
+        };
+
+        string jsonContent = JsonUtility.ToJson(save);
+        Debug.Log(jsonContent);
+        File.WriteAllText(statsPath + fileName + ".json", jsonContent);
+
+    }
+
+    public void LoadStats(string fileName)
+    {
+        if (File.Exists(statsPath + fileName + ".json"))
+        {
+            string jsonContent = File.ReadAllText(statsPath + fileName +".json");   
+
+            Stats statsave = JsonUtility.FromJson<Stats>(jsonContent);
+
+            Debug.Log(statsave.maxHp);
+
+            level = statsave.level;
+            exp = statsave.exp;
+            /*
+            stats[0] = statsave.maxHp;
+            stats[1] = statsave.maxMana;
+            stats[2] = statsave.strengh;
+            stats[3] = statsave.dexterity;
+            stats[4] = statsave.magic;
+            stats[5] = statsave.defense;
+            stats[6] = statsave.resistance;
+            stats[7] = statsave.speed;
+            stats[8] = statsave.luck;*/
+            maxHp = statsave.maxHp;
+            maxMana = statsave.maxMana;
+            strengh = statsave.strengh;
+            dexterity = statsave.dexterity;
+            magic = statsave.magic;
+            defense = statsave.defense;
+            resistance = statsave.resistance;
+            speed = statsave.speed;
+            luck = statsave.luck;
+            //aux = 0;
+
+        }
+
+
+
+        else
+        {
+            Debug.LogError("No existe el archivo de personaje");
+        }
+
+        stats[0] = maxHp;
+        stats[1] = maxMana;
+        stats[2] = strengh;
+        stats[3] = dexterity;
+        stats[4] = magic;
+        stats[5] = defense;
+        stats[6] = resistance;
+        stats[7] = speed;
+        stats[8] = luck;
+
+
+
+    }
+
+    public int SendStats(int stat)
+    {
+
+        return stats[stat];
+
+    }
+
+
     public void LoadData()
     {
         if (File.Exists(path))
@@ -93,6 +206,40 @@ public class PersistenciaDeDatos : MonoBehaviour
         
         
         return tutorialDone;
+    }
+
+    public void SetExp(int newExp)
+    {
+        exp = newExp;
+    }
+
+    public void SetLevel(int newLevel)
+    {
+        level = newLevel;
+    }
+
+    public int SendExp()
+    {
+        return exp;
+    }
+
+    public int SendLevel()
+    {
+        return level;
+    }
+
+    public void SetStats(int getMaxHP, int getMaxMana, int getStrengh, int getDexterity, int getMagic, int getDefense, int getResistance, int getSpeed, int getLuck)
+    {
+        maxHp = getMaxHP;
+        maxMana = getMaxMana;
+        strengh = getStrengh;
+        dexterity = getDexterity;
+        magic = getMagic;
+        defense = getDefense;
+        resistance = getResistance;
+        speed = getSpeed;
+        luck = getLuck;
+
     }
 
 
