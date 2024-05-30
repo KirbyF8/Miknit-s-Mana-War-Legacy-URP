@@ -57,7 +57,11 @@ public class VisualBattleV2 : MonoBehaviour
     private int dATKsLocal;
 
     private GameManagerD gameManagerD;
- 
+
+    [SerializeField] AudioClip slash;
+    
+    [SerializeField] AudioClip bonk;
+
     private void Start()
     {
         battle = GetComponent<Battle>();

@@ -524,7 +524,7 @@ public class MyGrid : MonoBehaviour
     {
         for(int i = 0; i<= enemies.Length; i++)
         {
-            if(enemies[i] == character)
+            if(enemies[i] != null && enemies[i] == character)
             {
                 Destroy(enemies[i].gameObject);
                 enemies[i]= null; 
