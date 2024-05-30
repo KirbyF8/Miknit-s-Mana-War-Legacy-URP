@@ -6,22 +6,13 @@ using UnityEngine;
 public class LvlUp : MonoBehaviour
 {
     
-    private Character characters;
+   
     int randomNumber;
 
     
 
-    [SerializeField]private int[] statsToLevelUp;
+   
 
-
-    private void Start()
-    {
-        characters = GetComponent<Character>();
-        
-
-        //Debug.Log(characters.HP);
-        
-    }
 
     public void LevelUpStat(ref int[] stats, int[] scale)
    {
@@ -47,7 +38,7 @@ public class LvlUp : MonoBehaviour
                
             }
             
-            // Debug.Log(stats[i]);
+            Debug.Log(stats[i]);
         }
 
     }

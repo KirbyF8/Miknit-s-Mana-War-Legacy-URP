@@ -52,17 +52,18 @@ public class Character : MonoBehaviour
         map = FindObjectOfType<MyGrid>();
         lvlUp = GetComponent<LvlUp>();
         //lvlUp = FindAnyObjectByType<LvlUp>();
-        // ExpReset();
+        
+        
     }
 
     public void ExpReset()
     {
 
             lvl++;
-            exp = exp - exp_max;
+            exp -= exp_max;
             exp_max += exp_max;
 
-            //lvlUp.LevelUpStat(ref stats, scale);
+            lvlUp.LevelUpStat(ref stats, scale);
 
     }
 
