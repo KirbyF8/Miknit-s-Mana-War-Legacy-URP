@@ -47,6 +47,7 @@ public class Battle : MonoBehaviour
        
         attacker = battler1;
         defender = battler2;
+        defender = battler2;
         Combat();
         //GetAllAttack();
         uiBattle.ValueChanges(attacker, defender, aDMG, aATKs, aHit, aCrit, dDMG, dATKs, dHit, dCrit, weaponTriangle);

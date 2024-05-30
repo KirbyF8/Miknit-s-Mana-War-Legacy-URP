@@ -53,12 +53,37 @@ public class UIBattle : MonoBehaviour
     [SerializeField] TextMeshProUGUI defenderHitCinfo;
     [SerializeField] TextMeshProUGUI defenderCritC;
     [SerializeField] TextMeshProUGUI defenderCritCinfo;
+
+
+
+    [SerializeField] GameObject canvasLVL;
+
+    private bool canvasLvlActivated = false;
+
+    [SerializeField] TextMeshProUGUI HP;
+    [SerializeField] TextMeshProUGUI MP;
+    [SerializeField] TextMeshProUGUI STR;
+    [SerializeField] TextMeshProUGUI DEX;
+    [SerializeField] TextMeshProUGUI MAG;
+    [SerializeField] TextMeshProUGUI DEF;
+    [SerializeField] TextMeshProUGUI RES;
+    [SerializeField] TextMeshProUGUI SPD;
+    [SerializeField] TextMeshProUGUI LCK;
     
 
     private int aDMGToSend;
 
-   
-   
+
+    private void Update()
+    {
+        
+            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
+            {
+                HideLvlUp();
+            }
+           
+        
+    }
 
 
 
@@ -286,5 +311,36 @@ public class UIBattle : MonoBehaviour
     public int ReturnDamage()
     {
         return aDMGToSend;
+    }
+
+   
+
+    public void LVLup(int[] stats, int[] statsLvl)
+    {
+
+        
+
+        HP.text = statsLvl[0].ToString() + "->" + stats[0].ToString();
+        MP.text = statsLvl[1].ToString() + "->" + stats[1].ToString();
+        STR.text = statsLvl[2].ToString() + "->" + stats[2].ToString();
+        DEX.text = statsLvl[3].ToString() + "->" + stats[3].ToString();
+        MAG.text = statsLvl[4].ToString() + "->" + stats[4].ToString();
+        DEF.text = statsLvl[5].ToString() + "->" + stats[5].ToString();
+        RES.text = statsLvl[6].ToString() + "->" + stats[6].ToString();
+        SPD.text = statsLvl[7].ToString() + "->" + stats[7].ToString();
+        LCK.text = statsLvl[8].ToString() + "->" + stats[8].ToString();
+
+        canvasLVL.SetActive(true);
+        canvasLvlActivated = true;
+      
+
+    }
+
+    public void HideLvlUp()
+    {
+        
+        canvasLVL.SetActive(false);
+        canvasLvlActivated = false;
+
     }
 }

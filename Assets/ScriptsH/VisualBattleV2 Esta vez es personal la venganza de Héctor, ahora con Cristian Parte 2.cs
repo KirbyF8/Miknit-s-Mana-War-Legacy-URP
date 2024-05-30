@@ -390,7 +390,7 @@ public class VisualBattleV2 : MonoBehaviour
 
     private void ParticleManager()
     {
-        if (missed) { 
+        if (!missed) { 
     if (Crited)
         {
 

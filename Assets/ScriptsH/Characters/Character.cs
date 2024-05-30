@@ -37,12 +37,13 @@ public class Character : MonoBehaviour
 
     public int[] scale;
 
+    //? Hacha Lanza Espada Magia Arco
 
     public string arma;
 
     public bool dmgType;
     
-    //? Hacha Lanza Espada Magia Arco
+    
 
     private LvlUp lvlUp;
 
@@ -54,10 +55,11 @@ public class Character : MonoBehaviour
         lvlUp = GetComponent<LvlUp>();
         //lvlUp = FindAnyObjectByType<LvlUp>();
 
-        persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
+        // persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
 
-        persistenciaDeDatos.LoadStats(gameObject.name);
+        // persistenciaDeDatos.LoadStats(gameObject.name);
         //GetStats();
+        /*
         for (int i = 0; i < stats.Length; i++)
         {
             stats[i] = persistenciaDeDatos.SendStats(i);
@@ -65,10 +67,9 @@ public class Character : MonoBehaviour
 
         lvl = persistenciaDeDatos.SendLevel();
         exp = persistenciaDeDatos.SendExp();
+        */
 
-
-        ExpReset();
-
+      
         
         
     }
@@ -81,12 +82,12 @@ public class Character : MonoBehaviour
             exp_max += exp_max;
 
             lvlUp.LevelUpStat(ref stats, scale);
-
+        /*
         persistenciaDeDatos.SetLevel(lvl);
 
         persistenciaDeDatos.SetStats(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], stats[7], stats[8]);
         persistenciaDeDatos.SaveStats(gameObject.name);
-            
+          */  
 
     }
 
@@ -96,9 +97,9 @@ public class Character : MonoBehaviour
         if(exp>= exp_max)
         {
             ExpReset();
-            persistenciaDeDatos.SetExp(x);
+            // persistenciaDeDatos.SetExp(x);
         }
-        persistenciaDeDatos.SetExp(x);
+        // persistenciaDeDatos.SetExp(x);
 
 
     }

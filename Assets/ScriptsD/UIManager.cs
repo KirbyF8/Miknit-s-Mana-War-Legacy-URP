@@ -28,10 +28,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tileDifficulty;
 
     [SerializeField] private TextMeshProUGUI[] stats;
+
+    private UIBattle uiBattle;
     void Start()
     {
         gameManager = FindObjectOfType<GameManagerD>();
 
+        uiBattle = FindObjectOfType<UIBattle>();
         //Asignamos a todos los elementos de la UI su función de GameManager correspondiente
 
         goBack.onClick.AddListener(gameManager.Hideoptions);
@@ -47,6 +50,27 @@ public class UIManager : MonoBehaviour
         endTurn.onClick.AddListener(gameManager.EndTurn);
     }
 
+    private void Update()
+    {
+
+        
+        
+        if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
+        {
+           
+
+            if (uiBattle == null)
+            {
+                uiBattle = FindObjectOfType<UIBattle>();
+            }
+            else
+            {
+                Debug.Log("puta");
+                uiBattle.HideLvlUp();
+            }
+           
+        }
+    }
 
     //Función para enseñar el panel de opciones
     public void ShowOptions()
