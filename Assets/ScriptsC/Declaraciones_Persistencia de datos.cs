@@ -66,14 +66,10 @@ public class PersistenciaDeDatos : MonoBehaviour
         Save save = new Save
         {
             Id = 0,
-            Name = "Jaime",
-            Description = "jaime",
+            //Name = "Jaime",
+            //Description = "jaime",
             tutorialDone = false,
-            HP= 50,
-            Strengh= 10,
-            Defense= 100,
-            Magic= 5,
-            Speed= 10,
+
         };
 
 
@@ -124,7 +120,7 @@ public class PersistenciaDeDatos : MonoBehaviour
 
             level = statsave.level;
             exp = statsave.exp;
-            /*
+            
             stats[0] = statsave.maxHp;
             stats[1] = statsave.maxMana;
             stats[2] = statsave.strengh;
@@ -133,7 +129,9 @@ public class PersistenciaDeDatos : MonoBehaviour
             stats[5] = statsave.defense;
             stats[6] = statsave.resistance;
             stats[7] = statsave.speed;
-            stats[8] = statsave.luck;*/
+            stats[8] = statsave.luck;
+            
+            /*
             maxHp = statsave.maxHp;
             maxMana = statsave.maxMana;
             strengh = statsave.strengh;
@@ -143,6 +141,8 @@ public class PersistenciaDeDatos : MonoBehaviour
             resistance = statsave.resistance;
             speed = statsave.speed;
             luck = statsave.luck;
+            */
+            
             //aux = 0;
 
         }
@@ -154,15 +154,7 @@ public class PersistenciaDeDatos : MonoBehaviour
             Debug.LogError("No existe el archivo de personaje");
         }
 
-        stats[0] = maxHp;
-        stats[1] = maxMana;
-        stats[2] = strengh;
-        stats[3] = dexterity;
-        stats[4] = magic;
-        stats[5] = defense;
-        stats[6] = resistance;
-        stats[7] = speed;
-        stats[8] = luck;
+        
 
 
 

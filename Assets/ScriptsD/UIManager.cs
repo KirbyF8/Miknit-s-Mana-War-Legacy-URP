@@ -29,6 +29,11 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI[] stats;
 
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
+
+    [SerializeField] private GameObject terreinPanel;
+
     private UIBattle uiBattle;
     void Start()
     {
@@ -147,5 +152,13 @@ public class UIManager : MonoBehaviour
             tileDifficulty.text = difficulty.ToString();
         }
         
+    }
+
+    public void YouWin()
+    {
+        winPanel.SetActive(true);
+        endSpawnPhase.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
+        terreinPanel.SetActive(false);
     }
 }

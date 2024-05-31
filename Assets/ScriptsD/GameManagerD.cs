@@ -19,6 +19,8 @@ public class GameManagerD : MonoBehaviour
     [SerializeField] private AudioSource sfx;
     [SerializeField] private AudioSource voices;
     [SerializeField] private AudioSource music;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip lose;
 
     private bool mirror;
     private bool gridShow;
@@ -97,6 +99,9 @@ public class GameManagerD : MonoBehaviour
     [SerializeField] private Volume volume;
 
     private AudioClip mapMusic;
+
+    private bool winned = false;
+
     void Start()
     {
         cameraBattle.enabled = false;
@@ -159,7 +164,16 @@ public class GameManagerD : MonoBehaviour
         }
         else if (YouWin())
         {
-            Debug.Log("you win!");
+            
+            if (!winned)
+            {
+                Debug.Log("you win!");
+                music.clip = win;
+                music.Play();
+                winned = true;
+                uiManager.YouWin();
+            }
+            
         }
 
         else if (autoend)
