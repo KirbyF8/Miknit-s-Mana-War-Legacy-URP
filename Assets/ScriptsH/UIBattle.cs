@@ -74,17 +74,7 @@ public class UIBattle : MonoBehaviour
     private int aDMGToSend;
 
 
-    private void Update()
-    {
-        
-            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
-            {
-                HideLvlUp();
-            }
-           
-        
-    }
-
+   
 
 
     public void ValueChanges(Character atacker, Character defender, int aDMG, int aATKs, int aHit, int aCrit, int dDMG, int dATKs, int dHit, int dCrit, int weaponTriangle)
@@ -332,15 +322,17 @@ public class UIBattle : MonoBehaviour
 
         canvasLVL.SetActive(true);
         canvasLvlActivated = true;
-      
+        Time.timeScale = 0;
 
     }
 
     public void HideLvlUp()
     {
-        
+        Time.timeScale = 1;
         canvasLVL.SetActive(false);
         canvasLvlActivated = false;
 
     }
+
+    
 }
