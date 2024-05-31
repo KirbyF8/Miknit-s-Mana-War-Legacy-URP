@@ -291,6 +291,12 @@ public class VisualBattleV2 : MonoBehaviour
                 }
                 else if ( attacksD >= maxAttacksD && attacksA >= aATKsLocal)
                 {
+                    if (atacker.hp <= 0 || defender.hp <= 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                        if (atacker.hp <= 0) GoBackToGrid(atacker, defender);
+                        else GoBackToGrid(defender, atacker);
+                    }
                     yield return new WaitForSeconds(1f);
                     GoBackToGrid(atacker,defender);
                     yield return null;
@@ -331,6 +337,12 @@ public class VisualBattleV2 : MonoBehaviour
                 }
                 else if (attacksD >= maxAttacksD && attacksA >= aATKsLocal)
                 {
+                    if (atacker.hp <= 0 || defender.hp <= 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                        if (atacker.hp <= 0) GoBackToGrid(atacker, defender);
+                        else GoBackToGrid(defender, atacker);
+                    }
                     yield return new WaitForSeconds(1f);
                     GoBackToGrid(atacker, defender);
                     yield return null;

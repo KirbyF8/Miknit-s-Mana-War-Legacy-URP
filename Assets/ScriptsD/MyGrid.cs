@@ -522,12 +522,14 @@ public class MyGrid : MonoBehaviour
 
     public void DeleteCharacter(Character character)
     {
-        for(int i = 0; i<= enemies.Length; i++)
+        
+        for(int i = 0; i< enemies.Length; i++)
         {
             if(enemies[i] != null && enemies[i] == character)
             {
                 Destroy(enemies[i].gameObject);
-                enemies[i]= null; 
+                enemies[i]= null;
+                return;
             }
         }
     }

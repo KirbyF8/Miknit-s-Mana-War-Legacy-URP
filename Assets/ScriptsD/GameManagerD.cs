@@ -719,8 +719,11 @@ public class GameManagerD : MonoBehaviour
             turn = 0;
             for (int i = 0; i < characters.Length; i++)
             {
-                characters[i].SetHasMoved(false);
-                characters[i].GetComponentInChildren<Renderer>().material = normalMat;
+                if (characters[i] != null)
+                {
+                    characters[i].SetHasMoved(false);
+                    characters[i].GetComponentInChildren<Renderer>().material = normalMat;
+                }
             }
             uiManager.EndTurnOn();
         }
@@ -835,12 +838,9 @@ public class GameManagerD : MonoBehaviour
 
     public void FightHasEnded(Character dead)
     {
-        cameraGrid.enabled = true;
-        cameraBattle.enabled = false;
-        fightHasEnded = true;
+        
         battleCanvas.SetActive(false);
         gridCanvas.SetActive(true);
-
         if (dead != null)
         {
             MyCell aux = map.GetCell(dead.GetPosition());
@@ -862,7 +862,11 @@ public class GameManagerD : MonoBehaviour
                 map.DeleteCharacter(dead);
             }
         }
-        
+
+        cameraGrid.enabled = true;
+        cameraBattle.enabled = false;
+        fightHasEnded = true;
+
     }
 
     
