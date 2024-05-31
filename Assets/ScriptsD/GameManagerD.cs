@@ -108,6 +108,8 @@ public class GameManagerD : MonoBehaviour
     private bool winned = false;
     private bool losed = false;
 
+    [SerializeField] private int level;
+
     void Start()
     {
         cameraBattle.enabled = false;
@@ -157,6 +159,18 @@ public class GameManagerD : MonoBehaviour
 
         //spawnea las casillas azules para indicar donde pueden spawnear los personajes
         SpawnTiles(spawnPos);
+        /*
+        if (level == 1)
+        {
+            Character changeYuu = GameObject.Find("Yuu(Clone").GetComponent<Character>();
+            Character changeYro = GameObject.Find("Yro(Clone").GetComponent<Character>();
+
+            changeYro.side = 0;
+            changeYuu.side = 0;
+        }
+        */
+
+        
 
 
 
@@ -936,6 +950,7 @@ public class GameManagerD : MonoBehaviour
     public void NextStage(string sceneToLoad)
     {
         SceneManager.LoadScene(sceneToLoad);
+        //level++;
     }
 
     public void GoToMainMenu()
@@ -956,6 +971,11 @@ public class GameManagerD : MonoBehaviour
     public bool IsWin()
     {
         return winned;
+    }
+
+    public int GetLevel()
+    {
+        return level;
     }
 
 

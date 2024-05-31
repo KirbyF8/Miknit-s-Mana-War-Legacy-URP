@@ -85,6 +85,7 @@ public class Character : MonoBehaviour
             LoadData();
         }
 
+/*
         if (side == 0)
         {
             healthBarColor.tintColor = Color.green;
@@ -93,6 +94,13 @@ public class Character : MonoBehaviour
         {
             healthBarColor.tintColor = Color.blue;
         }
+*/
+        if(gameManager.GetLevel() == 1 && gameObject.name == "Yuu(Clone)" || gameManager.GetLevel() == 1 && gameObject.name == "Yro(Clone)")
+        {
+            side = 0;
+        }
+
+
 
         // healthBar.highValue = stats[0];
         // healthBar.value = hp;
