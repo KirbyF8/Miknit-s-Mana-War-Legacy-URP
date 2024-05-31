@@ -5933,9 +5933,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Grid/Movement - David\nFX/Particles - David\r\nOptions -  David\nIA :
     David\r\n\r\nLevels System - H\xE9ctor \r\nCombat System - H\xE9ctor\r\nCharacters
-    Animations - H\xE9ctor\r\nCharacters - H\xE9ctor\r\nTrailer - H\xE9ctor\r\n\n\r\nUI
-    - Cristian\r\nGame Maps - Cristian\r\nPost Process - Cristian\r\nData Persistence
-    - Cristian\r\nBug Tester: Cristian\r\n"
+    Animations - H\xE9ctor\r\nCharacters - H\xE9ctor\r\n\n\r\nUI - Cristian\r\nGame
+    Maps - Cristian\r\nPost Process - Cristian\r\nData Persistence - Cristian\r\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
