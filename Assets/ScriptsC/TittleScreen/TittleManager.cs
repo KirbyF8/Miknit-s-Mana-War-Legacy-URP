@@ -26,6 +26,7 @@ public class TittleManager : MonoBehaviour
         MainPanel.SetActive(true);
         CreditsPanel.SetActive(false);
         OptionsPanel.SetActive(false);
+        Time.timeScale = 1.0f;
         
     }
 
