@@ -27,6 +27,7 @@ public class TittleManager : MonoBehaviour
         CreditsPanel.SetActive(false);
         OptionsPanel.SetActive(false);
         Time.timeScale = 1.0f;
+        persistenciaDeDatos.save();
         
     }
 
