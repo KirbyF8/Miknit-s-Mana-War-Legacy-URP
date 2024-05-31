@@ -130,7 +130,7 @@ public class GameManagerD : MonoBehaviour
             auxName = AlliesPrefabs[i].name + "(Clone)";
            
             aux = GameObject.Find(auxName);
-            Debug.Log(aux.name);
+            
             characters[i] = aux.GetComponent<Character>();
 
             characters[i].SetMap(map);
@@ -299,8 +299,9 @@ public class GameManagerD : MonoBehaviour
                         //si no hay un pj enseña información del terreno
                         else
                         {
-                            Debug.Log(selected.GetWalkable() + ", " + selected.GetDifficulty());
-                            //TO DO: HAY QUE CAMBIAR ESTO POR UN PANEL QUE DE INFO DEL TERRENO 
+                            // 
+                            // Debug.Log(selected.GetWalkable() + ", " + selected.GetDifficulty());
+                            //TODO: HAY QUE CAMBIAR ESTO POR UN PANEL QUE DE INFO DEL TERRENO 
                         }
                     }
                 }
@@ -326,7 +327,7 @@ public class GameManagerD : MonoBehaviour
                                 Character auxCharA = selected.GetCharacter();
                                 
                                 MoveChar(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
-                                Debug.Log("attack");
+                                // Debug.Log("attack");
                                 //AQUI VA LA LÓGICA DEL ATAQUE
                                 Fight(auxCharA, selectedAux.GetCharacter());
                                 fightHasEnded = false;
@@ -387,7 +388,7 @@ public class GameManagerD : MonoBehaviour
         }
         
 
-        Debug.Log(battler1.name + battler2.name);
+        // Debug.Log(battler1.name + battler2.name);
         battle.updateUIBattle(battler1, battler2);
         
         //! EFECTO DROGA
@@ -669,12 +670,7 @@ public class GameManagerD : MonoBehaviour
             
             yield return new WaitForSeconds(1f);
         }
-        Debug.Log("---------------------------------------------------");
-        Debug.Log("---------------------------------------------------");
-        Debug.Log("---------------------------------------------------");
-        Debug.Log("---------------------------------------------------");
-        Debug.Log("---------------------------------------------------");
-        Debug.Log("---------------------------------------------------");
+        
         enemyBrain.DoneFighting();
         fightHasEnded = true;
     }
@@ -723,7 +719,7 @@ public class GameManagerD : MonoBehaviour
     public void ChangeMaster(float x)
     {
         masterVolume = x;
-        Debug.Log(musicValue + ", " + masterVolume);
+        // Debug.Log(musicValue + ", " + masterVolume);
         ChangeSFX(sfxValue);
         ChangeMusic(musicValue);
         ChangeVoices(voicesValue);

@@ -120,9 +120,9 @@ public class EnemyAI : MonoBehaviour
             // Debug.Log(actionToPerform.y);
             Character aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
-            Debug.Log(moveList.Contains((5,0)));
+            // Debug.Log(moveList.Contains((5,0)));
             gameManager.MoveEnemy(map.GetCell((int)person.GetPosition().x, (int)person.GetPosition().y), map.GetCell(gameManager.AttackTile(person.GetPosition(), targetPos, ref moveList)));
-            Debug.Log("ENEMY ATTACK");
+            // Debug.Log("ENEMY ATTACK");
             //Lógica de ataque
             gameManager.WaitingForAFight(person, aux);
         }

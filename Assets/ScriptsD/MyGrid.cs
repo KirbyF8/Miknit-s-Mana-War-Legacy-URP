@@ -73,7 +73,7 @@ public class MyGrid : MonoBehaviour
            Instantiate(enemiesPrefabs[i]);
 
             auxName = enemiesPrefabs[i].name + "(Clone)";
-            Debug.Log(auxName);
+           
             aux = GameObject.Find(auxName);
 
             enemies[i] = aux.GetComponent<Character>();

@@ -320,15 +320,15 @@ public class UIBattle : MonoBehaviour
 
         
 
-        HP.text = statsLvl[0].ToString() + "->" + stats[0].ToString();
-        MP.text = statsLvl[1].ToString() + "->" + stats[1].ToString();
-        STR.text = statsLvl[2].ToString() + "->" + stats[2].ToString();
-        DEX.text = statsLvl[3].ToString() + "->" + stats[3].ToString();
-        MAG.text = statsLvl[4].ToString() + "->" + stats[4].ToString();
-        DEF.text = statsLvl[5].ToString() + "->" + stats[5].ToString();
-        RES.text = statsLvl[6].ToString() + "->" + stats[6].ToString();
-        SPD.text = statsLvl[7].ToString() + "->" + stats[7].ToString();
-        LCK.text = statsLvl[8].ToString() + "->" + stats[8].ToString();
+        HP.text = "HP "   + statsLvl[0].ToString() + " -> " + stats[0].ToString();
+        MP.text = "MP "   + statsLvl[1].ToString() + " -> " + stats[1].ToString();
+        STR.text = "STR " + statsLvl[2].ToString() + " -> " + stats[2].ToString();
+        DEX.text = "DEX " + statsLvl[3].ToString() + " -> " + stats[3].ToString();
+        MAG.text = "MAG " + statsLvl[4].ToString() + " -> " + stats[4].ToString();
+        DEF.text = "DEF " + statsLvl[5].ToString() + " -> " + stats[5].ToString();
+        RES.text = "RES " + statsLvl[6].ToString() + " -> " + stats[6].ToString();
+        SPD.text = "SPD " + statsLvl[7].ToString() + " -> " + stats[7].ToString();
+        LCK.text = "LCK " + statsLvl[8].ToString() + " -> " + stats[8].ToString();
 
         canvasLVL.SetActive(true);
         canvasLvlActivated = true;

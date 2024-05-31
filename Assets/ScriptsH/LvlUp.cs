@@ -27,7 +27,7 @@ public class LvlUp : MonoBehaviour
         
         // F*** Y******* 
         statsBLVL = StartStats(stats);
-       
+        Debug.Log(statsBLVL[7]);
 
         randomNumber = Random.Range(1, 101);
         //Debug.Log(statsToLevelUp.Length);
@@ -35,7 +35,7 @@ public class LvlUp : MonoBehaviour
         for (int i = 0; i < stats.Length; i++)
         {
             int randomNumber = Random.Range(1, 101);
-            Debug.Log(statsBLVL);
+            
 
             while (scale[i] >= 100)
             {
@@ -61,7 +61,15 @@ public class LvlUp : MonoBehaviour
 
     private int[] StartStats(int[] stats)
     {
-        return stats;
+        int[] arrayNuevo = new int[stats.Length]  ;
+      
+
+        for (int i = 0; i < stats.Length; i++)
+        {
+            arrayNuevo[i] = stats[i];
+        }
+
+        return arrayNuevo;
     }
 
     public void ObtainUiBattle() 

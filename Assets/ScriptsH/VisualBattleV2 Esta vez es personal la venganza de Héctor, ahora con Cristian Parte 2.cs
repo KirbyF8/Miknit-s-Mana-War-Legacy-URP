@@ -246,7 +246,7 @@ public class VisualBattleV2 : MonoBehaviour
         {
             attacksD++;
         }
-        Debug.Log( attacksA + "--" + attacksD );
+        // Debug.Log( attacksA + "--" + attacksD );
         
         actualAttacks++;
 
@@ -308,7 +308,7 @@ public class VisualBattleV2 : MonoBehaviour
         }
         else if (defenderTurn)
         {
-            Debug.Log(actualAttacks);
+            // Debug.Log(actualAttacks);
             if (attacksD < dATKsLocal && dATKsLocal > 2 && actualAttacks < 2)
             {
               
@@ -357,7 +357,7 @@ public class VisualBattleV2 : MonoBehaviour
         defenderTurn = false;
 
         SaveBattle(attacker, defender, aCrit, dCrit, aDMG, dDMG, aATKs, dATKs, aHit, dHit);
-        Debug.Log(defenderTurn);
+        // Debug.Log(defenderTurn);
        
        
         if (!defenderTurn)
@@ -469,7 +469,7 @@ public class VisualBattleV2 : MonoBehaviour
 
     private void DamageSound(Character atacker)
     {
-        Debug.Log(atacker.arma);
+      
         if (atacker.arma == "Baston")
         {
             gameManagerD.playSFX(bonk);

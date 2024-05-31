@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("puta");
+                
                 uiBattle.HideLvlUp();
             }
            
