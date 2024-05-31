@@ -247,6 +247,10 @@ public class PersistenciaDeDatos : MonoBehaviour
     {
         tutorialDone = true;
     }
+    public void NoSkip()
+    {
+        tutorialDone=false;
+    }
 
 
 

@@ -102,9 +102,12 @@ public class TittleManager : MonoBehaviour
         {
             persistenciaDeDatos.Skip();
             persistenciaDeDatos.save();
+            GoToPlay();
         }
         else if (!skip)
         {
+            persistenciaDeDatos.NoSkip();
+            persistenciaDeDatos.save();
             GoToPlay();
         }
 
