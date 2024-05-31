@@ -32,6 +32,8 @@ public class PersistenciaDeDatos : MonoBehaviour
     private int speed;
     private int luck;
 
+    private bool exists;
+
 
     private int[] stats = new int[9];
 
@@ -68,7 +70,7 @@ public class PersistenciaDeDatos : MonoBehaviour
             Id = 0,
             //Name = "Jaime",
             //Description = "jaime",
-            tutorialDone = false,
+            tutorialDone = tutorialDone,
 
         };
 
@@ -152,6 +154,8 @@ public class PersistenciaDeDatos : MonoBehaviour
         else
         {
             Debug.LogError("No existe el archivo de personaje");
+            //exists = false;
+
         }
 
         
@@ -162,11 +166,16 @@ public class PersistenciaDeDatos : MonoBehaviour
 
     public int SendStats(int stat)
     {
-
-        return stats[stat];
+        
+            return stats[stat];
+        
 
     }
 
+    public bool IfExist()
+    {
+        return exists;
+    }
 
     public void LoadData()
     {
@@ -188,15 +197,15 @@ public class PersistenciaDeDatos : MonoBehaviour
         else
         {
             Debug.LogError("¡¡¡ EL ARCHIVO DE GUARDADO NO EXISTE !!!");
+
         }
     }
 
 
 
+
     public bool GetTutorialDone()
     {
-        
-        
         return tutorialDone;
     }
 
@@ -232,6 +241,11 @@ public class PersistenciaDeDatos : MonoBehaviour
         speed = getSpeed;
         luck = getLuck;
 
+    }
+
+    public void Skip()
+    {
+        tutorialDone = true;
     }
 
 

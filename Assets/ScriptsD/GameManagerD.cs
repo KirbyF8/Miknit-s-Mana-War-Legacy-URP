@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManagerD : MonoBehaviour
@@ -103,6 +106,7 @@ public class GameManagerD : MonoBehaviour
     [SerializeField] private AudioClip partyMusic;
 
     private bool winned = false;
+    private bool losed = false;
 
     void Start()
     {
@@ -162,7 +166,15 @@ public class GameManagerD : MonoBehaviour
     {
         if (YouLost())
         {
-            Debug.Log("you lose!");
+            if (!losed)
+            {
+                Debug.Log("you lose!");
+                music.clip = lose;
+                music.Play();
+                losed = true;
+                uiManager.YouLose();
+            }
+            
         }
         else if (YouWin())
         {
@@ -907,5 +919,29 @@ public class GameManagerD : MonoBehaviour
         
         
     }
+
+
+    public void NextStage(string sceneToLoad)
+    {
+        SceneManager.LoadScene(sceneToLoad);
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void CloseOptions()
+    {
+        uiManager.HideOptions();
+    }
+
+
+
 
 }

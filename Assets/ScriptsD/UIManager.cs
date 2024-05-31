@@ -141,6 +141,14 @@ public class UIManager : MonoBehaviour
         terreinPanel.SetActive(false);
     }
 
+    public void YouLose()
+    {
+        losePanel.SetActive(true);
+        endSpawnPhase.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
+        terreinPanel.SetActive(false);
+    }
+
     public void HideTerrain()
     {
         terreinPanel.SetActive(false);

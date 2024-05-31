@@ -13,6 +13,8 @@ public class TittleManager : MonoBehaviour
     [SerializeField] private GameObject OptionsPanel;
     [SerializeField] private Button mainButtonSelect;
 
+    [SerializeField] private GameObject skipPanel;
+
     private PersistenciaDeDatos persistenciaDeDatos;
 
 
@@ -72,10 +74,17 @@ public class TittleManager : MonoBehaviour
 
     }
     public IEnumerator GoToTutorial()
-    {
-        
+    { 
         yield return new WaitForSeconds(0.50f);
 
+        skipPanel.SetActive(true);
+
+        
+
+    }
+
+    public void GoToPlay()
+    {
         if (!persistenciaDeDatos.GetTutorialDone())
         {
             SceneManager.LoadScene(2);
@@ -84,10 +93,21 @@ public class TittleManager : MonoBehaviour
         {
             SceneManager.LoadScene(3);
         }
-        
-        
-        
     }
 
+    public void SkippingTutorial(bool skip)
+    {
+
+        if (skip)
+        {
+            persistenciaDeDatos.Skip();
+            persistenciaDeDatos.save();
+        }
+        else if (!skip)
+        {
+            GoToPlay();
+        }
+
+    }
 
 }
