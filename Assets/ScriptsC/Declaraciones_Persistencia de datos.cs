@@ -132,6 +132,8 @@ public class PersistenciaDeDatos : MonoBehaviour
             stats[6] = statsave.resistance;
             stats[7] = statsave.speed;
             stats[8] = statsave.luck;
+
+            exists = true;
             
             /*
             maxHp = statsave.maxHp;

@@ -81,8 +81,8 @@ public class Character : MonoBehaviour
         gameManager = FindAnyObjectByType<GameManagerD>();
 
         string[] split = gameObject.name.Split('(');
-
-        if (split.Length <= 1)
+        Debug.Log(split[0] +" "+ split[1] + "," + split.Length);
+        if (split.Length <= 2)
         {
             Debug.Log("va joya");
             LoadData();
