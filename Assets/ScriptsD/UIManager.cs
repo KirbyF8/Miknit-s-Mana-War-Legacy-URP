@@ -140,4 +140,15 @@ public class UIManager : MonoBehaviour
         endTurn.gameObject.SetActive(false);
         terreinPanel.SetActive(false);
     }
+
+    public void HideTerrain()
+    {
+        terreinPanel.SetActive(false);
+        
+    }
+
+    public void ShowTerrain()
+    {
+        terreinPanel.SetActive(true);
+    }
 }

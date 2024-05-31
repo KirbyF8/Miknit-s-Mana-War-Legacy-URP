@@ -8020,6 +8020,10 @@ MonoBehaviour:
   endTurn: {fileID: 1796145245}
   mainMenu: {fileID: 915875946}
   tileDifficulty: {fileID: 640231347}
+  stats: []
+  winPanel: {fileID: 435940325}
+  losePanel: {fileID: 435940325}
+  terreinPanel: {fileID: 435940325}
 --- !u!1 &1297880624
 GameObject:
   m_ObjectHideFlags: 0
@@ -8280,6 +8284,8 @@ MonoBehaviour:
   sfx: {fileID: 387491563}
   voices: {fileID: 1476325213}
   music: {fileID: 1451541830}
+  win: {fileID: 8300000, guid: c6e5ddb7476132f41bdaa993330540b9, type: 3}
+  lose: {fileID: 8300000, guid: c6e5ddb7476132f41bdaa993330540b9, type: 3}
   alliesTile: {fileID: 8744606439417150437, guid: e63c130d49bae424fbd663dd9e9ad471,
     type: 3}
   enemiesTile: {fileID: 3112926431633767633, guid: fba5c3ffe55dfdb4b8b9a33c6c23ff50,
@@ -8294,7 +8300,7 @@ MonoBehaviour:
   battleCanvas: {fileID: 1372166592}
   gridCanvas: {fileID: 1283833890}
   volume: {fileID: 30810304}
-  vignette: {fileID: 0}
+  partyMusic: {fileID: 8300000, guid: 51a2be09deba59141a1109d75e5c8c46, type: 3}
 --- !u!114 &1321144431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8422,6 +8428,16 @@ MonoBehaviour:
   defenderHitCinfo: {fileID: 1144789969}
   defenderCritC: {fileID: 1260275925}
   defenderCritCinfo: {fileID: 1692331363}
+  canvasLVL: {fileID: 0}
+  HP: {fileID: 0}
+  MP: {fileID: 0}
+  STR: {fileID: 0}
+  DEX: {fileID: 0}
+  MAG: {fileID: 0}
+  DEF: {fileID: 0}
+  RES: {fileID: 0}
+  SPD: {fileID: 0}
+  LCK: {fileID: 0}
 --- !u!114 &1372166594
 MonoBehaviour:
   m_ObjectHideFlags: 0

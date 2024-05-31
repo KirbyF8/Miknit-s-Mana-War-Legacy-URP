@@ -195,6 +195,11 @@ public class GameManagerD : MonoBehaviour
                 uiManager.HideTurn();
                 uiManager.HideEndOfSpawn();
                 battleCanvas.SetActive(false);
+                uiManager.HideTerrain();
+                if (!fightHasEnded)
+                {
+                    gridCanvas.SetActive(true);
+                }
             }
             else
             {
@@ -202,8 +207,13 @@ public class GameManagerD : MonoBehaviour
                 paused = false;
                 Time.timeScale = 1.0f;
                 uiManager.ShowTurn();
+                uiManager.ShowTerrain();
                 if (spawnPhase) uiManager.ShowEndOfSpawn();
-                if(!fightHasEnded) battleCanvas.SetActive(true);
+                if (!fightHasEnded)
+                {
+                    gridCanvas.SetActive(false);
+                    battleCanvas.SetActive(true);
+                }
             }
 
         }
@@ -814,8 +824,13 @@ public class GameManagerD : MonoBehaviour
         paused = false;
         Time.timeScale = 1.0f;
         uiManager.ShowTurn();
+        uiManager.ShowTerrain();
         if (spawnPhase) uiManager.ShowEndOfSpawn();
-        if (!fightHasEnded) battleCanvas.SetActive(true);
+        if (!fightHasEnded)
+        {
+            battleCanvas.SetActive(true);
+            gridCanvas.SetActive(false);
+        }
     }
 
     public void FightHasEnded(Character dead)
