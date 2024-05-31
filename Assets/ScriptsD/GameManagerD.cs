@@ -100,6 +100,8 @@ public class GameManagerD : MonoBehaviour
 
     private AudioClip mapMusic;
 
+    [SerializeField] private AudioClip partyMusic;
+
     private bool winned = false;
 
     void Start()
@@ -752,7 +754,16 @@ public class GameManagerD : MonoBehaviour
     public void PartyMode(bool x)
     {
         party = x;
-        if (x) volume.weight = 1; else volume.weight = 0;
+        if (x)
+        {
+            volume.weight = 1;
+            music.clip = partyMusic;
+        }
+        else
+        {
+            volume.weight = 0;
+            music.clip = mapMusic;
+        }
     }
 
     public void MirrorStats(bool x)
