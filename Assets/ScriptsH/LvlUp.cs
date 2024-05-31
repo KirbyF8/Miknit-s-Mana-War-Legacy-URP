@@ -13,6 +13,7 @@ public class LvlUp : MonoBehaviour
 
     private UIBattle uiBattle;
 
+    private int scaleSave;
 
     private void Start()
     {
@@ -35,7 +36,8 @@ public class LvlUp : MonoBehaviour
         for (int i = 0; i < stats.Length; i++)
         {
             int randomNumber = Random.Range(1, 101);
-            
+
+            scaleSave = scale[i]; 
 
             while (scale[i] >= 100)
             {
@@ -53,7 +55,7 @@ public class LvlUp : MonoBehaviour
 
             }
 
-            
+            scale[i] = scaleSave;
            
         }
         uiBattle.LVLup(stats, statsBLVL);

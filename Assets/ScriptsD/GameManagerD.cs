@@ -353,8 +353,7 @@ public class GameManagerD : MonoBehaviour
                                 MoveChar(selected, map.GetCell(NearbyTile(selected.GetPosition(), selectedAux.GetPosition())));
                                 // Debug.Log("attack");
                                 //AQUI VA LA LÓGICA DEL ATAQUE
-                                Fight(auxCharA, selectedAux.GetCharacter());
-                                fightHasEnded = false;
+                                StartCoroutine(FightAlly(auxCharA));
                                 
                                 DeleteTiles();
                             }
@@ -387,6 +386,17 @@ public class GameManagerD : MonoBehaviour
         }
 
 
+    }
+
+    private IEnumerator FightAlly(Character auxCharA)
+    {
+        while (moving)
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        Fight(auxCharA, selectedAux.GetCharacter());
+        fightHasEnded = false;
     }
 
     public void Fight(Character battler1, Character battler2)
@@ -712,7 +722,7 @@ public class GameManagerD : MonoBehaviour
     //Función para terminar el turno aliado
     private void EndAllyTurn()
     {
-        if (!moving)
+        if (!moving && fightHasEnded)
         {
             turn++;
             DeleteTiles();
@@ -783,11 +793,13 @@ public class GameManagerD : MonoBehaviour
         {
             volume.weight = 1;
             music.clip = partyMusic;
+            music.Play();
         }
         else
         {
             volume.weight = 0;
             music.clip = mapMusic;
+            music.Play();
         }
     }
 

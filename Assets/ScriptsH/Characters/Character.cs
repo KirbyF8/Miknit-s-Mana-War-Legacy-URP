@@ -56,7 +56,7 @@ public class Character : MonoBehaviour
         //lvlUp = FindAnyObjectByType<LvlUp>();
 
         persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
-        LoadData();
+        // LoadData();
 
         
         
@@ -70,7 +70,7 @@ public class Character : MonoBehaviour
             exp_max += exp_max;
 
             lvlUp.LevelUpStat(ref stats, scale);
-        SaveStats();
+        // SaveStats();
         
 
     }
