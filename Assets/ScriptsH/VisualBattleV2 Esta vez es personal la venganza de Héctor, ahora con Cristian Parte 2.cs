@@ -469,10 +469,12 @@ public class VisualBattleV2 : MonoBehaviour
                 if (Crited)
                 {
                     defender.hp -= dDMGlocal * 2;
+                    // defender.updateHealthBar();
                 }
                 else
                 {
                     defender.hp -= dDMGlocal;
+                    // defender.updateHealthBar();
                 }
             }
         }

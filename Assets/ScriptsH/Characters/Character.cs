@@ -7,6 +7,10 @@ using UnityEngine.UIElements;
 
 public class Character : MonoBehaviour
 {
+    private Slider healthBar;
+   
+    private Image healthBarColor;
+
 
     private MyCell position;
     private MyCell previousPos;
@@ -51,7 +55,18 @@ public class Character : MonoBehaviour
     private LvlUp lvlUp;
 
     public int side;
+
+    private void Awake()
+    {
+        /*
+        healthBar = gameObject.GetComponentInChildren<Slider>();
+       
+
     
+        healthBarColor = gameObject.GetComponentInChildren<Image>();
+    */
+        }
+
     void Start()
     {
         map = FindObjectOfType<MyGrid>();
@@ -70,9 +85,22 @@ public class Character : MonoBehaviour
             LoadData();
         }
 
+        if (side == 0)
+        {
+            healthBarColor.tintColor = Color.green;
+        }
+        else if (side == 1)
+        {
+            healthBarColor.tintColor = Color.blue;
+        }
 
+        // healthBar.highValue = stats[0];
+        // healthBar.value = hp;
+        
 
     }
+
+   
 
     private void Update()
     {
@@ -84,6 +112,13 @@ public class Character : MonoBehaviour
 
     }
 
+    public void updateHealthBar()
+    { 
+    
+        healthBar.value = hp;
+    
+    }
+    
     public void ExpReset()
     {
 
