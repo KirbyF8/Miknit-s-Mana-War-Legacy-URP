@@ -84,7 +84,7 @@ public class TittleManager : MonoBehaviour
         if (skip)
         {
             persistenciaDeDatos.Skip();
-            persistenciaDeDatos.save();
+            //persistenciaDeDatos.save();
             GoToPlay();
         }
         else if (!skip)

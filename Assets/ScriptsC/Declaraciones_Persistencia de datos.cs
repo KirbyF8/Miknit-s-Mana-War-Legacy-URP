@@ -16,7 +16,7 @@ public class PersistenciaDeDatos : MonoBehaviour
     private int id;
    
     private string description;
-    private bool tutorialDone;
+    private bool tutorialDone = false;
 
 
     private int level;
@@ -32,7 +32,7 @@ public class PersistenciaDeDatos : MonoBehaviour
     private int speed;
     private int luck;
 
-    private bool exists;
+    private bool exists = false;
 
 
     private int[] stats = new int[9];
@@ -56,11 +56,7 @@ public class PersistenciaDeDatos : MonoBehaviour
         };
     }
 
-    private void cosas()
-    {
-        
-    }
-
+    
 
     public void save()
     {

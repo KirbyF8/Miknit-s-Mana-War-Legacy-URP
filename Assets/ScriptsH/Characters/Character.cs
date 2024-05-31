@@ -284,6 +284,7 @@ public class Character : MonoBehaviour
                 if (persistenciaDeDatos.IfExist())
                 {
                     stats[i] = persistenciaDeDatos.SendStats(i);
+                    Debug.Log(stats[i] + " " + persistenciaDeDatos.SendStats(i));
                 }
 
                 
