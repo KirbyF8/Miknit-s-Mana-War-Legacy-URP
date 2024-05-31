@@ -30,12 +30,6 @@ public class TittleManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
 
     public void Exit()
@@ -43,10 +37,7 @@ public class TittleManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void ChangeToCredits()
-    {
-
-    }
+ 
     public void ShowCreditsPanel()
     {
         CreditsPanel.SetActive(true);
@@ -70,18 +61,8 @@ public class TittleManager : MonoBehaviour
 
     public void GoToTutoriralCoroutine()
     {
-        
-        StartCoroutine(GoToTutorial());
-
-    }
-    public IEnumerator GoToTutorial()
-    { 
-        yield return new WaitForSeconds(0.50f);
-
         skipPanel.SetActive(true);
-
-        
-
+       
     }
 
     public void GoToPlay()

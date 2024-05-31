@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour

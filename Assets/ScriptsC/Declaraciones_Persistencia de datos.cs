@@ -14,7 +14,7 @@ public class PersistenciaDeDatos : MonoBehaviour
 
 
     private int id;
-    private string name;
+   
     private string description;
     private bool tutorialDone;
 

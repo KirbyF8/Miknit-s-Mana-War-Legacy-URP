@@ -26,7 +26,7 @@ public class LvlUp : MonoBehaviour
 
         ObtainUiBattle();
         
-        // F*** Y******* 
+      
         statsBLVL = StartStats(stats);
         Debug.Log(statsBLVL[7]);
 
