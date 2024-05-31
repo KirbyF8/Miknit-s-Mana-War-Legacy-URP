@@ -953,7 +953,10 @@ public class GameManagerD : MonoBehaviour
         uiManager.HideOptions();
     }
 
-
+    public bool IsWin()
+    {
+        return winned;
+    }
 
 
 }

@@ -118,7 +118,7 @@ public class EnemyAI : MonoBehaviour
         if (actionToPerform.x == 1)
         {
             movement = new Vector2Int(-1000,-1000);
-            // Debug.Log(actionToPerform.y);
+             Debug.Log(actionToPerform.y);
             Character aux = Allies[actionToPerform.y];
             targetPos = new Vector2Int((int)aux.GetPosition().x, (int)aux.GetPosition().y);
             // Debug.Log(moveList.Contains((5,0)));

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class Character : MonoBehaviour
     [SerializeField] private MyGrid map;
 
     private PersistenciaDeDatos persistenciaDeDatos;
+
+    private GameManagerD gameManager;
     //CAMBIAR POR ARMA
     private int range = 1;
     [SerializeField] private bool active = false;
@@ -56,10 +59,29 @@ public class Character : MonoBehaviour
         //lvlUp = FindAnyObjectByType<LvlUp>();
 
         persistenciaDeDatos = FindAnyObjectByType<PersistenciaDeDatos>();
-        // LoadData();
 
-        
-        
+        gameManager = FindAnyObjectByType<GameManagerD>();
+
+        string[] split = gameObject.name.Split('(');
+
+        if (split.Length <= 1)
+        {
+            Debug.Log("va joya");
+            LoadData();
+        }
+
+
+
+    }
+
+    private void Update()
+    {
+        if (gameManager.IsWin())
+        {
+            SaveStats();
+        }
+
+
     }
 
     public void ExpReset()
