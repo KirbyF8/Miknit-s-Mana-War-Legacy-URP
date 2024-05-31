@@ -101,6 +101,7 @@ public class EnemyAI : MonoBehaviour
 
     private void TrueEnemyTurn()
     {
+        Debug.Log(numberOfEnemy);
         if (!enemies[numberOfEnemy].GetActive() && AlliesInRange(enemies[numberOfEnemy]))
         {
             enemies[numberOfEnemy].SetActive(true);

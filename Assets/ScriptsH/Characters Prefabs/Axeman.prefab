@@ -15,7 +15,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c918cec051762d7479ff60fb3334549d, type: 2}
     - target: {fileID: 100102, guid: c04a63d584e38cb49a59057edbeb4e2c, type: 3}
       propertyPath: m_Name
-      value: Socram 1
+      value: Axeman
       objectReference: {fileID: 0}
     - target: {fileID: 400102, guid: c04a63d584e38cb49a59057edbeb4e2c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -114,10 +114,10 @@ MonoBehaviour:
   active: 1
   lvl: 2
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 18
   mp: 1
-  movement: 2
+  movement: 5
   stats: 12000000010000000a00000008000000010000000a0000000a0000000500000004000000
   scale: 6e00000000000000460000001e0000003200000032000000320000002800000032000000
   arma: Hacha

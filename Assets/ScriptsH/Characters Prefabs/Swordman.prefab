@@ -114,7 +114,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1c737b7de78c7184da51147fbad95fde, type: 2}
     - target: {fileID: 100102, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
       propertyPath: m_Name
-      value: Cardboia
+      value: Swordman
       objectReference: {fileID: 0}
     - target: {fileID: 400102, guid: e3942fec22e99384e9cee5aef64adec1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -219,10 +219,10 @@ MonoBehaviour:
   active: 1
   lvl: 4
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 7
   mp: 2
-  movement: 4
+  movement: 6
   stats: 070000000200000005000000040000000100000002000000040000000300000001000000
   scale: 0000000032000000320000005f0000002d000000140000002d0000005f00000005000000
   arma: Espada

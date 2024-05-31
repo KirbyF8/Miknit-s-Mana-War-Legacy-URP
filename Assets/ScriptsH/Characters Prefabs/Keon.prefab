@@ -208,7 +208,7 @@ MonoBehaviour:
   active: 1
   lvl: 1
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 14
   mp: 6
   movement: 4
@@ -4923,4 +4923,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ec44a0fcc5a1499b2dcf93c0bc05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsToLevelUp: 

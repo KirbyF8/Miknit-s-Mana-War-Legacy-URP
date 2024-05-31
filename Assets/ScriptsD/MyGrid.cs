@@ -189,7 +189,7 @@ public class MyGrid : MonoBehaviour
     public bool IsInBounds(int x, int y)
     {
         if (x < 0 || y < 0) return false;
-        if (x > width || y > height) return false;
+        if (x >= width || y >= height) return false;
         return true;
     }
 
@@ -247,6 +247,7 @@ public class MyGrid : MonoBehaviour
         //Si no está dentro de la grid, si ya está dentro de la lista, o si no se puede caminar por la casilla seleccionada vuelve
         if (!IsInBounds(x,y)) return;
         bool thereIs = end.Contains(new Vector2(x, y));
+        
         int diff = gridArray[x,y].GetDifficulty();
         if (!gridArray[x, y].GetWalkable()) return;
 

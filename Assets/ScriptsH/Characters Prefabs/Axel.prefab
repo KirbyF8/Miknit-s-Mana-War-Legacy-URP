@@ -118,7 +118,7 @@ MonoBehaviour:
   active: 1
   lvl: 1
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 19
   mp: 0
   movement: 5

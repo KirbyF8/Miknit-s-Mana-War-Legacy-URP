@@ -223,7 +223,7 @@ MonoBehaviour:
   active: 1
   lvl: 1
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 80
   mp: 12
   movement: 6
@@ -231,7 +231,7 @@ MonoBehaviour:
   scale: 3200000032000000320000005f0000002d000000140000002d0000005f00000005000000
   arma: Espada
   dmgType: 0
-  side: 1
+  side: 0
 --- !u!198 &7800982009898988340
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4938,7 +4938,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ec44a0fcc5a1499b2dcf93c0bc05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsToLevelUp: 
 --- !u!4 &3068771545726671201 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400102, guid: e3942fec22e99384e9cee5aef64adec1,

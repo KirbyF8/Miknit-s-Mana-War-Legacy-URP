@@ -140,7 +140,7 @@ public class Character : MonoBehaviour
 
     public void SetPosition(Vector2 pos)
     {
-        Debug.Log(map == null);
+        //Debug.Log(map == null);
         position = map.GetCell(pos);
         transform.position = new Vector3(position.GetPosition().x * 2 + 1, 0, position.GetPosition().y * -2 - 1);
     }

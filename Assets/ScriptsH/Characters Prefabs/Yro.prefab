@@ -112,7 +112,7 @@ MonoBehaviour:
   active: 1
   lvl: 1
   exp: 0
-  exp_max: 1
+  exp_max: 25
   hp: 7
   mp: 13
   movement: 4
@@ -120,7 +120,7 @@ MonoBehaviour:
   scale: 320000005f00000005000000230000009600000023000000230000001900000014000000
   arma: Baston
   dmgType: 1
-  side: 1
+  side: 0
 --- !u!198 &3454103755602961387
 ParticleSystem:
   m_ObjectHideFlags: 0
