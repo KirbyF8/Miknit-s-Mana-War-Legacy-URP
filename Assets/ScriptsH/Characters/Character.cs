@@ -56,6 +56,9 @@ public class Character : MonoBehaviour
 
     public int side;
 
+    private bool saved = false;
+
+
     private void Awake()
     {
         /*
@@ -112,9 +115,10 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        if (gameManager.IsWin())
+        if (gameManager.IsWin() && !saved)
         {
             SaveStats();
+            saved = true;
         }
 
 
